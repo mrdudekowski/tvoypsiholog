@@ -1,0 +1,12 @@
+# Documentation files
+*.md
+!README.md
+
+# Development files
+docs/
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+
