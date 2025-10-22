@@ -40,7 +40,7 @@
   }
 }
 
-![1761113667737](image/components/1761113667737.png)![1761113670902](image/components/1761113670902.png)![1761113680701](image/components/1761113680701.png)![1761113681717](image/components/1761113681717.png)![1761113689932](image/components/1761113689932.png)![1761113691056](image/components/1761113691056.png)/* Анимация слева */
+/* Анимация слева */
 @keyframes fadeInLeft {
   from {
     opacity: 0;
