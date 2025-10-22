@@ -386,59 +386,12 @@ section {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Магическое свечение при hover */
-.service-card::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
-    rgba(255, 215, 0, 0.6), 
-    rgba(255, 165, 0, 0.6), 
-    rgba(255, 215, 0, 0.6),
-    rgba(255, 140, 0, 0.6)
-  );
-  border-radius: var(--radius-lg);
-  opacity: 0;
-  z-index: -1;
-  filter: blur(20px);
-  transition: opacity 0.4s ease;
-  animation: glowRotate 3s linear infinite;
-  background-size: 200% 200%;
-}
-
-@keyframes glowRotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.service-card:hover::before {
-  opacity: 1;
-  animation: glowRotate 2s linear infinite, glowPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% { 
-    filter: blur(20px);
-    opacity: 0.8;
-  }
-  50% { 
-    filter: blur(25px);
-    opacity: 1;
-  }
-}
-
+/* Hover эффект для карточек - деликатный */
 .service-card:hover {
   border-color: var(--color-primary);
-  box-shadow: 
-    0 0 30px rgba(255, 215, 0, 0.4),
-    0 0 60px rgba(255, 165, 0, 0.2),
-    0 20px 40px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(255, 215, 0, 0.15);
   background: rgba(61, 42, 26, 0.95);
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-5px);
 }
 
 
