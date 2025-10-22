@@ -137,7 +137,7 @@
 
 /* Карточки с стеклянным эффектом */
 .glass-card {
-  background: rgba(26, 77, 58, 0.8);
+  background: rgba(26, 15, 46, 0.8);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 215, 0, 0.3);
   border-radius: var(--radius-lg);
@@ -240,7 +240,7 @@
   position: relative;
   padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
-  background: rgba(26, 77, 58, 0.9);
+  background: rgba(26, 15, 46, 0.9);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transition: all var(--transition-normal);
   backdrop-filter: blur(10px);
@@ -455,7 +455,7 @@
 }
 
 .modal-glassmorphism {
-  background: rgba(26, 77, 58, 0.85);
+  background: rgba(26, 15, 46, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 215, 0, 0.3);
@@ -677,7 +677,7 @@ body.modal-open {
 
 /* Контент модального окна */
 .modal-content {
-  background: rgba(26, 77, 58, 0.95);
+  background: rgba(26, 15, 46, 0.95);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 215, 0, 0.2);
   border-radius: 16px;
@@ -913,7 +913,7 @@ body.modal-open {
   align-items: center;
   gap: 1rem;
   padding: 1.25rem 1.75rem;
-  background: rgba(26, 77, 58, 0.98);
+  background: rgba(26, 15, 46, 0.98);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(219, 39, 119, 0.5);
   border-radius: 12px;

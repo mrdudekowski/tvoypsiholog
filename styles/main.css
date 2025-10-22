@@ -8,41 +8,42 @@
   --color-secondary: #2E8B57;      /* Морская волна зеленый */
   --color-secondary-hover: #3CB371; /* Средний морской зеленый */
 
-  /* Изумрудно-золотистый градиент - "Изумрудная Элегия" v2 */
-  --color-background: #0C3B2E;     /* Глубокий изумруд */
+  /* Темно-фиолетовый градиент - "Мистическая Ночь" */
+  --color-background: #0A0A1A;     /* Глубокий темно-фиолетовый */
   --color-background-gradient: 
-    /* Золотые акценты - УСИЛЕННЫЕ для видимости */
-    radial-gradient(ellipse 1000px 800px at 15% 20%, rgba(255, 215, 0, 0.18) 0%, rgba(255, 215, 0, 0.08) 30%, transparent 50%),
-    radial-gradient(ellipse 900px 700px at 85% 75%, rgba(218, 165, 32, 0.15) 0%, rgba(184, 134, 11, 0.07) 35%, transparent 55%),
-    /* Золотисто-изумрудные переходы - создают теплоту */
-    radial-gradient(ellipse 1100px 900px at 50% 50%, rgba(46, 139, 87, 0.25) 0%, rgba(34, 139, 34, 0.12) 40%, transparent 60%),
-    /* Дополнительные золотые блики */
-    radial-gradient(circle 600px at 30% 60%, rgba(255, 223, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(circle 550px at 70% 40%, rgba(218, 165, 32, 0.10) 0%, transparent 38%),
-    /* Изумрудные акценты - добавляют глубину */
-    radial-gradient(circle 450px at 20% 85%, rgba(16, 46, 36, 0.4) 0%, transparent 45%),
-    radial-gradient(circle 500px at 80% 15%, rgba(12, 59, 46, 0.35) 0%, transparent 50%),
-    /* Основной градиент - более контрастный и живой */
-    linear-gradient(135deg,
-      #0A2E23 0%,      /* Очень темный изумруд */
-      #15503F 15%,     /* Средний изумруд */
-      #1A6B4F 30%,     /* Светлый изумруд */
-      #2E8B57 50%,     /* Морская волна (яркий центр) */
-      #1A6B4F 70%,     /* Светлый изумруд */
-      #15503F 85%,     /* Средний изумруд */
-      #0A2E23 100%     /* Очень темный изумруд */
+    /* Тонкие изумрудные вкрапления - мистическое свечение */
+    radial-gradient(ellipse 900px 600px at 10% 25%, rgba(46, 139, 87, 0.06) 0%, transparent 45%),
+    radial-gradient(ellipse 800px 550px at 90% 70%, rgba(26, 77, 58, 0.05) 0%, transparent 50%),
+    radial-gradient(circle 400px at 25% 65%, rgba(34, 139, 34, 0.04) 0%, transparent 40%),
+    radial-gradient(circle 350px at 75% 30%, rgba(16, 89, 70, 0.05) 0%, transparent 38%),
+    /* Фиолетовые переливы - создают глубину */
+    radial-gradient(ellipse 1000px 800px at 50% 50%, rgba(75, 0, 130, 0.15) 0%, rgba(50, 0, 90, 0.08) 40%, transparent 60%),
+    radial-gradient(circle 600px at 20% 80%, rgba(40, 0, 70, 0.12) 0%, transparent 45%),
+    radial-gradient(circle 550px at 80% 20%, rgba(50, 0, 80, 0.10) 0%, transparent 48%),
+    /* Темные акценты - добавляют мистику */
+    radial-gradient(circle 500px at 15% 15%, rgba(10, 10, 30, 0.6) 0%, transparent 50%),
+    radial-gradient(circle 450px at 85% 85%, rgba(15, 10, 35, 0.5) 0%, transparent 48%),
+    /* Основной темно-фиолетовый градиент */
+    linear-gradient(180deg,
+      #0A0A1A 0%,      /* Очень темный фиолетовый */
+      #1A0F2E 15%,     /* Темный баклажан */
+      #2D1B3D 30%,     /* Средний фиолетовый */
+      #3D2050 50%,     /* Насыщенный фиолетовый (центр) */
+      #2D1B3D 70%,     /* Средний фиолетовый */
+      #1A0F2E 85%,     /* Темный баклажан */
+      #0A0A1A 100%     /* Очень темный фиолетовый */
     );
 
   /* Поверхности и текст */
-  --color-surface: #1A4D3A;        /* Изумрудная поверхность */
-  --color-surface-light: #2E8B57;  /* Светлая изумрудная поверхность */
+  --color-surface: #1A0F2E;        /* Темная фиолетовая поверхность */
+  --color-surface-light: #2D1B3D;  /* Светлая фиолетовая поверхность */
   --color-text-primary: #FFFFFF;    /* Белый текст */
-  --color-text-secondary: #D4F1E6;  /* Светло-изумрудный текст */
+  --color-text-secondary: #D4C5F0;  /* Светло-фиолетовый текст */
   --color-text-accent: #FFD700;    /* Золотой текст */
 
   /* Границы и тени */
-  --color-border: #2E8B57;         /* Изумрудные границы */
-  --color-border-light: #3CB371;   /* Светлые изумрудные границы */
+  --color-border: #3D2050;         /* Фиолетовые границы */
+  --color-border-light: #4D2F60;   /* Светлые фиолетовые границы */
 
   /* Типографика */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -326,6 +327,49 @@ section {
   margin-bottom: var(--spacing-2xl);
   color: var(--color-primary);
   letter-spacing: 0.02em;
+  position: relative;
+  padding-bottom: var(--spacing-lg);
+}
+
+/* Изумрудная линия свечения под заголовками */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(46, 139, 87, 0.3) 20%,
+    rgba(46, 139, 87, 0.8) 50%,
+    rgba(46, 139, 87, 0.3) 80%,
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(46, 139, 87, 0.6),
+    0 0 40px rgba(46, 139, 87, 0.4),
+    0 0 60px rgba(46, 139, 87, 0.2);
+  border-radius: 2px;
+  animation: emerald-glow 3s ease-in-out infinite;
+}
+
+@keyframes emerald-glow {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 
+      0 0 20px rgba(46, 139, 87, 0.6),
+      0 0 40px rgba(46, 139, 87, 0.4),
+      0 0 60px rgba(46, 139, 87, 0.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 
+      0 0 30px rgba(46, 139, 87, 0.8),
+      0 0 60px rgba(46, 139, 87, 0.6),
+      0 0 90px rgba(46, 139, 87, 0.4);
+  }
 }
 
 /* О себе секция */
@@ -394,7 +438,7 @@ section {
 .service-card {
   position: relative;
   overflow: hidden;
-  background: rgba(45, 27, 14, 0.9);
+  background: transparent
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
@@ -402,13 +446,14 @@ section {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-top: 3px solid  rgba(46, 139, 87, 0.6);
 }
 
 /* Hover эффект для карточек - деликатный */
 .service-card:hover {
   border-color: rgba(219, 39, 119, 0.5);
   box-shadow: 0 20px 40px rgba(219, 39, 119, 0.15);
-  background: rgba(61, 42, 26, 0.95);
+  background: transparent;
   transform: translateY(-5px);
 }
 
@@ -437,9 +482,15 @@ section {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid rgba(219, 39, 119, 0.5);
+  border: 2px solid  rgba(46, 139, 87, 0.6);
   opacity: 0;
   transition: all 0.4s ease;
+}
+
+/* hover для колец */
+.service-card:hover .service-icon::before,
+.service-card:hover .service-icon::after {
+  border-color: rgba(219, 39, 119, 0.5);
 }
 
 .service-icon::before {
