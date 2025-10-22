@@ -1,0 +1,179 @@
+/**
+ * Холст для карт Таро
+ * Карта привязана к документу, не движется со скроллом
+ */
+
+/* Контейнер для карт - абсолютное позиционирование относительно body */
+.tarot-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Базовые стили карты */
+.tarot-card {
+  position: absolute; /* Абсолютная позиция относительно документа */
+  width: 140px;
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Плавный easing */
+  z-index: 10; /* Поверх других элементов */
+}
+
+/* Левая карта - начальное состояние (невидима, смещена влево) */
+.tarot-card-left {
+  background-image: url('../assets/images/tower1.webp');
+  /* Позиция устанавливается через JavaScript относительно карточки Process */
+  left: -20vw; /* За пределами экрана слева */
+  opacity: 0;
+  transform: rotate(-15deg) scale(0.8);
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+}
+
+/* Левая карта - активное состояние (видима, на финальной позиции) */
+.tarot-card-left.active {
+  /* left и top устанавливаются через JavaScript */
+  opacity: 0.15;
+  transform: rotate(-10deg) scale(1);
+}
+
+/* Анимация левитации - плавное покачивание */
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(-10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-12deg) scale(1.02);
+  }
+}
+
+/* Класс для активации левитации */
+.tarot-card-left.levitating {
+  animation: cardFloat 4s ease-in-out infinite;
+  /* Переопределяем transition для плавного перехода */
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform; /* Только transform для GPU ускорения */
+}
+
+/* ==================== ПРАВАЯ КАРТА (ЗЕРКАЛО) ==================== */
+
+/* Правая карта - начальное состояние */
+.tarot-card-right {
+  background-image: url('../assets/images/empress1.webp');
+  right: -20vw; /* Зеркально left */
+  left: auto;
+  opacity: 0;
+  transform: rotate(15deg) scale(0.8); /* Зеркальный наклон */
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+}
+
+/* Правая карта - активное состояние */
+.tarot-card-right.active {
+  /* right и top устанавливаются через JavaScript */
+  opacity: 0.15;
+  transform: rotate(10deg) scale(1); /* Зеркальный поворот */
+}
+
+/* Зеркальная анимация левитации */
+@keyframes cardFloatRight {
+  0%, 100% {
+    transform: translateY(0px) rotate(10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) rotate(12deg) scale(1.02);
+  }
+}
+
+/* Класс для активации левитации правой карты */
+.tarot-card-right.levitating {
+  animation: cardFloatRight 4s ease-in-out infinite;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ==================== ТРЕТЬЯ КАРТА (TESTIMONIALS) ==================== */
+
+/* Третья карта - начальное состояние */
+.tarot-card-testimonials {
+  background-image: url('../assets/images/path.webp');
+  left: -20vw; /* За пределами экрана СЛЕВА */
+  opacity: 0;
+  transform: rotate(-12deg) scale(0.8); /* Немного другой угол */
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+}
+
+/* Третья карта - активное состояние */
+.tarot-card-testimonials.active {
+  /* left и top устанавливаются через JavaScript */
+  opacity: 0.15;
+  transform: rotate(-8deg) scale(1); /* Финальный поворот */
+}
+
+/* Анимация левитации для третьей карты */
+@keyframes cardFloatTestimonials {
+  0%, 100% {
+    transform: translateY(0px) rotate(-8deg) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-10deg) scale(1.01);
+  }
+}
+
+/* Класс для активации левитации третьей карты */
+.tarot-card-testimonials.levitating {
+  animation: cardFloatTestimonials 5s ease-in-out infinite;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ==================== ЧЕТВЕРТАЯ КАРТА (LOVERS) ==================== */
+
+/* Четвертая карта - начальное состояние */
+.tarot-card-lovers {
+  background-image: url('../assets/images/lovers.webp');
+  right: -20vw; /* За пределами экрана СПРАВА */
+  left: auto;
+  opacity: 0;
+  transform: rotate(12deg) scale(0.8); /* Зеркальный угол */
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+}
+
+/* Четвертая карта - активное состояние */
+.tarot-card-lovers.active {
+  /* right и top устанавливаются через JavaScript */
+  opacity: 0.15;
+  transform: rotate(8deg) scale(1); /* Финальный поворот */
+}
+
+/* Анимация левитации для четвертой карты */
+@keyframes cardFloatLovers {
+  0%, 100% {
+    transform: translateY(0px) rotate(8deg) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) rotate(10deg) scale(1.01);
+  }
+}
+
+/* Класс для активации левитации четвертой карты */
+.tarot-card-lovers.levitating {
+  animation: cardFloatLovers 5s ease-in-out infinite;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Мобильные устройства - скрыть карты */
+@media (max-width: 768px) {
+  .tarot-canvas {
+    display: none;
+  }
+}

@@ -209,10 +209,25 @@ img {
   overflow: hidden;
 }
 
+/* Адаптивное позиционирование логотипа */
+.nav-brand {
+  flex-shrink: 0; /* Предотвращаем сжатие логотипа */
+  margin-right: auto; /* Прижимаем к левому краю */
+}
+
+/* На больших экранах логотип всегда слева */
+@media (min-width: 769px) {
+  .nav-brand {
+    margin-right: auto;
+  }
+}
+
 .nav-brand .logo {
   display: flex;
   align-items: center;
   cursor: default;
+  margin-left: 0; /* Прижимаем к левому краю */
+  flex-shrink: 0; /* Предотвращаем сжатие */
 }
 
 .logo-image {
@@ -652,7 +667,6 @@ section {
 
 /* Процесс работы */
 .process {
-  /* Фон убран - используется единый градиент body */
   color: var(--color-text-primary);
 }
 
@@ -661,6 +675,7 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-xl);
 }
+
 
 .process-step {
   text-align: center;
@@ -1012,6 +1027,16 @@ section {
 
   .site-nav {
     padding: var(--spacing-md) var(--container-padding);
+    justify-content: flex-start; /* Логотип слева, остальное справа */
+  }
+
+  .nav-brand {
+    margin-right: auto; /* Прижимаем логотип к левому краю */
+  }
+
+  .logo-image {
+    height: 80px; /* Уменьшаем размер на мобильных */
+    padding: 0.25rem 0.5rem;
   }
 
   .nav-menu {
@@ -1076,6 +1101,16 @@ section {
 
   .section-title {
     font-size: var(--text-3xl);
+  }
+
+  .logo-image {
+    height: 60px; /* Еще меньше на очень маленьких экранах */
+    padding: 0.125rem 0.25rem;
+  }
+
+  .site-nav {
+    padding: var(--spacing-sm) var(--container-padding);
+    height: 60px; /* Уменьшаем высоту header */
   }
 
   .btn {

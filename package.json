@@ -1,0 +1,17 @@
+{
+  "name": "taro-landing-site",
+  "version": "1.0.0",
+  "description": "Лендинг таролога Елены с анимированными картами Таро",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=8000 --open=index.html",
+    "start": "live-server --port=8000 --open=index.html",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": ["tarot", "landing", "psychology", "spiritual"],
+  "author": "Елена Макарова",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

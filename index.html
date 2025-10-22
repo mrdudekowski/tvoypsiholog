@@ -32,8 +32,29 @@
     <!-- Стили -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/tarot-canvas.css">
 </head>
 <body>
+    <!-- Невидимый холст для карт Таро -->
+    <div class="tarot-canvas">
+        <div class="tarot-card tarot-card-left" 
+             data-card="tower" 
+             aria-hidden="true" 
+             role="presentation"></div>
+        <div class="tarot-card tarot-card-right" 
+             data-card="empress" 
+             aria-hidden="true" 
+             role="presentation"></div>
+        <div class="tarot-card tarot-card-testimonials" 
+             data-card="path" 
+             aria-hidden="true" 
+             role="presentation"></div>
+        <div class="tarot-card tarot-card-lovers" 
+             data-card="lovers" 
+             aria-hidden="true" 
+             role="presentation"></div>
+    </div>
+
     <!-- Шапка сайта -->
     <header class="site-header" role="banner">
         <nav class="site-nav" role="navigation" aria-label="Основная навигация">
@@ -499,5 +520,6 @@
 
     <!-- Скрипты -->
     <script src="scripts/main.js" defer></script>
+    <script src="scripts/tarot-canvas.js" defer></script>
 </body>
 </html>
