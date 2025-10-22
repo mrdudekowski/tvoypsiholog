@@ -20,6 +20,7 @@ function initializeSite() {
     initializeSmoothScroll();
     initializeContactButtons();
     initializeCertificatesModal();
+    initializeContactFormModal();
     initializePerformanceOptimizations();
 
     // Логирование успешной инициализации
@@ -340,6 +341,321 @@ function trackEvent(category, action, label = null) {
             event_label: label
         });
     }
+}
+
+
+/**
+ * Инициализирует модальное окно формы обратной связи
+ */
+function initializeContactFormModal() {
+    const modal = document.getElementById('contactModal');
+    const openBtn = document.getElementById('openContactModal');
+    const closeBtn = document.getElementById('closeContactModal');
+    const form = document.getElementById('contactForm');
+    const phoneInput = document.getElementById('contactPhone');
+    const notification = document.getElementById('successNotification');
+    
+    if (!modal || !openBtn || !form) {
+        console.warn('⚠️ Элементы формы обратной связи не найдены');
+        return;
+    }
+
+    // URL Google Apps Script webhook (заменить на реальный после развертывания)
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwx1Lst5oKVQn1IzwhpQLKGHPH1pAXTH7U1LwFJYX68Ex9NTTHeLbvrRVOm1MbbOWEf/exec';
+
+    /**
+     * Открывает модальное окно
+     */
+    function openModal() {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn?.focus();
+        trackEvent('contact_form', 'modal_open');
+        console.log('📝 Модальное окно формы открыто');
+    }
+
+    /**
+     * Закрывает модальное окно
+     */
+    function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        openBtn.focus();
+        trackEvent('contact_form', 'modal_close');
+        console.log('📝 Модальное окно формы закрыто');
+    }
+
+    /**
+     * Показывает уведомление об успехе
+     */
+    function showSuccessNotification() {
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 4000);
+    }
+
+    /**
+     * Применяет маску к телефонному номеру
+     */
+    function applyPhoneMask(input) {
+        let value = input.value.replace(/\D/g, '');
+        
+        // Если начинается с 8, заменяем на 7
+        if (value.startsWith('8')) {
+            value = '7' + value.substring(1);
+        }
+        
+        // Если не начинается с +, добавляем +
+        if (!input.value.startsWith('+') && value.length > 0) {
+            input.value = '+' + value;
+        }
+        
+        // Форматирование для российских номеров
+        if (value.startsWith('7') && value.length > 1) {
+            let formatted = '+7';
+            if (value.length > 1) formatted += ' (' + value.substring(1, 4);
+            if (value.length > 4) formatted += ') ' + value.substring(4, 7);
+            if (value.length > 7) formatted += '-' + value.substring(7, 9);
+            if (value.length > 9) formatted += '-' + value.substring(9, 11);
+            input.value = formatted;
+        }
+    }
+
+    /**
+     * Валидирует телефонный номер
+     */
+    function validatePhone(phone) {
+        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+        return phoneRegex.test(phone.replace(/\s/g, ''));
+    }
+
+    /**
+     * Валидирует email
+     */
+    function validateEmail(email) {
+        if (!email) return true; // Email опциональный
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    /**
+     * Показывает ошибку валидации
+     */
+    function showError(inputId, message) {
+        const input = document.getElementById(inputId);
+        const errorElement = document.getElementById(inputId.replace('contact', '').toLowerCase() + 'Error');
+        
+        if (input) {
+            input.classList.add('error');
+        }
+        
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
+    }
+
+    /**
+     * Очищает ошибки валидации
+     */
+    function clearErrors() {
+        document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+            input.classList.remove('error');
+        });
+        
+        document.querySelectorAll('.form-error').forEach(error => {
+            error.textContent = '';
+        });
+    }
+
+    /**
+     * Валидирует форму
+     */
+    function validateForm(formData) {
+        clearErrors();
+        let isValid = true;
+
+        // Проверка имени
+        if (!formData.get('name') || formData.get('name').trim().length < 2) {
+            showError('contactName', 'Пожалуйста, введите ваше имя');
+            isValid = false;
+        }
+
+        // Проверка телефона
+        const phone = formData.get('phone');
+        if (!phone || !validatePhone(phone)) {
+            showError('contactPhone', 'Введите корректный номер телефона');
+            isValid = false;
+        }
+
+        // Проверка email (если заполнен)
+        const email = formData.get('email');
+        if (email && !validateEmail(email)) {
+            showError('contactEmail', 'Введите корректный email');
+            isValid = false;
+        }
+
+        // Проверка вопроса
+        if (!formData.get('question') || formData.get('question').trim().length < 10) {
+            showError('contactQuestion', 'Пожалуйста, опишите ваш вопрос (минимум 10 символов)');
+            isValid = false;
+        }
+
+        // Проверка выбора мессенджера
+        if (!formData.get('messenger')) {
+            const messengerError = document.getElementById('messengerError');
+            if (messengerError) {
+                messengerError.textContent = 'Выберите удобный мессенджер';
+            }
+            isValid = false;
+        }
+
+        // Проверка honeypot (защита от ботов)
+        if (formData.get('website')) {
+            console.warn('🤖 Обнаружена попытка спама (honeypot filled)');
+            return false;
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Отправляет форму на сервер
+     */
+    async function submitForm(formData) {
+        const submitButton = form.querySelector('.btn-submit');
+        const originalText = submitButton.querySelector('.btn-text').textContent;
+        
+        try {
+            // Отключаем кнопку и показываем loading
+            submitButton.disabled = true;
+            submitButton.querySelector('.btn-text').textContent = 'Отправка...';
+            
+            // Подготовка данных для отправки
+            const data = {
+                name: formData.get('name'),
+                phone: formData.get('phone'),
+                email: formData.get('email') || '',
+                messenger: formData.get('messenger'),
+                question: formData.get('question'),
+                page: window.location.href,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('📤 Отправка данных:', data);
+            
+            // Отправка на Google Apps Script
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data).toString()
+            });
+            
+            const result = await response.json();
+            
+            if (result.ok) {
+                console.log('✅ Форма успешно отправлена');
+                
+                // Трекинг успешной отправки
+                trackEvent('contact_form', 'submit_success', data.messenger);
+                
+                // Закрываем модальное окно
+                closeModal();
+                
+                // Показываем уведомление
+                showSuccessNotification();
+                
+                // Очищаем форму
+                form.reset();
+                clearErrors();
+                
+            } else {
+                throw new Error(result.message || 'Ошибка отправки');
+            }
+            
+        } catch (error) {
+            console.error('❌ Ошибка отправки формы:', error);
+            
+            // Трекинг ошибки
+            trackEvent('contact_form', 'submit_error', error.message);
+            
+            // Показываем ошибку пользователю
+            alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или свяжитесь через мессенджеры.');
+            
+        } finally {
+            // Возвращаем кнопку в исходное состояние
+            submitButton.disabled = false;
+            submitButton.querySelector('.btn-text').textContent = originalText;
+        }
+    }
+
+    // Открытие модального окна
+    openBtn.addEventListener('click', openModal);
+
+    // Закрытие модального окна
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Закрытие по клику на overlay
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Закрытие по ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // Применение маски к телефону
+    if (phoneInput) {
+        phoneInput.addEventListener('input', () => applyPhoneMask(phoneInput));
+        phoneInput.addEventListener('focus', () => {
+            if (!phoneInput.value) {
+                phoneInput.value = '+7 ';
+            }
+        });
+    }
+
+    // Очистка ошибок при фокусе на поле
+    form.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+        input.addEventListener('focus', () => {
+            input.classList.remove('error');
+            const errorId = input.id.replace('contact', '').toLowerCase() + 'Error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        });
+    });
+
+    // Обработка отправки формы
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        // Валидация
+        if (!validateForm(formData)) {
+            console.warn('⚠️ Форма не прошла валидацию');
+            trackEvent('contact_form', 'validation_error');
+            return;
+        }
+        
+        // Отправка
+        await submitForm(formData);
+    });
+
+    console.log('✅ Модальное окно формы обратной связи инициализировано');
 }
 
 

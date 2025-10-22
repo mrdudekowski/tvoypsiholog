@@ -646,3 +646,341 @@ body.modal-open {
     color: black;
   }
 }
+
+/* ========================================
+   МОДАЛЬНОЕ ОКНО ФОРМЫ ОБРАТНОЙ СВЯЗИ
+   ======================================== */
+
+/* Overlay модального окна */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow-y: auto;
+  padding: 2rem 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+
+/* Контент модального окна */
+.modal-content {
+  background: rgba(45, 27, 14, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+/* Кнопка закрытия */
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--color-primary);
+  transform: rotate(90deg);
+}
+
+/* Заголовки модального окна */
+.modal-title {
+  font-size: 2rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #EC4899 0%, #F59E0B 50%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.modal-subtitle {
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+}
+
+/* Форма */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #EC4899;
+}
+
+.optional {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+/* Поля ввода */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: rgba(219, 39, 119, 0.5);
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Ошибки валидации */
+.form-error {
+  color: #EC4899;
+  font-size: 0.85rem;
+  min-height: 1.2rem;
+  display: block;
+}
+
+.form-input.error,
+.form-textarea.error {
+  border-color: #EC4899;
+}
+
+/* Выбор мессенджера */
+.messenger-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.messenger-option {
+  cursor: pointer;
+}
+
+.messenger-option input[type="radio"] {
+  display: none;
+}
+
+.messenger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.messenger-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.messenger-option input[type="radio"]:checked + .messenger-btn {
+  background: linear-gradient(135deg, rgba(219, 39, 119, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+  border-color: rgba(219, 39, 119, 0.6);
+  box-shadow: 0 0 20px rgba(219, 39, 119, 0.3);
+}
+
+.messenger-option:hover .messenger-btn {
+  border-color: rgba(219, 39, 119, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Кнопка отправки */
+.btn-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Honeypot (скрытое поле от ботов) */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Кнопка "Задать вопрос" */
+.question-btn {
+  background: linear-gradient(135deg, #DB2777 0%, #F59E0B 50%, #FFD700 100%);
+  color: white;
+  border: none;
+}
+
+.question-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(219, 39, 119, 0.3);
+}
+
+/* ========================================
+   POP-UP УВЕДОМЛЕНИЕ
+   ======================================== */
+
+.notification-popup {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: none;
+}
+
+.notification-popup.show {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+  background: rgba(45, 27, 14, 0.98);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(219, 39, 119, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(219, 39, 119, 0.3);
+}
+
+.notification-icon {
+  font-size: 2rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.notification-message {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* ========================================
+   АДАПТИВНОСТЬ
+   ======================================== */
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+  }
+
+  .messenger-choice {
+    grid-template-columns: 1fr;
+  }
+
+  .notification-popup {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+
+  .notification-content {
+    padding: 1rem 1.25rem;
+  }
+
+  .notification-message {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 1rem 0.5rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    font-size: 16px; /* Предотвращает zoom на iOS */
+  }
+}
