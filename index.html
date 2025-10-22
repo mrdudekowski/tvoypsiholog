@@ -123,6 +123,55 @@
         <section class="services" id="services" aria-labelledby="services-title" data-scroll-reveal="fadeInUp">
             <div class="container">
                 <h2 id="services-title" class="section-title">Путь трансформации</h2>
+                
+                <!-- Анимированный синусоидальный путь -->
+                <svg class="transformation-path" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.8" />
+                            <stop offset="50%" style="stop-color:#FFA500;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.8" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Синусоидальная линия через все карточки -->
+                    <path class="sine-path" 
+                          d="M 150 200 Q 300 100, 450 200 T 750 200 T 1050 200" 
+                          stroke="url(#pathGradient)" 
+                          stroke-width="3" 
+                          fill="none" 
+                          filter="url(#glow)"
+                          stroke-dasharray="2000"
+                          stroke-dashoffset="2000"/>
+                    
+                    <!-- Частицы света вдоль пути -->
+                    <circle class="light-particle particle-1" r="4" fill="#FFD700" opacity="0.8">
+                        <animateMotion dur="8s" repeatCount="indefinite">
+                            <mpath href="#motionPath"/>
+                        </animateMotion>
+                    </circle>
+                    <circle class="light-particle particle-2" r="3" fill="#FFA500" opacity="0.6">
+                        <animateMotion dur="8s" begin="2s" repeatCount="indefinite">
+                            <mpath href="#motionPath"/>
+                        </animateMotion>
+                    </circle>
+                    <circle class="light-particle particle-3" r="5" fill="#FFD700" opacity="0.7">
+                        <animateMotion dur="8s" begin="4s" repeatCount="indefinite">
+                            <mpath href="#motionPath"/>
+                        </animateMotion>
+                    </circle>
+                    
+                    <!-- Скрытый путь для анимации частиц -->
+                    <path id="motionPath" d="M 150 200 Q 300 100, 450 200 T 750 200 T 1050 200" fill="none" stroke="none"/>
+                </svg>
+                
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">
