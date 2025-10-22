@@ -122,14 +122,10 @@ img {
 
 /* Шапка сайта */
 .site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  z-index: 1000;
   transition: background-color var(--transition-normal);
 }
 
@@ -142,6 +138,8 @@ img {
   margin: 0 auto;
   box-sizing: border-box;
   width: 100%;
+  height: 80px;
+  overflow: hidden;
 }
 
 .nav-brand .logo {
@@ -151,13 +149,16 @@ img {
 }
 
 .logo-image {
-  height: 32px;
+  height: 120px;
   width: auto;
-  transition: transform var(--transition-fast);
+  padding: 0.5rem 1rem;
+  filter: invert(1) brightness(2);
+  transition: all var(--transition-fast);
 }
 
-.logo-image:hover {
-  transform: scale(1.05);
+.logo:hover .logo-image {
+  transform: translateY(-2px);
+  opacity: 0.8;
 }
 
 .nav-menu {
@@ -827,5 +828,83 @@ section {
   .btn {
     width: 100%;
     max-width: 280px;
+  }
+}
+
+/* Отключение hover эффектов на тачскринах */
+@media (hover: none) and (pointer: coarse) {
+  /* Отключаем все hover эффекты для карточек услуг */
+  .service-card:hover {
+    border-color: var(--color-border-light);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(45, 27, 14, 0.9);
+    transform: none;
+  }
+
+  /* Отключаем hover эффекты для иконок */
+  .service-card:hover .service-icon {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
+  }
+
+  .service-card:hover .service-icon::before,
+  .service-card:hover .service-icon::after {
+    opacity: 0;
+  }
+
+  .service-card:hover .service-icon-img {
+    transform: none;
+    filter: invert(1);
+  }
+
+  /* Отключаем hover для логотипа */
+  .logo:hover .logo-image {
+    transform: none;
+    opacity: 1;
+  }
+
+  /* Отключаем hover для кнопок */
+  .btn:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: none;
+    box-shadow: initial;
+  }
+
+  /* Отключаем hover для навигации */
+  .nav-menu a:hover {
+    color: var(--color-primary);
+  }
+
+  /* Отключаем hover для карточек отзывов */
+  .testimonial-card:hover {
+    transform: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Отключаем hover для карточек процесса */
+  .process-step:hover {
+    transform: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Отключаем hover для сертификатов */
+  .certificate-item:hover img {
+    border-color: rgba(255, 215, 0, 0.2);
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Отключаем hover для контактных методов */
+  .contact-method:hover {
+    transform: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Отключаем анимации орбитальных частиц */
+  .service-icon::before,
+  .service-icon::after {
+    animation: none;
+    display: none;
   }
 }
