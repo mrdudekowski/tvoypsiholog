@@ -8,29 +8,36 @@
   --color-secondary: #2E8B57;      /* Морская волна зеленый */
   --color-secondary-hover: #3CB371; /* Средний морской зеленый */
 
-  /* Теплый градиентный фон - Вариант A: "Мистический сумрак" */
-  --color-background: #1A0F0A;     /* Теплый темный коричневый */
+  /* Изумрудно-золотистый градиент - "Изумрудная Элегия" */
+  --color-background: #0C3B2E;     /* Глубокий изумруд */
   --color-background-gradient: 
-    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.06) 0%, transparent 35%),
-    radial-gradient(circle at 80% 70%, rgba(46, 139, 87, 0.05) 0%, transparent 35%),
+    /* Золотые акценты - создают грациозное сияние */
+    radial-gradient(ellipse 800px 600px at 15% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse 700px 500px at 85% 75%, rgba(184, 134, 11, 0.06) 0%, transparent 50%),
+    /* Изумрудные переливы - добавляют глубину */
+    radial-gradient(ellipse 900px 700px at 50% 50%, rgba(46, 139, 87, 0.12) 0%, transparent 55%),
+    radial-gradient(circle at 25% 80%, rgba(26, 77, 58, 0.15) 0%, transparent 35%),
+    radial-gradient(circle at 75% 15%, rgba(12, 59, 46, 0.2) 0%, transparent 40%),
+    /* Основной диагональный градиент - элегантный переход */
     linear-gradient(135deg,
-      #1A0F0A 0%,      /* Темный теплый коричневый */
-      #2D1B0E 25%,     /* Теплый шоколадный */
-      #3D2A1A 50%,     /* Средний теплый коричневый */
-      #2D1B0E 75%,     /* Теплый шоколадный */
-      #1A0F0A 100%     /* Темный теплый коричневый */
+      #0C3B2E 0%,      /* Глубокий изумруд */
+      #1A4D3A 20%,     /* Морской изумруд */
+      #0F5943 40%,     /* Насыщенный изумруд */
+      #1A4D3A 60%,     /* Морской изумруд */
+      #15503F 80%,     /* Средний изумруд */
+      #0C3B2E 100%     /* Глубокий изумруд */
     );
 
   /* Поверхности и текст */
-  --color-surface: #2D1B0E;        /* Теплая шоколадная поверхность */
-  --color-surface-light: #3D2A1A;  /* Светлее шоколадная поверхность */
+  --color-surface: #1A4D3A;        /* Изумрудная поверхность */
+  --color-surface-light: #2E8B57;  /* Светлая изумрудная поверхность */
   --color-text-primary: #FFFFFF;    /* Белый текст */
-  --color-text-secondary: #F5DEB3;  /* Теплый пшеничный */
+  --color-text-secondary: #D4F1E6;  /* Светло-изумрудный текст */
   --color-text-accent: #FFD700;    /* Золотой текст */
 
   /* Границы и тени */
-  --color-border: #4A3C2A;         /* Теплые коричневые границы */
-  --color-border-light: #5D4A35;   /* Светлее теплые границы */
+  --color-border: #2E8B57;         /* Изумрудные границы */
+  --color-border-light: #3CB371;   /* Светлые изумрудные границы */
 
   /* Типографика */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
