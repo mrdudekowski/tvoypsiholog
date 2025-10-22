@@ -8,15 +8,18 @@
   --color-secondary: #2E8B57;      /* Морская волна зеленый */
   --color-secondary-hover: #3CB371; /* Средний морской зеленый */
 
-  /* Теплый градиентный фон */
+  /* Теплый градиентный фон - Вариант A: "Мистический сумрак" */
   --color-background: #1A0F0A;     /* Теплый темный коричневый */
-  --color-background-gradient: linear-gradient(135deg,
-    #1A0F0A 0%,      /* Темный теплый коричневый */
-    #2D1B0E 25%,     /* Теплый шоколадный */
-    #3D2A1A 50%,     /* Средний теплый коричневый */
-    #2D1B0E 75%,     /* Теплый шоколадный */
-    #1A0F0A 100%     /* Темный теплый коричневый */
-  );
+  --color-background-gradient: 
+    radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.06) 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(46, 139, 87, 0.05) 0%, transparent 35%),
+    linear-gradient(135deg,
+      #1A0F0A 0%,      /* Темный теплый коричневый */
+      #2D1B0E 25%,     /* Теплый шоколадный */
+      #3D2A1A 50%,     /* Средний теплый коричневый */
+      #2D1B0E 75%,     /* Теплый шоколадный */
+      #1A0F0A 100%     /* Темный теплый коричневый */
+    );
 
   /* Поверхности и текст */
   --color-surface: #2D1B0E;        /* Теплая шоколадная поверхность */
@@ -159,7 +162,7 @@ img {
 .nav-brand .logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
+  cursor: default;
 }
 
 .logo-image {
@@ -167,11 +170,7 @@ img {
   width: auto;
   padding: 0.5rem 1rem;
   filter: invert(1) brightness(2);
-  transition: all var(--transition-fast);
-}
-
-.logo:hover .logo-image {
-  transform: translateY(-2px);
+  pointer-events: none;
   opacity: 0.8;
 }
 
@@ -368,10 +367,7 @@ section {
 /* Услуги секция */
 .services {
   position: relative;
-  background:
-    radial-gradient(circle at 90% 10%, rgba(46, 139, 87, 0.05) 0%, transparent 40%),
-    rgba(29, 19, 12, 0.8);
-  backdrop-filter: blur(10px);
+  /* Фон убран - используется единый градиент body */
 }
 
 
@@ -521,9 +517,8 @@ section {
 
 /* Процесс работы */
 .process {
-  background: rgba(29, 19, 12, 0.8);
+  /* Фон убран - используется единый градиент body */
   color: var(--color-text-primary);
-  backdrop-filter: blur(10px);
 }
 
 .process-steps {
@@ -599,9 +594,8 @@ section {
 
 /* FAQ */
 .faq {
-  background: rgba(29, 19, 12, 0.8);
+  /* Фон убран - используется единый градиент body */
   color: var(--color-text-primary);
-  backdrop-filter: blur(10px);
 }
 
 .faq-accordion {
@@ -660,12 +654,8 @@ section {
 
 /* Контакты */
 .contact {
-  background:
-    radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 70% 30%, rgba(46, 139, 87, 0.08) 0%, transparent 40%),
-    rgba(26, 15, 10, 0.95);
+  /* Фон убран - используется единый градиент body */
   text-align: center;
-  backdrop-filter: blur(10px);
 }
 
 .contact-description {
@@ -728,11 +718,10 @@ section {
 
 /* Подвал */
 .site-footer {
-  background: rgba(26, 15, 10, 0.98);
+  /* Фон убран - используется единый градиент body */
   color: var(--color-text-secondary);
   padding: var(--spacing-xl) 0;
   border-top: 1px solid var(--color-border-light);
-  backdrop-filter: blur(10px);
 }
 
 .footer-content {
@@ -871,10 +860,10 @@ section {
     filter: invert(1);
   }
 
-  /* Отключаем hover для логотипа */
-  .logo:hover .logo-image {
-    transform: none;
-    opacity: 1;
+  /* Логотип не кликабельный */
+  .logo {
+    pointer-events: none;
+    cursor: default;
   }
 
   /* Отключаем hover для кнопок */
