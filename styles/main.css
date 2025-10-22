@@ -383,8 +383,8 @@ section {
 
 /* Hover эффект для карточек - деликатный */
 .service-card:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 20px 40px rgba(255, 215, 0, 0.15);
+  border-color: rgba(219, 39, 119, 0.5);
+  box-shadow: 0 20px 40px rgba(219, 39, 119, 0.15);
   background: rgba(61, 42, 26, 0.95);
   transform: translateY(-5px);
 }
@@ -399,9 +399,9 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(135deg, #DB2777 0%, #F59E0B 50%, #FFD700 100%);
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
   position: relative;
   transition: all 0.4s ease;
 }
@@ -414,7 +414,7 @@ section {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid rgba(255, 215, 0, 0.4);
+  border: 2px solid rgba(219, 39, 119, 0.5);
   opacity: 0;
   transition: all 0.4s ease;
 }
@@ -460,9 +460,9 @@ section {
 .service-card:hover .service-icon {
   transform: scale(1.1) rotate(5deg);
   box-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.6),
-    0 0 40px rgba(255, 165, 0, 0.4),
-    0 4px 12px rgba(255, 215, 0, 0.5);
+    0 0 20px rgba(219, 39, 119, 0.7),
+    0 0 40px rgba(245, 158, 11, 0.5),
+    0 4px 12px rgba(255, 215, 0, 0.4);
 }
 
 .service-card:hover .service-icon::before,
@@ -486,7 +486,10 @@ section {
   font-size: var(--text-xl);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-md);
-  color: var(--color-primary);
+  background: linear-gradient(135deg, #EC4899 0%, #F59E0B 50%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .service-description {
