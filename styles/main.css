@@ -105,6 +105,20 @@ body {
   box-sizing: border-box;
 }
 
+/* Убрать outline при клике на любые элементы */
+*:focus {
+  outline: none;
+}
+
+/* Убрать outline для header элементов */
+.site-header *:focus,
+.site-header button:focus,
+.site-header a:focus,
+.nav-link:focus,
+.logo:focus {
+  outline: none;
+}
+
 img {
   max-width: 100%;
   height: auto;
