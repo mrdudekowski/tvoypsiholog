@@ -2,48 +2,80 @@
 /* Золотой минимализм с элементами зелени */
 
 :root {
-  /* Теплая золотистая палитра с зелеными акцентами */
-  --color-primary: #FFD700;        /* Яркое золото */
-  --color-primary-hover: #DAA520; /* Темное золото */
-  --color-secondary: #2E8B57;      /* Морская волна зеленый */
-  --color-secondary-hover: #3CB371; /* Средний морской зеленый */
+  /* ===== ПРЕМИАЛЬНОЕ ЗОЛОТО ===== */
+  --color-gold-dark: #9A7209;        /* Самое темное золото */
+  --color-gold-medium: #B8860B;      /* Основное темное золото */
+  --color-gold-classic: #D4AF37;     /* Классическое золото */
+  --color-gold-light: #F4E4C1;       /* Светлое золото для подсветок */
+  
+  /* ===== ОСНОВНЫЕ ЦВЕТА ===== */
+  --color-primary: #B8860B;          /* Темное золото - основной */
+  --color-primary-hover: #9A7209;    /* Темнее при hover */
+  --color-secondary: #B8860B;        /* Золото вместо зеленого */
+  --color-secondary-hover: #9A7209;  /* Темнее при hover */
 
-  /* Темно-фиолетовый градиент - "Мистическая Ночь" */
-  --color-background: #0A0A1A;     /* Глубокий темно-фиолетовый */
+/* ===== ФИОЛЕТОВО-БОРДОВЫЕ АКЦЕНТЫ (для hover) ===== */
+--color-burgundy-dark: #6B1B3D;    /* Темный бордовый */
+--color-burgundy: #8B2252;         /* Бордовый */
+--color-violet: #9B4F96;           /* Фиолетово-бордовый */
+--color-violet-light: #B565A7;     /* Светлый фиолетовый */
+
+  /* ===== ЧЕРНЫЙ ФОН С ТЕКСТУРОЙ ===== */
+  --color-background: #000000;
   --color-background-gradient: 
-    /* Тонкие изумрудные вкрапления - мистическое свечение */
-    radial-gradient(ellipse 900px 600px at 10% 25%, rgba(46, 139, 87, 0.06) 0%, transparent 45%),
-    radial-gradient(ellipse 800px 550px at 90% 70%, rgba(26, 77, 58, 0.05) 0%, transparent 50%),
-    radial-gradient(circle 400px at 25% 65%, rgba(34, 139, 34, 0.04) 0%, transparent 40%),
-    radial-gradient(circle 350px at 75% 30%, rgba(16, 89, 70, 0.05) 0%, transparent 38%),
-    /* Фиолетовые переливы - создают глубину */
-    radial-gradient(ellipse 1000px 800px at 50% 50%, rgba(75, 0, 130, 0.15) 0%, rgba(50, 0, 90, 0.08) 40%, transparent 60%),
-    radial-gradient(circle 600px at 20% 80%, rgba(40, 0, 70, 0.12) 0%, transparent 45%),
-    radial-gradient(circle 550px at 80% 20%, rgba(50, 0, 80, 0.10) 0%, transparent 48%),
-    /* Темные акценты - добавляют мистику */
-    radial-gradient(circle 500px at 15% 15%, rgba(10, 10, 30, 0.6) 0%, transparent 50%),
-    radial-gradient(circle 450px at 85% 85%, rgba(15, 10, 35, 0.5) 0%, transparent 48%),
-    /* Основной темно-фиолетовый градиент */
+    /* Золотые металлические прожилки - тонкие линии */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(184, 134, 11, 0.015) 1px,
+      transparent 2px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(184, 134, 11, 0.012) 1px,
+      transparent 2px,
+      transparent 80px
+    ),
+    /* Диагональные золотые переливы - едва заметные */
+    linear-gradient(
+      135deg,
+      rgba(184, 134, 11, 0.025) 0%,
+      transparent 15%,
+      transparent 85%,
+      rgba(184, 134, 11, 0.02) 100%
+    ),
+    /* Вертикальный золотой отблеск в центре */
+    radial-gradient(
+      ellipse 800px 1200px at 50% 50%,
+      rgba(184, 134, 11, 0.035) 0%,
+      transparent 60%
+    ),
+    /* Черная база с едва заметной глубиной */
     linear-gradient(180deg,
-      #0A0A1A 0%,      /* Очень темный фиолетовый */
-      #1A0F2E 15%,     /* Темный баклажан */
-      #2D1B3D 30%,     /* Средний фиолетовый */
-      #3D2050 50%,     /* Насыщенный фиолетовый (центр) */
-      #2D1B3D 70%,     /* Средний фиолетовый */
-      #1A0F2E 85%,     /* Темный баклажан */
-      #0A0A1A 100%     /* Очень темный фиолетовый */
+      #000000 0%,
+      #020202 30%,
+      #010101 70%,
+      #000000 100%
     );
 
-  /* Поверхности и текст */
-  --color-surface: #1A0F2E;        /* Темная фиолетовая поверхность */
-  --color-surface-light: #2D1B3D;  /* Светлая фиолетовая поверхность */
-  --color-text-primary: #FFFFFF;    /* Белый текст */
-  --color-text-secondary: #D4C5F0;  /* Светло-фиолетовый текст */
-  --color-text-accent: #FFD700;    /* Золотой текст */
-
-  /* Границы и тени */
-  --color-border: #3D2050;         /* Фиолетовые границы */
-  --color-border-light: #4D2F60;   /* Светлые фиолетовые границы */
+  /* ===== ПОВЕРХНОСТИ ===== */
+  --color-surface: #0a0a08;          /* Темно-серая с золотым оттенком */
+  --color-surface-light: #372a19;    /* Светлее с золотым оттенком */
+  
+  /* ===== ТЕКСТ ===== */
+  --color-text-primary: #FFFFFF;     /* Белый */
+  --color-text-secondary: #E5E5E5;   /* Светло-серый */
+  --color-text-accent: #D4AF37;      /* Классическое золото */
+  
+  /* ===== ЗЕЛЕНЫЙ ТОЛЬКО ДЛЯ АНИМАЦИЙ ===== */
+  --color-emerald: #2E8B57;          /* Только для линий под заголовками */
+  --color-emerald-soft: rgba(46, 139, 87, 0.35); /* Мягкий вариант */
+ 
+  /* ===== ГРАНИЦЫ ===== */
+  --color-border: rgba(184, 134, 11, 0.3);
+  --color-border-light: rgba(212, 175, 55, 0.2);
 
   /* Типографика */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -83,11 +115,16 @@
   --radius-lg: 0.75rem;    /* 12px */
   --radius-xl: 1rem;       /* 16px */
 
-  /* Тени */
+  /* Тени черные (для карточек) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* ===== ЗОЛОТЫЕ ТЕНИ ===== */
+  --shadow-gold-sm: 0 4px 12px rgba(184, 134, 11, 0.25);
+  --shadow-gold-md: 0 6px 20px rgba(184, 134, 11, 0.4);
+  --shadow-gold-lg: 0 10px 30px rgba(184, 134, 11, 0.5);
 
   /* Переходы */
   --transition-fast: 0.15s ease-in-out;
@@ -268,7 +305,7 @@ img {
   justify-content: center;
   padding: var(--spacing-md) var(--spacing-xl);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   font-family: var(--font-family-primary);
   font-size: var(--text-base);
   font-weight: var(--font-weight-medium);
@@ -279,15 +316,26 @@ img {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: var(--color-black);
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, 
+    var(--color-gold-medium) 0%,
+    var(--color-gold-dark) 100%
+  );
+  color: var(--color-text-primary);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 
+    var(--shadow-gold-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-primary-hover) 0%, #B8860B 100%);
+  background: linear-gradient(135deg, 
+    var(--color-gold-classic) 0%,
+    var(--color-gold-medium) 100%
+  );
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  box-shadow: 
+    var(--shadow-gold-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary {
@@ -298,7 +346,7 @@ img {
 
 .btn-secondary:hover {
   background: var(--color-primary);
-  color: var(--color-black);
+  color: #160420;
 }
 
 .btn-outline {
@@ -325,50 +373,55 @@ section {
   font-weight: var(--font-weight-light);
   text-align: center;
   margin-bottom: var(--spacing-2xl);
-  color: var(--color-primary);
+  background: linear-gradient(135deg, 
+    var(--color-gold-dark) 0%,
+    var(--color-gold-medium) 50%,
+    var(--color-gold-classic) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: 0.02em;
   position: relative;
   padding-bottom: var(--spacing-lg);
+  text-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
 }
 
-/* Изумрудная линия свечения под заголовками */
+/* Мягкая изумрудная линия под заголовками */
 .section-title::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 120px;
+  width: 250px;
   height: 3px;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(46, 139, 87, 0.3) 20%,
-    rgba(46, 139, 87, 0.8) 50%,
-    rgba(46, 139, 87, 0.3) 80%,
+    rgba(46, 139, 87, 0.15) 20%,
+    var(--color-emerald-soft) 50%,
+    rgba(46, 139, 87, 0.15) 80%,
     transparent 100%
   );
   box-shadow: 
-    0 0 20px rgba(46, 139, 87, 0.6),
-    0 0 40px rgba(46, 139, 87, 0.4),
-    0 0 60px rgba(46, 139, 87, 0.2);
+    0 0 8px rgba(46, 139, 87, 0.25),
+    0 0 15px rgba(46, 139, 87, 0.15);
   border-radius: 2px;
-  animation: emerald-glow 3s ease-in-out infinite;
+  animation: emerald-glow-soft 4s ease-in-out infinite;
 }
 
-@keyframes emerald-glow {
+@keyframes emerald-glow-soft {
   0%, 100% {
-    opacity: 0.8;
+    opacity: 0.6;
     box-shadow: 
-      0 0 20px rgba(46, 139, 87, 0.6),
-      0 0 40px rgba(46, 139, 87, 0.4),
-      0 0 60px rgba(46, 139, 87, 0.2);
+      0 0 8px rgba(46, 139, 87, 0.25),
+      0 0 15px rgba(46, 139, 87, 0.15);
   }
   50% {
-    opacity: 1;
+    opacity: 0.85;
     box-shadow: 
-      0 0 30px rgba(46, 139, 87, 0.8),
-      0 0 60px rgba(46, 139, 87, 0.6),
-      0 0 90px rgba(46, 139, 87, 0.4);
+      0 0 12px rgba(46, 139, 87, 0.35),
+      0 0 20px rgba(46, 139, 87, 0.2);
   }
 }
 
@@ -446,19 +499,19 @@ section {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-top: 3px solid  rgba(46, 139, 87, 0.6);
+  border-top: 3px solid var(--color-border);
 }
 
 /* Hover эффект для карточек - деликатный */
 .service-card:hover {
-  border-color: rgba(219, 39, 119, 0.5);
-  box-shadow: 0 20px 40px rgba(219, 39, 119, 0.15);
+  border-color: rgba(155, 79, 150, 0.5);
+  box-shadow: 
+    0 20px 40px rgba(139, 34, 82, 0.25),      /* Бордовое свечение */
+    0 30px 60px rgba(155, 79, 150, 0.2),      /* Фиолетовое свечение */
+    0 0 80px rgba(155, 79, 150, 0.15);        /* Дополнительное мягкое свечение */
   background: transparent;
   transform: translateY(-5px);
 }
-
-
-
 
 .service-icon {
   width: 64px;
@@ -467,11 +520,17 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #DB2777 0%, #F59E0B 50%, #FFD700 100%);
+  background: linear-gradient(135deg, 
+    var(--color-gold-dark) 0%,
+    var(--color-gold-medium) 50%,
+    var(--color-gold-classic) 100%
+  );
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
+  box-shadow: 
+    var(--shadow-gold-sm),
+    0 0 20px rgba(184, 134, 11, 0.2);
   position: relative;
-  transition: all 0.4s ease;
+  transition: all 0.4s ease, background 0.6s ease;
 }
 
 /* Частицы света вокруг иконки */
@@ -482,7 +541,7 @@ section {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid  rgba(46, 139, 87, 0.6);
+  border: 2px solid var(--color-border);
   opacity: 0;
   transition: all 0.4s ease;
 }
@@ -490,7 +549,7 @@ section {
 /* hover для колец */
 .service-card:hover .service-icon::before,
 .service-card:hover .service-icon::after {
-  border-color: rgba(219, 39, 119, 0.5);
+  border-color: rgba(155, 79, 150, 0.6);
 }
 
 .service-icon::before {
@@ -533,15 +592,16 @@ section {
 /* Эффект при hover карточки */
 .service-card:hover .service-icon {
   transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, 
+    var(--color-burgundy-dark) 0%,
+    var(--color-burgundy) 50%,
+    var(--color-violet) 100%
+  );
   box-shadow: 
-    0 0 20px rgba(219, 39, 119, 0.7),
-    0 0 40px rgba(245, 158, 11, 0.5),
-    0 4px 12px rgba(255, 215, 0, 0.4);
-}
-
-.service-card:hover .service-icon::before,
-.service-card:hover .service-icon::after {
-  opacity: 1;
+    0 4px 12px rgba(139, 34, 82, 0.3),
+    0 6px 20px rgba(139, 34, 82, 0.3),
+    0 0 30px rgba(155, 79, 150, 0.25),
+    0 0 50px rgba(155, 79, 150, 0.1);
 }
 
 .service-icon-img {
@@ -560,10 +620,27 @@ section {
   font-size: var(--text-xl);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg, #EC4899 0%, #F59E0B 50%, #FFD700 100%);
+  background: linear-gradient(135deg, 
+    var(--color-gold-dark) 0%,
+    var(--color-gold-medium) 50%,
+    var(--color-gold-classic) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Hover для заголовка услуги - меняется на фиолетово-бордовый */
+.service-card:hover .service-title {
+  background: linear-gradient(135deg, 
+    var(--color-burgundy) 0%,
+    var(--color-violet) 50%,
+    var(--color-violet-light) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.7s ease;
 }
 
 .service-description {
@@ -572,11 +649,6 @@ section {
   line-height: 1.6;
 }
 
-.service-price {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
-}
 
 /* Процесс работы */
 .process {
@@ -596,22 +668,32 @@ section {
   border-radius: var(--radius-lg);
   background: var(--color-white);
   box-shadow: var(--shadow-sm);
-  border: 1px solid  rgba(46, 139, 87, 0.6);
+  border: 1px solid var(--color-border);
 }
 
 .process-step:hover {
-  border: 1px solid rgba(219, 39, 119, 0.5);
-  box-shadow: 0 20px 40px rgba(219, 39, 119, 0.15);
+  border: 1px solid rgba(155, 79, 150, 0.5);
+  box-shadow: 
+    0 20px 20px rgba(139, 34, 82, 0.3),
+    0 30px 30px rgba(155, 79, 150, 0.25),
+    0 0 40px rgba(155, 79, 150, 0.2);
   transform: translateY(-5px);
 }
 
 .step-number {
   width: 64px;
   height: 64px;
-  background: rgba(26, 15, 46, 0.6);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(46, 139, 87, 0.6);
-  color: var(--color-primary);
+  border: 2px solid var(--color-border);
+  background: linear-gradient(135deg, 
+    var(--color-gold-dark) 0%,
+    var(--color-gold-medium) 50%,
+    var(--color-gold-classic) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -620,7 +702,7 @@ section {
   font-weight: var(--font-weight-bold);
   margin: 0 auto var(--spacing-lg);
   position: relative;
-  transition: all 0.4s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
     0 0 20px rgba(46, 139, 87, 0.3),
     inset 0 0 20px rgba(46, 139, 87, 0.1);
@@ -654,17 +736,26 @@ section {
 
 /* Hover эффект для process-step влияет на step-number */
 .process-step:hover .step-number {
-  border-color: rgba(219, 39, 119, 0.6);
+  border-color: rgba(155, 79, 150, 0.6);
+  background: linear-gradient(135deg, 
+    var(--color-burgundy-dark) 0%,
+    var(--color-burgundy) 50%,
+    var(--color-violet) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   box-shadow: 
-    0 0 30px rgba(219, 39, 119, 0.5),
-    inset 0 0 20px rgba(219, 39, 119, 0.2);
+    0 0 30px rgba(139, 34, 82, 0.5),
+    0 0 50px rgba(155, 79, 150, 0.4),
+    inset 0 0 20px rgba(155, 79, 150, 0.2);
   transform: scale(1.1);
 }
 
 .process-step:hover .step-number::before,
 .process-step:hover .step-number::after {
   opacity: 1;
-  border-color: rgba(219, 39, 119, 0.4);
+  border-color: rgba(155, 79, 150, 0.5);
 }
 
 .process-step:hover .step-number::before {
@@ -690,11 +781,28 @@ section {
   font-size: var(--text-xl);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg, #EC4899 0%, #F59E0B 50%, #FFD700 100%);
+  background: linear-gradient(135deg, 
+    var(--color-gold-dark) 0%,
+    var(--color-gold-medium) 50%,
+    var(--color-gold-classic) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-align: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover для заголовка шага - меняется на фиолетово-бордовый */
+.process-step:hover .step-title {
+  background: linear-gradient(135deg, 
+    var(--color-burgundy) 0%,
+    var(--color-violet) 50%,
+    var(--color-violet-light) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .step-description {
@@ -713,8 +821,8 @@ section {
 }
 
 .testimonial-card {
-  background: rgba(45, 27, 14, 0.9);
-  border: 1px solid var(--color-border-light);
+  background: transparent;
+  border: 1px solid  rgba(46, 139, 87, 0.6);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   backdrop-filter: blur(10px);
@@ -989,7 +1097,7 @@ section {
   /* Отключаем hover эффекты для иконок */
   .service-card:hover .service-icon {
     transform: none;
-    box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
+    box-shadow: var(--shadow-gold-sm);
   }
 
   .service-card:hover .service-icon::before,

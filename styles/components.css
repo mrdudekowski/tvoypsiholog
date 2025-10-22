@@ -6,7 +6,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-xl);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-normal);
@@ -139,25 +139,25 @@
 .glass-card {
   background: rgba(26, 15, 46, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
 
 /* Пульсирующая кнопка CTA */
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.6);
   }
   70% {
-    box-shadow: 0 0 0 15px rgba(255, 215, 0, 0);
+    box-shadow: 0 0 0 15px rgba(184, 134, 11, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
   }
 }
 
 .btn-primary {
-  animation: pulse 2s infinite;
+  animation: pulse 5s infinite;
 }
 
 /* Индикатор загрузки */
@@ -186,7 +186,7 @@
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-medium);
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
 }
 
 /* Цитаты в отзывах */
@@ -195,7 +195,7 @@
   color: var(--color-primary);
   opacity: 0.4;
   line-height: 1;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  text-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
 }
 
 /* Затемнение фона для модалов */
@@ -244,12 +244,12 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transition: all var(--transition-normal);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(184, 134, 11, 0.2);
 }
 
 .process-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 35px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 12px 35px rgba(184, 134, 11, 0.2);
   border-color: var(--color-primary);
 }
 
@@ -361,7 +361,7 @@
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-primary) 100%);
   margin: var(--spacing-xl) auto;
   border-radius: 2px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
 }
 
 /* Текстовые стили */
@@ -377,7 +377,7 @@
 }
 
 .text-glow {
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  text-shadow: 0 0 15px rgba(184, 134, 11, 0.6);
 }
 
 /* Фокус стили для доступности */
@@ -391,30 +391,43 @@
    ============================================ */
 
 .btn-certificates {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: #000;
+  color: var(--color-primary);
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  font-size: var(--text-base);
+  font-size: calc(var(--text-base) * 1.50);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 
+    color 0.3s ease, 
+    box-shadow 0.3s ease,
+    background 0.3s ease;
   display: inline-flex;
   align-items: center;
+  justify-content: center;  
   gap: 8px;
   margin-top: var(--spacing-md);
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  background: none;
+  box-shadow: none;
 }
 
-.btn-certificates:hover {
-  box-shadow: 0 0 20px rgba(46, 139, 87, 0.6), 0 4px 12px rgba(255, 215, 0, 0.4);
-  transform: translateY(-2px);
+.btn-certificates .icon-graduation {
+  transition: 
+    color 0.3s ease, 
+    filter 0.3s ease,
+    transform 0.3s ease;
 }
 
-.btn-certificates:active {
-  transform: translateY(0);
-  box-shadow: 0 0 15px rgba(46, 139, 87, 0.5), 0 2px 6px rgba(255, 215, 0, 0.3);
+.btn-certificates:hover,
+.btn-certificates:focus {
+  color: var(--color-primary-hover);
+}
+
+.btn-certificates:hover .icon-graduation,
+.btn-certificates:focus .icon-graduation {
+  color: var(--color-gold-classic); /* золото, для эффекта */
+  filter: drop-shadow(0 0 6px var(--color-gold-classic));
+  transform: scale(1.15) rotate(-10deg);
 }
 
 .icon-graduation {
@@ -458,13 +471,13 @@
   background: rgba(26, 15, 46, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 32px;
   max-width: 90vw;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(184, 134, 11, 0.1);
   position: relative;
   animation: slideUp 0.4s ease-out;
 }
@@ -485,8 +498,8 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(255, 215, 0, 0.2);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(184, 134, 11, 0.2);
+  border: 1px solid var(--color-border);
   color: var(--color-primary);
   font-size: 28px;
   line-height: 1;
@@ -502,9 +515,9 @@
 }
 
 .modal-close:hover {
-  background: rgba(255, 215, 0, 0.3);
+  background: rgba(184, 134, 11, 0.3);
   transform: rotate(90deg);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
 }
 
 /* Заголовок модального окна */
@@ -536,8 +549,8 @@
 }
 
 .certificate-item:hover img {
-  border-color: rgba(255, 215, 0, 0.4);
-  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+  border-color: rgba(184, 134, 11, 0.4);
+  box-shadow: 0 4px 20px rgba(184, 134, 11, 0.2);
   transform: scale(1.05);
 }
 
@@ -553,7 +566,7 @@
   display: block;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(184, 134, 11, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   vertical-align: top;
@@ -570,12 +583,12 @@
 }
 
 .modal-glassmorphism::-webkit-scrollbar-thumb {
-  background: rgba(255, 215, 0, 0.3);
+  background: rgba(184, 134, 11, 0.3);
   border-radius: 4px;
 }
 
 .modal-glassmorphism::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 215, 0, 0.5);
+  background: rgba(184, 134, 11, 0.5);
 }
 
 /* ============================================
@@ -679,7 +692,7 @@ body.modal-open {
 .modal-content {
   background: rgba(26, 15, 46, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(184, 134, 11, 0.2);
   border-radius: 16px;
   padding: 2.5rem;
   max-width: 600px;
@@ -714,7 +727,7 @@ body.modal-open {
 }
 
 .modal-close:hover {
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(184, 134, 11, 0.1);
   color: var(--color-primary);
   transform: rotate(90deg);
 }
@@ -723,7 +736,7 @@ body.modal-open {
 .modal-title {
   font-size: 2rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #EC4899 0%, #F59E0B 50%, #FFD700 100%);
+  background: linear-gradient(135deg, var(--color-gold-medium) 0%, var(--color-gold-medium) 50%, var(--color-gold-classic) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -758,7 +771,7 @@ body.modal-open {
 }
 
 .required {
-  color: #EC4899;
+  color: var(--color-gold-medium);
 }
 
 .optional {
@@ -773,7 +786,7 @@ body.modal-open {
   width: 100%;
   padding: 0.875rem 1rem;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(184, 134, 11, 0.2);
   border-radius: 8px;
   color: var(--color-text-primary);
   font-size: 1rem;
@@ -784,8 +797,8 @@ body.modal-open {
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: rgba(219, 39, 119, 0.5);
-  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
+  border-color: rgba(184, 134, 11, 0.5);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.1);
   background: rgba(0, 0, 0, 0.4);
 }
 
@@ -802,7 +815,7 @@ body.modal-open {
 
 /* Ошибки валидации */
 .form-error {
-  color: #EC4899;
+  color: var(--color-gold-medium);
   font-size: 0.85rem;
   min-height: 1.2rem;
   display: block;
@@ -810,7 +823,7 @@ body.modal-open {
 
 .form-input.error,
 .form-textarea.error {
-  border-color: #EC4899;
+  border-color: var(--color-gold-medium);
 }
 
 /* Выбор мессенджера */
@@ -835,7 +848,7 @@ body.modal-open {
   gap: 0.5rem;
   padding: 1rem;
   background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 215, 0, 0.2);
+  border: 2px solid rgba(184, 134, 11, 0.2);
   border-radius: 8px;
   color: var(--color-text-primary);
   font-weight: 500;
@@ -848,13 +861,13 @@ body.modal-open {
 }
 
 .messenger-option input[type="radio"]:checked + .messenger-btn {
-  background: linear-gradient(135deg, rgba(219, 39, 119, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
-  border-color: rgba(219, 39, 119, 0.6);
-  box-shadow: 0 0 20px rgba(219, 39, 119, 0.3);
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.2) 0%, rgba(184, 134, 11, 0.2) 100%);
+  border-color: rgba(184, 134, 11, 0.6);
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
 }
 
 .messenger-option:hover .messenger-btn {
-  border-color: rgba(219, 39, 119, 0.4);
+  border-color: rgba(184, 134, 11, 0.4);
   transform: translateY(-2px);
 }
 
@@ -877,14 +890,14 @@ body.modal-open {
 
 /* Кнопка "Задать вопрос" */
 .question-btn {
-  background: linear-gradient(135deg, #DB2777 0%, #F59E0B 50%, #FFD700 100%);
+  background: linear-gradient(135deg, var(--color-gold-dark) 0%, var(--color-gold-medium) 50%, var(--color-gold-classic) 100%);
   color: white;
   border: none;
 }
 
 .question-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(219, 39, 119, 0.3);
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
 }
 
 /* ========================================
@@ -915,9 +928,9 @@ body.modal-open {
   padding: 1.25rem 1.75rem;
   background: rgba(26, 15, 46, 0.98);
   backdrop-filter: blur(20px);
-  border: 2px solid rgba(219, 39, 119, 0.5);
+  border: 2px solid rgba(184, 134, 11, 0.5);
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(219, 39, 119, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(184, 134, 11, 0.3);
 }
 
 .notification-icon {
