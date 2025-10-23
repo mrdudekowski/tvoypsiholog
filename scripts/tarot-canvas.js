@@ -13,8 +13,8 @@
     const CARD_CONFIG = {
         left: {
             selector: '.tarot-card-left',
-            targetSelector: '.step-title',
-            targetText: 'Знакомство',
+            targetSelector: '#process-title',  // ИЗМЕНЕНО: было '.step-title'
+            targetText: null,                   // ИЗМЕНЕНО: было 'Знакомство'
             horizontalPosition: '3vw',
             horizontalProperty: 'left',
             initialRotation: -15,
@@ -24,8 +24,8 @@
         },
         right: {
             selector: '.tarot-card-right',
-            targetSelector: '.process-step',
-            targetText: null, // null = последний элемент
+            targetSelector: '#process-title',  // ИЗМЕНЕНО: было '.process-step'
+            targetText: null,                   // ИЗМЕНЕНО: был null (последний элемент)
             horizontalPosition: '3vw',
             horizontalProperty: 'right',
             initialRotation: 15,
@@ -35,9 +35,9 @@
         },
         testimonials: {
             selector: '.tarot-card-testimonials',
-            targetSelector: '.testimonials',
-            targetText: null, // null = первый элемент секции
-            horizontalPosition: '2vw',
+            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetText: null,
+            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
             horizontalProperty: 'left',
             initialRotation: -12,
             finalRotation: -8,
@@ -46,9 +46,9 @@
         },
         lovers: {
             selector: '.tarot-card-lovers',
-            targetSelector: '.testimonials',
-            targetText: null, // null = первый элемент секции
-            horizontalPosition: '2vw',
+            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetText: null,
+            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
             horizontalProperty: 'right',
             initialRotation: 12,
             finalRotation: 8,
@@ -85,26 +85,33 @@
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const targetTopInDocument = targetRect.top + scrollTop;
             
-            const cardHeight = 160; /* Обновляем под новый размер карт */
+            // Динамическое определение высоты карты в зависимости от разрешения
+            const viewportWidth = window.innerWidth;
+            let cardHeight;
+
+            if (viewportWidth >= 1921) {
+                cardHeight = 336;
+            } else if (viewportWidth >= 1440) {
+                cardHeight = 336;
+            } else if (viewportWidth >= 1200) {
+                cardHeight = 302; // 336 × 0.9
+            } else if (viewportWidth >= 1024) {
+                cardHeight = 269; // 336 × 0.8
+            } else if (viewportWidth >= 769) {
+                cardHeight = 235; // 336 × 0.7
+            } else {
+                cardHeight = 336; // fallback
+            }
+
             const targetHeight = targetRect.height;
             let finalTop = targetTopInDocument + (targetHeight / 2) - (cardHeight / 2);
-            
-            // Для третьей карты добавляем смещение вниз на 70px
-            if (config.selector === '.tarot-card-testimonials') {
-                finalTop += 70;
-            }
-            
-            // Для четвертой карты добавляем смещение вниз на 70px (на том же уровне, что и третья)
-            if (config.selector === '.tarot-card-lovers') {
-                finalTop += 70;
-            }
             
             card.style.top = `${finalTop}px`;
             
             console.log(`📍 ${config.selector} позиция:`, {
                 top: `${finalTop}px`,
                 [config.horizontalProperty]: config.horizontalPosition,
-                offset: config.selector === '.tarot-card-testimonials' ? '+300px' : 'none'
+                target: config.targetSelector  // ИЗМЕНЕНО: убрали offset, добавили target
             });
         }
         
@@ -162,9 +169,15 @@
      * @returns {Element|null} Найденный элемент или null
      */
     function findTargetElement(config) {
+        // Для элементов с ID используем прямой селектор
+        if (config.targetSelector.startsWith('#')) {
+            const element = document.querySelector(config.targetSelector);
+            return element;
+        }
+        
+        // Fallback для других селекторов (не используется в текущей конфигурации)
         const elements = document.querySelectorAll(config.targetSelector);
         
-        // Если указан текст для поиска
         if (config.targetText) {
             for (const element of elements) {
                 if (element.textContent.includes(config.targetText)) {
@@ -173,18 +186,7 @@
             }
         }
         
-        // Для testimonials возвращаем первый элемент секции
-        if (config.selector === '.tarot-card-testimonials') {
-            return elements[0];
-        }
-        
-        // Для lovers возвращаем первый элемент секции
-        if (config.selector === '.tarot-card-lovers') {
-            return elements[0];
-        }
-        
-        // Иначе возвращаем последний элемент (для правой карты)
-        return elements[elements.length - 1];
+        return elements[0] || elements[elements.length - 1];
     }
     
     /**
