@@ -17,8 +17,8 @@
 /* Базовые стили карты */
 .tarot-card {
   position: absolute; /* Абсолютная позиция относительно документа */
-  width: 140px;
-  height: 240px;
+  width: 100px; /* Уменьшаем ширину */
+  height: 160px; /* Уменьшаем высоту */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -26,7 +26,7 @@
   backface-visibility: hidden;
   transform: translateZ(0);
   transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Плавный easing */
-  z-index: 10; /* Поверх других элементов */
+  z-index: 1; /* Под контентом, но над фоном */
 }
 
 /* Левая карта - начальное состояние (невидима, смещена влево) */
@@ -42,17 +42,17 @@
 /* Левая карта - активное состояние (видима, на финальной позиции) */
 .tarot-card-left.active {
   /* left и top устанавливаются через JavaScript */
-  opacity: 0.15;
-  transform: rotate(-10deg) scale(1);
+  opacity: 0.08; /* Еще более прозрачная, чтобы не мешать контенту */
+  transform: rotate(-10deg) scale(0.8); /* Немного меньше */
 }
 
 /* Анимация левитации - плавное покачивание */
 @keyframes cardFloat {
   0%, 100% {
-    transform: translateY(0px) rotate(-10deg) scale(1);
+    transform: translateY(0px) rotate(-10deg) scale(0.8);
   }
   50% {
-    transform: translateY(-8px) rotate(-12deg) scale(1.02);
+    transform: translateY(-8px) rotate(-12deg) scale(0.82);
   }
 }
 
@@ -79,17 +79,17 @@
 /* Правая карта - активное состояние */
 .tarot-card-right.active {
   /* right и top устанавливаются через JavaScript */
-  opacity: 0.15;
-  transform: rotate(10deg) scale(1); /* Зеркальный поворот */
+  opacity: 0.08; /* Еще более прозрачная */
+  transform: rotate(10deg) scale(0.8); /* Немного меньше */
 }
 
 /* Зеркальная анимация левитации */
 @keyframes cardFloatRight {
   0%, 100% {
-    transform: translateY(0px) rotate(10deg) scale(1);
+    transform: translateY(0px) rotate(10deg) scale(0.8);
   }
   50% {
-    transform: translateY(-8px) rotate(12deg) scale(1.02);
+    transform: translateY(-8px) rotate(12deg) scale(0.82);
   }
 }
 
@@ -114,17 +114,17 @@
 /* Третья карта - активное состояние */
 .tarot-card-testimonials.active {
   /* left и top устанавливаются через JavaScript */
-  opacity: 0.15;
-  transform: rotate(-8deg) scale(1); /* Финальный поворот */
+  opacity: 0.08; /* Еще более прозрачная */
+  transform: rotate(-8deg) scale(0.8); /* Немного меньше */
 }
 
 /* Анимация левитации для третьей карты */
 @keyframes cardFloatTestimonials {
   0%, 100% {
-    transform: translateY(0px) rotate(-8deg) scale(1);
+    transform: translateY(0px) rotate(-8deg) scale(0.8);
   }
   50% {
-    transform: translateY(-6px) rotate(-10deg) scale(1.01);
+    transform: translateY(-6px) rotate(-10deg) scale(0.81);
   }
 }
 
@@ -150,17 +150,17 @@
 /* Четвертая карта - активное состояние */
 .tarot-card-lovers.active {
   /* right и top устанавливаются через JavaScript */
-  opacity: 0.15;
-  transform: rotate(8deg) scale(1); /* Финальный поворот */
+  opacity: 0.08; /* Еще более прозрачная */
+  transform: rotate(8deg) scale(0.8); /* Немного меньше */
 }
 
 /* Анимация левитации для четвертой карты */
 @keyframes cardFloatLovers {
   0%, 100% {
-    transform: translateY(0px) rotate(8deg) scale(1);
+    transform: translateY(0px) rotate(8deg) scale(0.8);
   }
   50% {
-    transform: translateY(-6px) rotate(10deg) scale(1.01);
+    transform: translateY(-6px) rotate(10deg) scale(0.81);
   }
 }
 

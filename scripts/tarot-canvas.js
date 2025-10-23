@@ -85,7 +85,7 @@
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const targetTopInDocument = targetRect.top + scrollTop;
             
-            const cardHeight = 240;
+            const cardHeight = 160; /* Обновляем под новый размер карт */
             const targetHeight = targetRect.height;
             let finalTop = targetTopInDocument + (targetHeight / 2) - (cardHeight / 2);
             
