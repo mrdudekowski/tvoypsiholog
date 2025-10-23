@@ -77,6 +77,14 @@
   --color-border: rgba(184, 134, 11, 0.3);
   --color-border-light: rgba(212, 175, 55, 0.2);
 
+  /* ===== ЦВЕТА МЕССЕНДЖЕРОВ ===== */
+  --color-telegram: #0088cc;           /* Telegram синий */
+  --color-telegram-hover: #006699;     /* Telegram темнее при hover */
+  --color-whatsapp: #25D366;           /* WhatsApp зеленый */
+  --color-whatsapp-hover: #128C7E;     /* WhatsApp темнее при hover */
+  --color-phone-border: rgba(255, 255, 255, 0.3);  /* Граница кнопки телефона */
+  --color-phone-border-hover: rgba(255, 255, 255, 0.6); /* Граница при hover */
+
   /* Типографика */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-weight-light: 300;
@@ -497,10 +505,54 @@ section {
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: var(--spacing-xl);
   position: relative;
   z-index: 2;
+  justify-items: center;
+}
+
+/* Для нижнего ряда создаем 2 широкие колонки */
+.services-grid .service-card:nth-child(4),
+.services-grid .service-card:nth-child(5) {
+  grid-column: span 1;
+}
+
+/* Нижний ряд с 2 карточками - центрируем */
+.services-grid .service-card:nth-child(4),
+.services-grid .service-card:nth-child(5) {
+  grid-column: span 1;
+}
+
+/* Центрируем нижний ряд - 2 карточки рядом в центре */
+.services-grid .service-card:nth-child(4) {
+  grid-column: 1 / 2; /* Левая колонка */
+  justify-self: center; /* Центрируем в левой колонке */
+  grid-row: 2; /* Обеспечиваем, что карточка находится во втором ряду */
+}
+
+.services-grid .service-card:nth-child(5) {
+  grid-column: 3 / 4; /* Правая колонка */
+  justify-self: center; /* Центрируем в правой колонке */
+  grid-row: 2; /* Обеспечиваем, что карточка находится во втором ряду */
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, auto);
+    gap: var(--spacing-lg);
+  }
+  
+  .services-grid .service-card:nth-child(4),
+  .services-grid .service-card:nth-child(5) {
+    grid-column: 1;
+    justify-self: center;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .service-card {
@@ -934,51 +986,118 @@ section {
 
 .contact-methods {
   display: flex;
-  gap: var(--spacing-lg);
-  justify-content: center;
   flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--spacing-xl);
+  width: 100%;
+}
+
+.question-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: #fff;
+  background: transparent;
+  border: 2px solid var(--color-gold-classic);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  transition: 
+    background 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s,
+    border-color 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.22s cubic-bezier(0.4, 0.1, 0.2, 1),
+    transform 0.22s cubic-bezier(0.4, 0.1, 0.2, 1);
+  cursor: pointer;
+  outline: none;
+  width: 240px !important;
+  min-width: 240px !important;
+}
+
+.question-btn:hover,
+.question-btn:focus {
+  background: linear-gradient(90deg, #ffeac9 0%, #ffd8a7 100%);
+  color: #111;
+  border-color: var(--color-gold-classic);
+  box-shadow: 0 0 20px rgba(200, 132, 43, 0.18);
+  transform: translateY(-2px) scale(1.025);
+}
+
+/* Текст внутри question-btn */
+.question-btn .contact-text {
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .contact-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
-  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  transition: all 0.3s ease;
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  transition: all var(--transition-normal);
-  min-height: 48px;
+  border: none;
+  cursor: pointer;
+  /* Одинаковая ширина для всех кнопок */
+  min-width: 120px;
+  width: 120px;
+  height: 56px;
+  font-size: 1.5rem; /* Увеличиваем размер иконок */
+}
+
+/* Иконки без текста - центрируем и увеличиваем */
+.contact-button i {
+  margin: 0;
+  font-size: 1.8rem; /* Увеличиваем размер иконок */
 }
 
 .telegram-btn {
-  background: #0088cc;
-  color: white;
+  background: transparent; /* Remove blue fill */
+  color: white; /* Keep white icon */
+  border: 2px solid var(--color-gold-classic); /* Add golden outline */
 }
 
 .telegram-btn:hover {
-  background: #006699;
+  background: transparent; /* Keep transparent */
+  color: var(--color-telegram); /* Blue color for telegram icon on hover */
+  border-color: var(--color-gold-classic);
   transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(46, 139, 87, 0.6); /* Emerald green glow */
 }
 
 .whatsapp-btn {
-  background: #25D366;
-  color: white;
+  background: transparent; /* Remove green fill */
+  color: white; /* Keep white icon */
+  border: 2px solid var(--color-gold-classic); /* Add golden outline */
 }
 
 .whatsapp-btn:hover {
-  background: #128C7E;
+  background: transparent; /* Keep transparent */
+  color: var(--color-whatsapp); /* Green color for whatsapp icon on hover */
+  border-color: var(--color-gold-classic);
   transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(46, 139, 87, 0.6); /* Emerald green glow */
 }
 
 .phone-btn {
-  background: var(--color-primary);
-  color: var(--color-black);
+  background: transparent;
+  color: white;
+  border: 2px solid var(--color-gold-classic); /* Golden outline */
 }
 
 .phone-btn:hover {
-  background: var(--color-primary-hover);
+  background: transparent; /* Keep transparent */
+  color: #ff4444; /* Red color for phone icon on hover */
+  border-color: var(--color-gold-classic);
   transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(46, 139, 87, 0.6); /* Emerald green glow */
 }
 
 /* Подвал */
@@ -1088,6 +1207,24 @@ section {
     align-items: center;
   }
 
+  /* Адаптивность для кнопок связи */
+  .contact-button {
+    min-width: 100px;
+    width: 100px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+  
+  .question-btn {
+    width: 200px !important; /* Явная ширина для мобильных с !important */
+    min-width: 200px !important;
+    font-size: 0.9rem;
+  }
+  
+  .contact-methods {
+    gap: var(--spacing-sm);
+  }
+
   .footer-content {
     flex-direction: column;
     text-align: center;
@@ -1116,6 +1253,19 @@ section {
   .btn {
     width: 100%;
     max-width: 280px;
+  }
+
+  /* Адаптивность для кнопок связи на очень маленьких экранах */
+  .contact-button {
+    min-width: 80px;
+    width: 80px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+  
+  .question-btn {
+    width: 100%;
+    min-width: unset;
   }
 }
 

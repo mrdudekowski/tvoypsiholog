@@ -28,6 +28,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome для иконок мессенджеров -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
 
     <!-- Стили -->
     <link rel="stylesheet" href="styles/main.css">
@@ -142,6 +148,7 @@
             <div class="container">
                 <h2 id="services-title" class="section-title">Путь трансформации</h2>
                 <div class="services-grid">
+                    <!-- Верхний ряд: 3 карточки -->
                     <div class="service-card">
                         <div class="service-icon">
                             <img src="assets/icons/taro-icon.svg" alt="Иконка таро" class="service-icon-img">
@@ -149,16 +156,6 @@
                         <h3 class="service-title">Таролог</h3>
                         <p class="service-description">
                             Карты Таро как зеркало души - увидите скрытые стороны своей личности
-                        </p>
-                    </div>
-
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <img src="assets/icons/psychology-icon.svg" alt="Иконка психологии" class="service-icon-img">
-                        </div>
-                        <h3 class="service-title">Психолог-консультант</h3>
-                        <p class="service-description">
-                            Профессиональная психологическая помощь в решении жизненных вызовов
                         </p>
                     </div>
 
@@ -179,6 +176,17 @@
                         <h3 class="service-title">Арт-терапевт</h3>
                         <p class="service-description">
                             Творчество как терапия - выразите эмоции через искусство
+                        </p>
+                    </div>
+
+                    <!-- Нижний ряд: 2 карточки по центру -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <img src="assets/icons/psychology-icon.svg" alt="Иконка психологии" class="service-icon-img">
+                        </div>
+                        <h3 class="service-title">Психолог-консультант</h3>
+                        <p class="service-description">
+                            Профессиональная психологическая помощь в решении жизненных вызовов
                         </p>
                     </div>
 
@@ -301,22 +309,38 @@
                             Первый шаг к изменениям начинается здесь. Напишите мне в удобном мессенджере.
                         </p>
                         <div class="contact-methods">
-                            <button class="contact-button question-btn" id="openContactModal" aria-label="Задать вопрос">
-                                <span class="contact-icon">✉️</span>
+                            <!-- 1. Телефон - только белая трубка (ПЕРВОЕ МЕСТО) -->
+                            <a href="tel:+79025553566" 
+                               class="contact-button phone-btn"
+                               aria-label="Позвонить +7 (902) 555-35-66">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                            
+                            <!-- 2. Telegram - только иконка -->
+                            <a href="https://t.me/taro_elena" 
+                               class="contact-button telegram-btn" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               aria-label="Написать в Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            
+                            <!-- 3. WhatsApp - только иконка -->
+                            <a href="https://wa.me/79025553566" 
+                               class="contact-button whatsapp-btn" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               aria-label="Написать в WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            
+                            <!-- 4. Задать вопрос - последняя кнопка -->
+                            <button class="contact-button question-btn" 
+                                    id="openContactModal" 
+                                    aria-label="Задать вопрос">
+                                <i class="fas fa-envelope"></i>
                                 <span class="contact-text">Задать вопрос</span>
                             </button>
-                            <a href="https://t.me/taro_elena" class="contact-button telegram-btn" target="_blank" rel="noopener noreferrer">
-                                <span class="contact-icon">📱</span>
-                                <span class="contact-text">Написать в Telegram</span>
-                            </a>
-                            <a href="https://wa.me/79025553566" class="contact-button whatsapp-btn" target="_blank" rel="noopener noreferrer">
-                                <span class="contact-icon">💬</span>
-                                <span class="contact-text">Написать в WhatsApp</span>
-                            </a>
-                            <a href="tel:+79025553566" class="contact-button phone-btn">
-                                <span class="contact-icon">📞</span>
-                                <span class="contact-text">+7 (902) 555-35-66</span>
-                            </a>
                         </div>
                     </div>
                 </div>
