@@ -370,7 +370,7 @@ function initializeContactFormModal() {
     }
 
     // URL Google Apps Script webhook (заменить на реальный после развертывания)
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwx1Lst5oKVQn1IzwhpQLKGHPH1pAXTH7U1LwFJYX68Ex9NTTHeLbvrRVOm1MbbOWEf/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxQz4m0PRvM4fflp2NBQlJovsSD7GIv7kaQv1D9OLAIjANB-S4InF4fQNeLs7016diB/exec';
 
     /**
      * Открывает модальное окно
@@ -677,9 +677,84 @@ window.addEventListener('error', function(e) {
 });
 
 // Экспорт функций для тестирования
+// ===== TESTIMONIALS CAROUSEL =====
+function initTestimonialsCarousel() {
+    const track = document.querySelector('.testimonials-track');
+    const cards = Array.from(track.children);
+    const prevButton = document.querySelector('.carousel-arrow-left');
+    const nextButton = document.querySelector('.carousel-arrow-right');
+    
+    if (!track || !cards.length || !prevButton || !nextButton) {
+        console.warn('⚠️ Элементы карусели не найдены');
+        return;
+    }
+    
+    let currentIndex = 0;
+    const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
+    
+    // Клонируем карточки для бесконечной прокрутки
+    cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        track.appendChild(clone);
+    });
+    
+    // Функция перемещения
+    function moveToCard(index) {
+        track.style.transform = `translateX(-${cardWidth * index}px)`;
+    }
+    
+    // Следующая карточка
+    nextButton.addEventListener('click', () => {
+        currentIndex++;
+        moveToCard(currentIndex);
+        
+        // Бесконечная прокрутка
+        if (currentIndex >= cards.length) {
+            setTimeout(() => {
+                track.style.transition = 'none';
+                currentIndex = 0;
+                moveToCard(currentIndex);
+                setTimeout(() => {
+                    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                }, 50);
+            }, 500);
+        }
+    });
+    
+    // Предыдущая карточка
+    prevButton.addEventListener('click', () => {
+        if (currentIndex === 0) {
+            track.style.transition = 'none';
+            currentIndex = cards.length;
+            moveToCard(currentIndex);
+            setTimeout(() => {
+                track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                currentIndex--;
+                moveToCard(currentIndex);
+            }, 50);
+        } else {
+            currentIndex--;
+            moveToCard(currentIndex);
+        }
+    });
+    
+    // Автопрокрутка каждые 5 секунд
+    setInterval(() => {
+        nextButton.click();
+    }, 5000);
+    
+    console.log('✅ Карусель отзывов инициализирована');
+}
+
+// Инициализация карусели при загрузке
+if (document.querySelector('.testimonials-carousel')) {
+    initTestimonialsCarousel();
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         initializeSite,
-        trackEvent
+        trackEvent,
+        initTestimonialsCarousel
     };
 }
