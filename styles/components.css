@@ -23,54 +23,65 @@
 }
 
 /* Анимации при скролле */
-/* Базовое скрытие элементов до анимации */
+/* Базовое скрытие элементов до анимации с GPU подготовкой */
 [data-scroll-reveal] {
   opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform: translateZ(0);
 }
 
-/* Анимация снизу вверх */
+/* После анимации убираем will-change */
+[data-scroll-reveal].animated {
+  will-change: auto;
+}
+
+/* Анимация снизу вверх с GPU ускорением */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(30px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
-/* Анимация слева */
+/* Анимация слева с GPU ускорением */
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-30px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) translateZ(0);
   }
 }
 
-/* Анимация справа */
+/* Анимация справа с GPU ускорением */
 @keyframes fadeInRight {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(30px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) translateZ(0);
   }
 }
 
-/* Простое появление */
+/* Простое появление с GPU ускорением */
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateZ(0);
   }
   to {
     opacity: 1;
+    transform: translateZ(0);
   }
 }
 
@@ -569,7 +580,6 @@
   border: 1px solid rgba(184, 134, 11, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
-  vertical-align: top;
 }
 
 /* Скроллбар для модального окна */

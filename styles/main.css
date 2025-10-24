@@ -268,8 +268,7 @@ img {
 }
 
 .nav-actions {
-  display: flex;
-  gap: var(--spacing-md);
+  display: none; /* Скрываем пустой контейнер */
 }
 
 /* Герой секция */
@@ -611,13 +610,24 @@ section {
   animation-delay: 1.5s;
 }
 
-/* Анимации пульсации для всех устройств */
-.service-icon {
-  animation: gentle-pulse 4s ease-in-out infinite;
+/* Отключаем пульсацию пока элемент анимируется */
+.service-card[data-scroll-reveal]:not(.animated) {
+  animation: none !important;
 }
 
-.service-card {
+.service-card[data-scroll-reveal]:not(.animated) .service-icon {
+  animation: none !important;
+}
+
+/* Включаем пульсацию после fade-in */
+.service-card.animated {
   animation: card-breathe 6s ease-in-out infinite;
+  animation-delay: 0.3s; /* Задержка 300ms после fade-in */
+}
+
+.service-card.animated .service-icon {
+  animation: gentle-pulse 4s ease-in-out infinite;
+  animation-delay: 0.4s; /* Задержка 400ms */
 }
 
 @keyframes particleOrbit1 {
@@ -839,22 +849,35 @@ section {
 /* Анимации пульсации для мобильных устройств */
 @keyframes gentle-pulse {
   0%, 100% {
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(0);
     opacity: 1;
   }
 }
 
+/* GPU ускорение для всех анимируемых элементов */
+.service-card,
+.service-icon,
+.process-step,
+.testimonial-card,
+[data-scroll-reveal] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Оптимизация для пульсации */
 @keyframes card-breathe {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
   50% {
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
   }
 }

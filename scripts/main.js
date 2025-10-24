@@ -54,8 +54,8 @@ function initializeScrollAnimations() {
 
     // Настройки для Intersection Observer
     const observerOptions = {
-        threshold: 0.15, // Триггер при 15% видимости
-        rootMargin: '0px 0px -100px 0px' // Отступ снизу для более позднего триггера
+        threshold: 0.2, // Триггер при 20% видимости для более раннего появления
+        rootMargin: '0px 0px -50px 0px' // Уменьшенный отступ для более плавного появления
     };
 
     // Создаем Intersection Observer
@@ -69,6 +69,15 @@ function initializeScrollAnimations() {
                 
                 // Применяем соответствующую анимацию
                 target.classList.add(`animate-${animationType}`);
+                
+                // Добавляем класс animated после завершения fade-in
+                target.addEventListener('animationend', function handleAnimationEnd(e) {
+                    if (e.animationName.includes('fadeIn')) {
+                        target.classList.add('animated');
+                        target.style.willChange = 'auto';
+                        this.removeEventListener('animationend', handleAnimationEnd);
+                    }
+                }, { once: true });
                 
                 // Прекращаем наблюдение после анимации
                 observer.unobserve(target);

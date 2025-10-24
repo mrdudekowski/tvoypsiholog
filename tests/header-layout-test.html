@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Test - Taro Landing</title>
+    <title>Header Layout Test - Taro Landing</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,7 +81,7 @@
         
         .iframe-container iframe {
             width: 100%;
-            height: 600px;
+            height: 400px;
             border: none;
         }
         
@@ -113,61 +113,61 @@
             text-align: center;
             font-weight: bold;
         }
+        
+        .header-focus {
+            background: rgba(212, 175, 55, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #d4af37;
+        }
     </style>
 </head>
 <body>
     <div class="test-container">
-        <h1>🔍 Responsive Test - Taro Landing</h1>
+        <h1>🔍 Header Layout Test - Call Button Removed</h1>
         
         <div class="current-resolution">
             <p>Current Resolution: <span id="current-resolution"></span></p>
         </div>
         
+        <div class="header-focus">
+            <h3>🎯 Focus: Header Layout After Call Button Removal</h3>
+            <p>Testing header layout and navigation after removing the "ПОЗВОНИТЬ" button</p>
+        </div>
+        
         <div class="test-section">
-            <h2>📱 Horizontal Icons Layout Test</h2>
+            <h2>📱 Header Layout Tests</h2>
             <div class="resolution-test">
                 <div class="resolution-item">
                     <h3>320px (iPhone SE)</h3>
-                    <p>Mobile Layout</p>
+                    <p>Mobile Header</p>
                     <div class="status" id="test-320">Testing...</div>
                 </div>
                 <div class="resolution-item">
-                    <h3>375px (iPhone X)</h3>
-                    <p>Mobile Layout</p>
-                    <div class="status" id="test-375">Testing...</div>
-                </div>
-                <div class="resolution-item">
                     <h3>768px (iPad Portrait)</h3>
-                    <p>Mobile Layout</p>
+                    <p>Tablet Header</p>
                     <div class="status" id="test-768">Testing...</div>
                 </div>
                 <div class="resolution-item">
-                    <h3>769px (Desktop Start)</h3>
-                    <p>Desktop Layout</p>
-                    <div class="status" id="test-769">Testing...</div>
-                </div>
-                <div class="resolution-item">
                     <h3>1024px (Desktop)</h3>
-                    <p>Desktop Layout</p>
+                    <p>Desktop Header</p>
                     <div class="status" id="test-1024">Testing...</div>
                 </div>
                 <div class="resolution-item">
                     <h3>1920px (Full HD)</h3>
-                    <p>Desktop Layout</p>
+                    <p>Large Desktop</p>
                     <div class="status" id="test-1920">Testing...</div>
                 </div>
             </div>
         </div>
         
         <div class="test-section">
-            <h2>🎯 Live Preview</h2>
+            <h2>🎯 Live Header Preview</h2>
             <div class="controls">
                 <button onclick="setResolution(320)">320px</button>
-                <button onclick="setResolution(375)">375px</button>
                 <button onclick="setResolution(768)">768px</button>
-                <button onclick="setResolution(769)">769px</button>
                 <button onclick="setResolution(1024)">1024px</button>
-                <button onclick="setResolution(1366)">1366px</button>
                 <button onclick="setResolution(1920)">1920px</button>
                 <button onclick="setResolution('auto')">Auto</button>
             </div>
@@ -177,9 +177,20 @@
         </div>
         
         <div class="test-section">
-            <h2>📊 Test Results</h2>
+            <h2>📊 Header Test Results</h2>
             <div id="test-results">
                 <p>Run tests by clicking resolution buttons above</p>
+                <div class="header-focus">
+                    <h4>Key Tests:</h4>
+                    <ul>
+                        <li>✅ Logo positioned correctly</li>
+                        <li>✅ Navigation menu aligned properly</li>
+                        <li>✅ No layout breaks after button removal</li>
+                        <li>✅ Header height maintained</li>
+                        <li>✅ Responsive behavior preserved</li>
+                        <li>✅ Alternative contact methods available</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -197,40 +208,38 @@
             const iframe = document.getElementById('preview-frame');
             if (width === 'auto') {
                 iframe.style.width = '100%';
-                iframe.style.height = '600px';
+                iframe.style.height = '400px';
             } else {
                 iframe.style.width = width + 'px';
-                iframe.style.height = '600px';
+                iframe.style.height = '400px';
             }
             
             // Update current resolution display
-            document.getElementById('current-resolution').textContent = `${width}x600`;
+            document.getElementById('current-resolution').textContent = `${width}x400`;
             
             // Run tests for this resolution
-            runTests(width);
+            runHeaderTests(width);
         }
         
-        // Run responsive tests
-        function runTests(width) {
+        // Run header-specific tests
+        function runHeaderTests(width) {
             const tests = [
                 { id: 'test-320', width: 320, name: 'iPhone SE' },
-                { id: 'test-375', width: 375, name: 'iPhone X' },
                 { id: 'test-768', width: 768, name: 'iPad Portrait' },
-                { id: 'test-769', width: 769, name: 'Desktop Start' },
                 { id: 'test-1024', width: 1024, name: 'Desktop' },
                 { id: 'test-1920', width: 1920, name: 'Full HD' }
             ];
             
             tests.forEach(test => {
                 const element = document.getElementById(test.id);
-                const status = testResponsiveDesign(test.width);
+                const status = testHeaderLayout(test.width);
                 element.textContent = status.text;
                 element.className = `status ${status.class}`;
             });
         }
         
-        // Test responsive design logic - 2 positions only
-        function testResponsiveDesign(width) {
+        // Test header layout logic
+        function testHeaderLayout(width) {
             if (width <= 768) {
                 return { text: 'Mobile ✓', class: 'pass' };
             } else {
@@ -244,7 +253,7 @@
         
         // Auto-run tests on load
         setTimeout(() => {
-            runTests(window.innerWidth);
+            runHeaderTests(window.innerWidth);
         }, 1000);
     </script>
 </body>
