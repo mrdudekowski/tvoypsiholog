@@ -538,22 +538,7 @@ section {
   grid-row: 2; /* Обеспечиваем, что карточка находится во втором ряду */
 }
 
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, auto);
-    gap: var(--spacing-lg);
-  }
-  
-  .services-grid .service-card:nth-child(4),
-  .services-grid .service-card:nth-child(5) {
-    grid-column: 1;
-    justify-self: center;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
+/* Адаптивность для мобильных устройств - перенесено в основной медиа-запрос */
 
 .service-card {
   position: relative;
@@ -1014,8 +999,8 @@ section {
     transform 0.22s cubic-bezier(0.4, 0.1, 0.2, 1);
   cursor: pointer;
   outline: none;
-  width: 240px !important;
-  min-width: 240px !important;
+  width: 240px;
+  min-width: 240px;
 }
 
 .question-btn:hover,
@@ -1190,7 +1175,16 @@ section {
 
   .services-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, auto);
     gap: var(--spacing-lg);
+  }
+  
+  .services-grid .service-card:nth-child(4),
+  .services-grid .service-card:nth-child(5) {
+    grid-column: 1;
+    justify-self: center;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .process-steps {
@@ -1202,27 +1196,44 @@ section {
     grid-template-columns: 1fr;
   }
 
+  /* MOBILE LAYOUT: 3 icons horizontal + question-btn below */
   .contact-methods {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-  }
-
-  /* Адаптивность для кнопок связи */
-  .contact-button {
-    min-width: 100px;
-    width: 100px;
-    height: 50px;
-    font-size: 1.25rem;
-  }
-  
-  .question-btn {
-    width: 200px !important; /* Явная ширина для мобильных с !important */
-    min-width: 200px !important;
-    font-size: 0.9rem;
-  }
-  
-  .contact-methods {
+    justify-content: center;
     gap: var(--spacing-sm);
+  }
+  
+  /* Icon buttons - horizontal layout using flex-wrap */
+  .phone-btn,
+  .telegram-btn,
+  .whatsapp-btn {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    font-size: 1.5rem;
+    margin: 0 4px;
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  
+  /* Create horizontal row for first 3 buttons */
+  .contact-methods .phone-btn,
+  .contact-methods .telegram-btn,
+  .contact-methods .whatsapp-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  
+  /* Question button - mobile size - full width on new line */
+  .contact-methods .question-btn {
+    width: 100%;
+    min-width: 200px;
+    font-size: 0.9rem;
+    flex-basis: 100%;
+    margin-top: var(--spacing-sm);
   }
 
   .footer-content {
@@ -1230,6 +1241,30 @@ section {
     text-align: center;
   }
 }
+
+/* DESKTOP LAYOUT: All buttons horizontal */
+@media (min-width: 769px) {
+  .contact .contact-methods {
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .contact .contact-methods .question-btn {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+    font-size: 1rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 
 @media (max-width: 480px) {
   .hero-title {
@@ -1255,17 +1290,22 @@ section {
     max-width: 280px;
   }
 
-  /* Адаптивность для кнопок связи на очень маленьких экранах */
-  .contact-button {
-    min-width: 80px;
-    width: 80px;
-    height: 48px;
-    font-size: 1.1rem;
+  /* Icon buttons smaller on tiny screens */
+  .phone-btn,
+  .telegram-btn,
+  .whatsapp-btn {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    font-size: 1.3rem;
+    margin: 0 3px;
   }
   
+  /* Question button full width on tiny screens */
   .question-btn {
     width: 100%;
     min-width: unset;
+    font-size: 0.85rem;
   }
 }
 

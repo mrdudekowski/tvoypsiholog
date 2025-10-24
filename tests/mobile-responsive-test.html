@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Responsive Test - Taro Landing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .test-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 3px;
+        }
+        
+        .test-pass {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .test-fail {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .test-warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .breakpoint-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .breakpoint-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .current-width {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Mobile Responsive Test - Taro Landing</h1>
+        <p>Тестирование адаптивности и мобильной версии сайта</p>
+        
+        <div class="test-section">
+            <div class="test-title">📱 Текущий размер экрана</div>
+            <div class="test-item">
+                <span class="current-width" id="currentWidth">Загрузка...</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">🎯 Breakpoint тесты</div>
+            <div class="breakpoint-test">
+                <div class="breakpoint-item">
+                    <strong>Desktop</strong><br>
+                    > 768px
+                </div>
+                <div class="breakpoint-item">
+                    <strong>Tablet</strong><br>
+                    ≤ 768px
+                </div>
+                <div class="breakpoint-item">
+                    <strong>Mobile</strong><br>
+                    ≤ 480px
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">🔧 CSS Конфликты</div>
+            <div class="test-item" id="cssConflicts">
+                <span class="test-warning">⏳ Проверка дублирования медиа-запросов...</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">📐 Contact Section Layout</div>
+            <div class="test-item" id="contactLayout">
+                <span class="test-warning">⏳ Проверка layout контактных кнопок...</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">🎨 Service Cards Grid</div>
+            <div class="test-item" id="serviceGrid">
+                <span class="test-warning">⏳ Проверка сетки карточек услуг...</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">⚡ Performance Issues</div>
+            <div class="test-item" id="performance">
+                <span class="test-warning">⏳ Проверка производительности...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Обновление текущего размера экрана
+        function updateCurrentWidth() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            document.getElementById('currentWidth').textContent = 
+                `${width}px × ${height}px (${width <= 480 ? 'Mobile' : width <= 768 ? 'Tablet' : 'Desktop'})`;
+        }
+        
+        // Проверка CSS конфликтов
+        function checkCSSConflicts() {
+            const conflicts = [];
+            
+            // Проверка дублирования медиа-запросов
+            const mediaQueries = document.styleSheets;
+            let media768Count = 0;
+            
+            for (let i = 0; i < mediaQueries.length; i++) {
+                try {
+                    const rules = mediaQueries[i].cssRules || mediaQueries[i].rules;
+                    for (let j = 0; j < rules.length; j++) {
+                        if (rules[j].type === CSSRule.MEDIA_RULE) {
+                            if (rules[j].media.mediaText.includes('max-width: 768px')) {
+                                media768Count++;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Игнорируем ошибки CORS
+                }
+            }
+            
+            if (media768Count > 1) {
+                conflicts.push(`❌ Дублирование @media (max-width: 768px): ${media768Count} раз`);
+            }
+            
+            // Проверка !important злоупотреблений
+            const questionBtn = document.querySelector('.question-btn');
+            if (questionBtn) {
+                const computedStyle = window.getComputedStyle(questionBtn);
+                const width = computedStyle.width;
+                if (width.includes('!important') || width === '200px') {
+                    conflicts.push('⚠️ Использование !important для .question-btn');
+                }
+            }
+            
+            return conflicts;
+        }
+        
+        // Проверка layout контактных кнопок
+        function checkContactLayout() {
+            const issues = [];
+            const contactMethods = document.querySelector('.contact-methods');
+            
+            if (contactMethods) {
+                const buttons = contactMethods.querySelectorAll('.contact-button');
+                const iconButtons = contactMethods.querySelectorAll('.phone-btn, .telegram-btn, .whatsapp-btn');
+                const questionBtn = contactMethods.querySelector('.question-btn');
+                
+                if (buttons.length !== 4) {
+                    issues.push(`❌ Ожидается 4 кнопки, найдено: ${buttons.length}`);
+                }
+                
+                if (iconButtons.length !== 3) {
+                    issues.push(`❌ Ожидается 3 иконки, найдено: ${iconButtons.length}`);
+                }
+                
+                if (!questionBtn) {
+                    issues.push('❌ Кнопка "Задать вопрос" не найдена');
+                }
+                
+                // Проверка размеров на разных экранах
+                const width = window.innerWidth;
+                iconButtons.forEach((btn, index) => {
+                    const computedStyle = window.getComputedStyle(btn);
+                    const btnWidth = parseInt(computedStyle.width);
+                    
+                    if (width <= 480) {
+                        if (btnWidth !== 60) {
+                            issues.push(`❌ Кнопка ${index + 1}: ожидается 60px, получено ${btnWidth}px`);
+                        }
+                    } else if (width <= 768) {
+                        if (btnWidth !== 70) {
+                            issues.push(`❌ Кнопка ${index + 1}: ожидается 70px, получено ${btnWidth}px`);
+                        }
+                    }
+                });
+            } else {
+                issues.push('❌ Контейнер .contact-methods не найден');
+            }
+            
+            return issues;
+        }
+        
+        // Проверка сетки карточек услуг
+        function checkServiceGrid() {
+            const issues = [];
+            const servicesGrid = document.querySelector('.services-grid');
+            
+            if (servicesGrid) {
+                const cards = servicesGrid.querySelectorAll('.service-card');
+                const computedStyle = window.getComputedStyle(servicesGrid);
+                const gridTemplateColumns = computedStyle.gridTemplateColumns;
+                const width = window.innerWidth;
+                
+                if (cards.length !== 5) {
+                    issues.push(`❌ Ожидается 5 карточек, найдено: ${cards.length}`);
+                }
+                
+                if (width <= 768) {
+                    if (gridTemplateColumns !== '1fr') {
+                        issues.push(`❌ На мобильных ожидается grid-template-columns: 1fr, получено: ${gridTemplateColumns}`);
+                    }
+                }
+                
+                // Проверка позиционирования последних двух карточек
+                if (width > 768) {
+                    const card4 = cards[3];
+                    const card5 = cards[4];
+                    
+                    if (card4 && card5) {
+                        const card4Style = window.getComputedStyle(card4);
+                        const card5Style = window.getComputedStyle(card5);
+                        
+                        if (card4Style.gridColumn !== '1 / 2') {
+                            issues.push('❌ 4-я карточка должна быть в колонке 1');
+                        }
+                        
+                        if (card5Style.gridColumn !== '3 / 4') {
+                            issues.push('❌ 5-я карточка должна быть в колонке 3');
+                        }
+                    }
+                }
+            } else {
+                issues.push('❌ Контейнер .services-grid не найден');
+            }
+            
+            return issues;
+        }
+        
+        // Проверка производительности
+        function checkPerformance() {
+            const issues = [];
+            
+            // Проверка количества CSS правил
+            let totalRules = 0;
+            for (let i = 0; i < document.styleSheets.length; i++) {
+                try {
+                    const rules = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
+                    totalRules += rules.length;
+                } catch (e) {
+                    // Игнорируем ошибки CORS
+                }
+            }
+            
+            if (totalRules > 1000) {
+                issues.push(`⚠️ Много CSS правил: ${totalRules} (рекомендуется < 1000)`);
+            }
+            
+            // Проверка использования !important
+            const importantCount = document.querySelectorAll('*').length;
+            if (importantCount > 10) {
+                issues.push(`⚠️ Возможно избыточное использование !important`);
+            }
+            
+            return issues;
+        }
+        
+        // Запуск всех тестов
+        function runAllTests() {
+            updateCurrentWidth();
+            
+            // CSS конфликты
+            const cssConflicts = checkCSSConflicts();
+            document.getElementById('cssConflicts').innerHTML = 
+                cssConflicts.length > 0 ? 
+                cssConflicts.map(c => `<div class="test-fail">${c}</div>`).join('') :
+                '<div class="test-pass">✅ CSS конфликтов не найдено</div>';
+            
+            // Contact layout
+            const contactIssues = checkContactLayout();
+            document.getElementById('contactLayout').innerHTML = 
+                contactIssues.length > 0 ? 
+                contactIssues.map(c => `<div class="test-fail">${c}</div>`).join('') :
+                '<div class="test-pass">✅ Contact layout корректен</div>';
+            
+            // Service grid
+            const serviceIssues = checkServiceGrid();
+            document.getElementById('serviceGrid').innerHTML = 
+                serviceIssues.length > 0 ? 
+                serviceIssues.map(c => `<div class="test-fail">${c}</div>`).join('') :
+                '<div class="test-pass">✅ Service grid корректен</div>';
+            
+            // Performance
+            const perfIssues = checkPerformance();
+            document.getElementById('performance').innerHTML = 
+                perfIssues.length > 0 ? 
+                perfIssues.map(c => `<div class="test-warning">${c}</div>`).join('') :
+                '<div class="test-pass">✅ Производительность в норме</div>';
+        }
+        
+        // Запуск тестов при загрузке и изменении размера
+        window.addEventListener('load', runAllTests);
+        window.addEventListener('resize', runAllTests);
+        
+        // Обновление размера экрана каждую секунду
+        setInterval(updateCurrentWidth, 1000);
+    </script>
+</body>
+</html>
