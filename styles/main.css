@@ -513,29 +513,27 @@ section {
   justify-items: center;
 }
 
-/* Для нижнего ряда создаем 2 широкие колонки */
-.services-grid .service-card:nth-child(4),
-.services-grid .service-card:nth-child(5) {
-  grid-column: span 1;
-}
-
 /* Нижний ряд с 2 карточками - центрируем */
-.services-grid .service-card:nth-child(4),
-.services-grid .service-card:nth-child(5) {
-  grid-column: span 1;
-}
 
 /* Центрируем нижний ряд - 2 карточки рядом в центре */
 .services-grid .service-card:nth-child(4) {
   grid-column: 1 / 2; /* Левая колонка */
   justify-self: center; /* Центрируем в левой колонке */
-  grid-row: 2; /* Обеспечиваем, что карточка находится во втором ряду */
+  grid-row: 2; /* Второй ряд */
 }
 
 .services-grid .service-card:nth-child(5) {
   grid-column: 3 / 4; /* Правая колонка */
   justify-self: center; /* Центрируем в правой колонке */
-  grid-row: 2; /* Обеспечиваем, что карточка находится во втором ряду */
+  grid-row: 2; /* Второй ряд */
+}
+
+/* Предотвращение наезжания - добавляем отступы */
+.services-grid .service-card:nth-child(4),
+.services-grid .service-card:nth-child(5) {
+  margin: 0 auto;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Адаптивность для мобильных устройств - перенесено в основной медиа-запрос */
@@ -611,6 +609,15 @@ section {
 .service-icon::after {
   animation: particleOrbit2 3s linear infinite;
   animation-delay: 1.5s;
+}
+
+/* Анимации пульсации для всех устройств */
+.service-icon {
+  animation: gentle-pulse 4s ease-in-out infinite;
+}
+
+.service-card {
+  animation: card-breathe 6s ease-in-out infinite;
 }
 
 @keyframes particleOrbit1 {
@@ -826,6 +833,29 @@ section {
   100% {
     transform: translate(-50%, -50%) scale(1.3);
     opacity: 0;
+  }
+}
+
+/* Анимации пульсации для мобильных устройств */
+@keyframes gentle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes card-breathe {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -1179,12 +1209,15 @@ section {
     gap: var(--spacing-lg);
   }
   
+  /* Мобильные карточки - предотвращение наезжания */
   .services-grid .service-card:nth-child(4),
   .services-grid .service-card:nth-child(5) {
     grid-column: 1;
+    grid-row: auto;
     justify-self: center;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0 auto;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .process-steps {
@@ -1242,8 +1275,23 @@ section {
   }
 }
 
+/* MEDIUM SCREENS (769px - 1200px) - Services optimization */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  .services-grid .service-card:nth-child(4),
+  .services-grid .service-card:nth-child(5) {
+    grid-column: span 1;
+    grid-row: auto;
+    justify-self: center;
+  }
+}
+
 /* DESKTOP LAYOUT: All buttons horizontal */
-@media (min-width: 769px) {
+@media (min-width: 1201px) {
   .contact .contact-methods {
     justify-content: center;
     align-items: center;
@@ -1379,10 +1427,25 @@ section {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
 
-  /* Отключаем анимации орбитальных частиц */
+  /* Сохраняем анимации пульсации, но убираем hover эффекты */
   .service-icon::before,
   .service-icon::after {
-    animation: none;
-    display: none;
+    animation: particleOrbit1 3s linear infinite;
+    display: block;
+  }
+  
+  .service-icon::after {
+    animation: particleOrbit2 3s linear infinite;
+    animation-delay: 1.5s;
+  }
+  
+  /* Дополнительная пульсация для иконок */
+  .service-icon {
+    animation: gentle-pulse 4s ease-in-out infinite;
+  }
+  
+  /* Пульсация для карточек */
+  .service-card {
+    animation: card-breathe 6s ease-in-out infinite;
   }
 }
