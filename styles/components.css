@@ -857,9 +857,11 @@ body.modal-open {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.messenger-btn svg {
+.messenger-btn svg,
+.messenger-btn i {
   width: 24px;
   height: 24px;
+  font-size: 20px;
 }
 
 .messenger-option input[type="radio"]:checked + .messenger-btn {
