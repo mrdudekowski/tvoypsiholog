@@ -689,8 +689,12 @@ function initTestimonialsCarousel() {
         return;
     }
     
+    // Определяем режим отображения (десктоп или мобильный)
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const cardsPerStep = isMobile ? 1 : 3;
+    
     let currentIndex = 0;
-    const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
+    const originalCardsCount = cards.length;
     
     // Клонируем карточки для бесконечной прокрутки
     cards.forEach(card => {
@@ -700,16 +704,17 @@ function initTestimonialsCarousel() {
     
     // Функция перемещения
     function moveToCard(index) {
+        const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
         track.style.transform = `translateX(-${cardWidth * index}px)`;
     }
     
-    // Следующая карточка
+    // Следующая группа карточек
     nextButton.addEventListener('click', () => {
-        currentIndex++;
+        currentIndex += cardsPerStep;
         moveToCard(currentIndex);
         
         // Бесконечная прокрутка
-        if (currentIndex >= cards.length) {
+        if (currentIndex >= originalCardsCount) {
             setTimeout(() => {
                 track.style.transition = 'none';
                 currentIndex = 0;
@@ -721,29 +726,33 @@ function initTestimonialsCarousel() {
         }
     });
     
-    // Предыдущая карточка
+    // Предыдущая группа карточек
     prevButton.addEventListener('click', () => {
         if (currentIndex === 0) {
             track.style.transition = 'none';
-            currentIndex = cards.length;
+            currentIndex = originalCardsCount;
             moveToCard(currentIndex);
             setTimeout(() => {
                 track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                currentIndex--;
+                currentIndex -= cardsPerStep;
                 moveToCard(currentIndex);
             }, 50);
         } else {
-            currentIndex--;
+            currentIndex -= cardsPerStep;
             moveToCard(currentIndex);
         }
     });
     
-    // Автопрокрутка каждые 5 секунд
-    setInterval(() => {
-        nextButton.click();
-    }, 5000);
+    // Обработка изменения размера экрана
+    window.addEventListener('resize', () => {
+        const newIsMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (newIsMobile !== isMobile) {
+            // Перезапускаем карусель при изменении режима
+            location.reload();
+        }
+    });
     
-    console.log('✅ Карусель отзывов инициализирована');
+    console.log(`✅ Карусель отзывов инициализирована (${cardsPerStep} карточек за шаг)`);
 }
 
 // Инициализация карусели при загрузке
