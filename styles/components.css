@@ -452,21 +452,24 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 9999;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 10000; /* Увеличено для гарантии перекрытия */
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease;
+  overflow-y: auto; /* Скролл overlay если контент не влезает */
+  padding: 1rem;
 }
 
 .modal-overlay.active {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Не center - для малых экранов */
   opacity: 1;
   animation: fadeIn 0.3s ease-out;
+  padding-top: 1rem; /* Отступ сверху */
 }
 
 @keyframes fadeIn {
@@ -674,50 +677,27 @@ body.modal-open {
    МОДАЛЬНОЕ ОКНО ФОРМЫ ОБРАТНОЙ СВЯЗИ
    ======================================== */
 
-/* Overlay модального окна */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.95); /* Более темный черный фон */
-  backdrop-filter: blur(15px);
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  overflow-y: auto;
-  padding: 2rem 1rem;
-}
-
-.modal-overlay.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-}
 
 /* Контент модального окна */
 .modal-content {
-  background: linear-gradient(135deg, 
-    rgba(0, 0, 0, 0.95) 0%, 
-    rgba(20, 20, 20, 0.98) 50%, 
-    rgba(0, 0, 0, 0.95) 100%
-  ); /* Черно-золотая градиентная заливка */
+  background: transparent;
   backdrop-filter: blur(25px);
   border: 2px solid var(--color-gold-classic); /* Золотая рамка */
   border-radius: 20px;
-  padding: 2.5rem;
-  max-width: 600px;
+  padding: 1.5rem;
+  max-width: 500px;
   width: 100%;
+  max-height: calc(100vh - 2rem); /* Гарантия вмещения */
+  overflow-y: auto; /* Внутренний скролл если нужен */
   position: relative;
   box-shadow: 
     0 25px 80px rgba(0, 0, 0, 0.8),
     0 0 40px rgba(212, 175, 55, 0.15); /* Золотое свечение */
   transform: scale(0.9);
   transition: transform 0.3s ease;
+  margin: 0; /* Убрать margin - центрирование через flexbox */
 }
+
 
 .modal-overlay.active .modal-content {
   transform: scale(1);
@@ -764,7 +744,7 @@ body.modal-open {
 .modal-subtitle {
   color: var(--color-text-secondary);
   text-align: center;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1.5rem 0; /* Уменьшено с 2rem */
   font-size: 1rem;
 }
 
@@ -779,6 +759,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1rem; /* Уменьшено с 1.5rem */
 }
 
 .form-label {
@@ -801,7 +782,7 @@ body.modal-open {
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 0.875rem; /* Уменьшено с 0.875rem 1rem */
   background: rgba(0, 0, 0, 0.6); /* Более темный черный фон */
   border: 2px solid rgba(212, 175, 55, 0.3); /* Золотая рамка */
   border-radius: 12px;
@@ -830,7 +811,7 @@ body.modal-open {
 
 .form-textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 100px; /* Уменьшено с 120px */
 }
 
 /* Ошибки валидации */
@@ -1011,12 +992,21 @@ body.modal-open {
 
 @media (max-width: 768px) {
   .modal-content {
-    padding: 2rem 1.5rem;
-    margin: 1rem;
+    padding: 1.25rem;
+    max-width: 90%;
+    max-height: calc(100vh - 2rem);
   }
-
+  
+  .modal-overlay.active {
+    padding: 1rem 0.5rem;
+  }
+  
   .modal-title {
     font-size: 1.5rem;
+  }
+  
+  .modal-subtitle {
+    font-size: 0.9rem;
   }
 
   .messenger-choice {
@@ -1038,13 +1028,27 @@ body.modal-open {
   }
 }
 
+/* ========================================
+   БЛОКИРОВКА СКРОЛЛА BODY ПРИ ОТКРЫТОЙ МОДАЛКЕ
+   ======================================== */
+
+/* Блокировка скролла body при открытой модалке */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+}
+
 @media (max-width: 480px) {
-  .modal-overlay {
-    padding: 1rem 0.5rem;
+  .modal-overlay.active {
+    padding: 0.75rem 0.5rem;
   }
 
   .modal-content {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
+    max-width: 95%;
+    max-height: calc(100vh - 1.5rem);
   }
 
   .form-input,

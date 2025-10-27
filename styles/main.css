@@ -990,7 +990,7 @@ section {
 
 .testimonials-track {
   display: flex;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -999,11 +999,13 @@ section {
   background: transparent;
   border: 1px solid rgba(46, 139, 87, 0.3);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  min-width: 100%;
+  width: 320px;
+  height: 240px;
   flex-shrink: 0;
+  overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1011,14 +1013,14 @@ section {
 .testimonial-header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 /* Круглый аватар */
 .testimonial-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, 
     var(--color-emerald-dark) 0%,
@@ -1034,7 +1036,7 @@ section {
 
 .avatar-initials {
   color: white;
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 1px;
 }
@@ -1048,7 +1050,7 @@ section {
 
 .testimonial-name {
   color: var(--color-gold-medium);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: var(--font-weight-semibold);
   display: block;
 }
@@ -1060,11 +1062,14 @@ section {
 
 /* Текст отзыва */
 .testimonial-text {
-  font-size: var(--text-base);
-  line-height: 1.7;
+  font-size: var(--text-sm);
+  line-height: 1.6;
   color: var(--color-text-secondary);
   font-style: italic;
   margin: 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 /* FAQ */
@@ -1383,6 +1388,9 @@ section {
   }
   
   .testimonial-card {
+    width: 300px;
+    height: auto;
+    min-height: 200px;
     padding: var(--spacing-lg);
   }
   
