@@ -371,7 +371,7 @@ function initializeContactFormModal() {
     }
 
     // URL Google Apps Script webhook (заменить на реальный после развертывания)
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxQz4m0PRvM4fflp2NBQlJovsSD7GIv7kaQv1D9OLAIjANB-S4InF4fQNeLs7016diB/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwnjjIart4H57pc7O8xNQ0ry3hpP1oOT8bMxeqUn_d3fZUNwRpmfFFBtyZ2o9nxUYy_/exec';
 
     /**
      * Открывает модальное окно
