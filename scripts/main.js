@@ -102,9 +102,10 @@ function initializeScrollAnimations() {
     legacyElements.forEach(element => {
         observer.observe(element);
         // Для старых элементов используем дефолтную анимацию
+        // Единый класс анимации в CamelCase для консистентности
         element.addEventListener('animationstart', function addLegacyClass() {
-            if (!this.classList.contains('animate-fade-in-up')) {
-                this.classList.add('animate-fade-in-up');
+            if (!this.classList.contains('animate-fadeInUp')) {
+                this.classList.add('animate-fadeInUp');
             }
         }, { once: true });
     });
