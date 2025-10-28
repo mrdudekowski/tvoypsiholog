@@ -21,6 +21,7 @@ function initializeSite() {
     initializeContactButtons();
     initializeCertificatesModal();
     initializeContactFormModal();
+    initializeBurgerMenu();
     initializePerformanceOptimizations();
 
     // Логирование успешной инициализации
@@ -665,6 +666,109 @@ function initializeContactFormModal() {
     });
 
     console.log('✅ Модальное окно формы обратной связи инициализировано');
+}
+
+
+/**
+ * Инициализирует бургер меню для мобильных устройств
+ * Следует принципам: Self-Documenting Code, Explicit Dependencies
+ */
+function initializeBurgerMenu() {
+    const hamburger = document.getElementById('hamburger-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
+    
+    if (!hamburger || !mobileMenu) {
+        console.warn('⚠️ Элементы бургер меню не найдены');
+        return;
+    }
+
+    /**
+     * Переключает состояние мобильного меню
+     */
+    function toggleMenu() {
+        const isActive = hamburger.classList.contains('is-active');
+        
+        if (isActive) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    /**
+     * Открывает мобильное меню
+     */
+    function openMenu() {
+        hamburger.classList.add('is-active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        hamburger.setAttribute('aria-label', 'Закрыть меню');
+        
+        mobileMenu.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        
+        // Блокируем скролл body
+        document.body.style.overflow = 'hidden';
+        
+        // Трекинг события
+        trackEvent('mobile_menu', 'open');
+        
+        console.log('📱 Мобильное меню открыто');
+    }
+
+    /**
+     * Закрывает мобильное меню
+     */
+    function closeMenu() {
+        hamburger.classList.remove('is-active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Открыть меню');
+        
+        mobileMenu.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        
+        // Разблокируем скролл body
+        document.body.style.overflow = '';
+        
+        // Трекинг события
+        trackEvent('mobile_menu', 'close');
+        
+        console.log('📱 Мобильное меню закрыто');
+    }
+
+    // Клик по кнопке гамбургера
+    hamburger.addEventListener('click', toggleMenu);
+
+    // Закрытие меню при клике на ссылку
+    mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeMenu();
+            
+            // Трекинг клика по пункту меню
+            const linkText = link.textContent.trim();
+            trackEvent('mobile_menu', 'link_click', linkText);
+        });
+    });
+
+    // Закрытие по клавише ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && hamburger.classList.contains('is-active')) {
+            closeMenu();
+        }
+    });
+
+    // Закрытие при изменении размера окна на desktop
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768 && hamburger.classList.contains('is-active')) {
+                closeMenu();
+            }
+        }, 250);
+    });
+
+    console.log('✅ Бургер меню инициализировано');
 }
 
 

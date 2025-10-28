@@ -209,6 +209,7 @@ img {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(212, 175, 55, 0.2);
   transition: background-color var(--transition-normal);
+  z-index: 1002; /* НОВОЕ: выше мобильного меню */
 }
 
 .site-nav {
@@ -1296,6 +1297,232 @@ section {
   color: var(--color-primary);
 }
 
+/* ===== БУРГЕР МЕНЮ ===== */
+/* Hamburger Button - Hidden on Desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1003; /* ИЗМЕНЕНО: выше header */
+  position: relative; /* НОВОЕ */
+  transition: transform var(--transition-normal);
+}
+
+.hamburger:focus {
+  outline: 2px solid var(--color-gold-medium);
+  outline-offset: 4px;
+}
+
+.hamburger .line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-gold-medium);
+  border-radius: 2px;
+  transition: all var(--transition-normal);
+  transform-origin: center;
+}
+
+/* Active State - X Animation */
+.hamburger.is-active {
+  transform: rotate(90deg);
+}
+
+.hamburger.is-active .line:nth-child(2) {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.hamburger.is-active .line:nth-child(1) {
+  transform: translateY(13.5px) rotate(45deg);
+}
+
+.hamburger.is-active .line:nth-child(3) {
+  transform: translateY(-13.5px) rotate(-45deg);
+}
+
+/* ===== БУРГЕР МЕНЮ - ЗОЛОТОЙ МИНИМАЛИЗМ ===== */
+
+/* Mobile Menu с черным фоном и золотыми прожилками */
+.mobile-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  
+  /* Черный фон с золотыми текстурными прожилками */
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(184, 134, 11, 0.015) 1px,
+      transparent 2px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(184, 134, 11, 0.012) 1px,
+      transparent 2px,
+      transparent 80px
+    ),
+    linear-gradient(180deg,
+      #000000 0%,
+      #020202 30%,
+      #010101 70%,
+      #000000 100%
+    );
+  
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  overflow: hidden;
+  z-index: 1001;
+  
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform var(--transition-normal) ease-out, 
+              opacity var(--transition-normal) ease-out;
+  pointer-events: none;
+}
+
+.mobile-menu.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  height: 100%;
+  gap: var(--spacing-xl); /* Уменьшено с 2xl для лучшего баланса */
+  position: relative;
+}
+
+/* Декоративная золотая линия сверху */
+.mobile-menu-list::before {
+  content: '';
+  position: absolute;
+  top: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    var(--color-gold-medium) 50%,
+    transparent 100%
+  );
+  transition: width 0.6s ease-out 0.3s;
+}
+
+.mobile-menu.active .mobile-menu-list::before {
+  width: 80%;
+}
+
+.mobile-menu-list li {
+  width: 100%;
+  max-width: 400px; /* Ограничиваем ширину для красоты */
+  text-align: center;
+}
+
+/* Пункты меню - золотой стиль как у кнопок */
+.mobile-menu-list a {
+  display: block;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-lg);
+  position: relative;
+  
+  /* Золотой градиент */
+  background: linear-gradient(135deg, 
+    rgba(184, 134, 11, 0.1) 0%,
+    rgba(154, 114, 9, 0.05) 100%
+  );
+  
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-lg);
+  
+  /* Золотая тень */
+  box-shadow: 
+    0 4px 12px rgba(184, 134, 11, 0.15),
+    inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Дыхательная анимация для пунктов */
+.mobile-menu.active .mobile-menu-list a {
+  animation: gentle-breathe 4s ease-in-out infinite;
+}
+
+@keyframes gentle-breathe {
+  0%, 100% {
+    opacity: 0.95;
+    box-shadow: 
+      0 4px 12px rgba(184, 134, 11, 0.15),
+      inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 
+      0 6px 16px rgba(184, 134, 11, 0.2),
+      inset 0 1px 0 rgba(212, 175, 55, 0.15);
+  }
+}
+
+/* Hover - изумрудное свечение */
+.mobile-menu-list a:hover,
+.mobile-menu-list a:focus {
+  color: var(--color-emerald-light);
+  border-color: rgba(46, 125, 50, 0.5);
+  
+  /* Изумрудное свечение как у service-card */
+  box-shadow: 
+    0 20px 40px rgba(13, 79, 60, 0.25),
+    0 30px 60px rgba(46, 125, 50, 0.2),
+    0 0 80px rgba(46, 125, 50, 0.15),
+    inset 0 1px 0 rgba(46, 125, 50, 0.2);
+  
+  transform: translateY(-3px);
+  
+  background: linear-gradient(135deg, 
+    rgba(46, 125, 50, 0.15) 0%,
+    rgba(13, 79, 60, 0.1) 100%
+  );
+  
+  /* Отключаем дыхание при hover */
+  animation: none;
+}
+
+/* Active state - золотое свечение */
+.mobile-menu-list a:active {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 8px 20px rgba(184, 134, 11, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Убираем старый ::after */
+.mobile-menu-list a::after {
+  display: none;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
   :root {
@@ -1323,6 +1550,15 @@ section {
 
   .nav-menu {
     display: none; /* Скрываем меню на мобильных */
+  }
+
+  /* Show hamburger button on mobile */
+  .hamburger {
+    display: flex;
+  }
+
+  .site-nav {
+    justify-content: space-between;
   }
 
   .hero {
