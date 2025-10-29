@@ -759,10 +759,14 @@ function initializeBurgerMenu() {
     });
 
     // Закрытие при изменении размера окна на desktop
-    resizeManager.addHandler(() => {
-        if (window.innerWidth > 768 && hamburger.classList.contains('is-active')) {
-            closeMenu();
-        }
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768 && hamburger.classList.contains('is-active')) {
+                closeMenu();
+            }
+        }, 250);
     });
 
     console.log('✅ Бургер меню инициализировано');

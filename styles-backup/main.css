@@ -2,9 +2,6 @@
 /* Золотой минимализм с элементами зелени */
 
 :root {
-  /* ===== АДАПТИВНЫЕ РАЗМЕРЫ ===== */
-  --header-height: clamp(60px, 8vh, 80px);
-  
   /* ===== ПРЕМИАЛЬНОЕ ЗОЛОТО ===== */
   --color-gold-dark: #9A7209;        /* Самое темное золото */
   --color-gold-medium: #daa24f;      /* Основное светащееся золото */
@@ -18,16 +15,17 @@
   --color-secondary: #B8860B;        /* Золото вместо зеленого */
   --color-secondary-hover: #9A7209;  /* Темнее при hover */
 
-  /* ===== ИЗУМРУДНЫЕ АКЦЕНТЫ (для hover) ===== */
-  --color-emerald-dark: #0D4F3C;     /* Темный изумруд */
-  --color-emerald-medium: #2E7D32;   /* Средний изумруд */
-  --color-emerald-light: #4CAF50;    /* Светлый изумруд */
+/* ===== ИЗУМРУДНЫЕ АКЦЕНТЫ (для hover) ===== */
+--color-emerald-dark: #0D4F3C;     /* Темный изумруд */
+--color-emerald: #1B5E3A;          /* Основной изумруд */
+--color-emerald-medium: #2E7D32;   /* Средний изумруд */
+--color-emerald-light: #4CAF50;    /* Светлый изумруд */
 
-  /* ===== ФИОЛЕТОВО-БОРДОВЫЕ АКЦЕНТЫ (для hover) ===== */
-  --color-burgundy-dark: #6B1B3D;    /* Темный бордовый */
-  --color-burgundy: #8B2252;         /* Бордовый */
-  --color-violet: #9B4F96;           /* Фиолетово-бордовый */
-  --color-violet-light: #B565A7;     /* Светлый фиолетовый */
+/* ===== ФИОЛЕТОВО-БОРДОВЫЕ АКЦЕНТЫ (для hover) ===== */
+--color-burgundy-dark: #6B1B3D;    /* Темный бордовый */
+--color-burgundy: #8B2252;         /* Бордовый */
+--color-violet: #9B4F96;           /* Фиолетово-бордовый */
+--color-violet-light: #B565A7;     /* Светлый фиолетовый */
 
   /* ===== ЧЕРНЫЙ ФОН С ТЕКСТУРОЙ ===== */
   --color-background: #000000;
@@ -229,7 +227,7 @@ img {
   margin: 0 auto;
   box-sizing: border-box;
   width: 100%;
-  height: var(--header-height);
+  height: 80px;
   overflow: hidden;
 }
 
@@ -255,9 +253,9 @@ img {
 }
 
 .logo-image {
-  height: clamp(60px, 8vw, 120px);
+  height: 120px;
   width: auto;
-  padding: clamp(0.125rem, 1vw, 0.5rem) clamp(0.25rem, 2vw, 1rem);
+  padding: 0.5rem 1rem;
   filter: invert(1) brightness(2);
   pointer-events: none;
   opacity: 0.8;
@@ -305,8 +303,6 @@ img {
   background-attachment: fixed;
   overflow: hidden;
 }
-
-
 
 .hero-content {
   position: relative;
@@ -1362,10 +1358,10 @@ section {
 /* Mobile Menu с черным фоном и золотыми прожилками */
 .mobile-menu {
   position: fixed;
-  top: var(--header-height);
+  top: 80px;
   left: 0;
   width: 100%;
-  height: calc(100vh - var(--header-height));
+  height: calc(100vh - 80px);
   
   /* Черный фон с золотыми текстурными прожилками */
   background: 
@@ -1556,6 +1552,10 @@ section {
     margin-right: auto; /* Прижимаем логотип к левому краю */
   }
 
+  .logo-image {
+    height: 80px; /* Уменьшаем размер на мобильных */
+    padding: 0.25rem 0.5rem;
+  }
 
   .nav-menu {
     display: none; /* Скрываем меню на мобильных */
@@ -1624,16 +1624,16 @@ section {
   }
   
   .carousel-arrow {
-    width: clamp(40px, 8vw, 50px);
-    height: clamp(40px, 8vw, 50px);
+    width: 40px;
+    height: 40px;
   }
   
   .carousel-arrow i {
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: 16px;
   }
   
   .testimonial-card {
-    width: min(300px, 90vw);
+    width: 300px;
     height: auto;
     min-height: 200px;
     padding: var(--spacing-lg);
@@ -1662,14 +1662,14 @@ section {
     gap: var(--spacing-sm);
   }
   
-  /* Icon buttons - адаптивные размеры */
+  /* Icon buttons - horizontal layout using flex-wrap */
   .phone-btn,
   .telegram-btn,
   .whatsapp-btn {
-    width: clamp(44px, 12vw, 70px);
-    height: clamp(44px, 12vw, 70px);
-    min-width: 44px;
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    font-size: 1.5rem;
     margin: 0 4px;
     display: inline-flex;
     flex-shrink: 0;
@@ -1746,9 +1746,14 @@ section {
     font-size: var(--text-3xl);
   }
 
+  .logo-image {
+    height: 60px; /* Еще меньше на очень маленьких экранах */
+    padding: 0.125rem 0.25rem;
+  }
 
   .site-nav {
     padding: var(--spacing-sm) var(--container-padding);
+    height: 60px; /* Уменьшаем высоту header */
   }
 
   .btn {
@@ -1756,6 +1761,16 @@ section {
     max-width: 280px;
   }
 
+  /* Icon buttons smaller on tiny screens */
+  .phone-btn,
+  .telegram-btn,
+  .whatsapp-btn {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    font-size: 1.3rem;
+    margin: 0 3px;
+  }
   
   /* Question button full width on tiny screens */
   .question-btn {

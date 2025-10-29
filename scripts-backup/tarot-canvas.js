@@ -1,0 +1,213 @@
+/**
+ * Модуль управления холстом карт Таро (DRY архитектура)
+ * Карты привязаны к позиции в документе напротив карточек Process
+ */
+
+(function() {
+    'use strict';
+    
+    /**
+     * Конфигурация карт Таро
+     * Single Source of Truth для всех параметров анимации
+     */
+    const CARD_CONFIG = {
+        left: {
+            selector: '.tarot-card-left',
+            targetSelector: '#process-title',  // ИЗМЕНЕНО: было '.step-title'
+            targetText: null,                   // ИЗМЕНЕНО: было 'Знакомство'
+            horizontalPosition: '3vw',
+            horizontalProperty: 'left',
+            initialRotation: -15,
+            finalRotation: -10,
+            levitationRotationStart: -10,
+            levitationRotationEnd: -12
+        },
+        right: {
+            selector: '.tarot-card-right',
+            targetSelector: '#process-title',  // ИЗМЕНЕНО: было '.process-step'
+            targetText: null,                   // ИЗМЕНЕНО: был null (последний элемент)
+            horizontalPosition: '3vw',
+            horizontalProperty: 'right',
+            initialRotation: 15,
+            finalRotation: 10,
+            levitationRotationStart: 10,
+            levitationRotationEnd: 12
+        },
+        testimonials: {
+            selector: '.tarot-card-testimonials',
+            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetText: null,
+            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
+            horizontalProperty: 'left',
+            initialRotation: -12,
+            finalRotation: -8,
+            levitationRotationStart: -8,
+            levitationRotationEnd: -10
+        },
+        lovers: {
+            selector: '.tarot-card-lovers',
+            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetText: null,
+            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
+            horizontalProperty: 'right',
+            initialRotation: 12,
+            finalRotation: 8,
+            levitationRotationStart: 8,
+            levitationRotationEnd: 10
+        }
+    };
+    
+    /**
+     * Универсальная функция инициализации карты Таро
+     * @param {Object} config - Конфигурация карты из CARD_CONFIG
+     */
+    function initTarotCard(config) {
+        const card = document.querySelector(config.selector);
+        
+        if (!card) {
+            console.warn(`⚠️ Не найдена карта: ${config.selector}`);
+            return;
+        }
+        
+        // Поиск целевого элемента для привязки
+        const targetElement = findTargetElement(config);
+        
+        if (!targetElement) {
+            console.warn(`⚠️ Не найден целевой элемент для ${config.selector}`);
+            return;
+        }
+        
+        /**
+         * Вычисление и установка финальной позиции карты
+         */
+        function setCardFinalPosition() {
+            const targetRect = targetElement.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetTopInDocument = targetRect.top + scrollTop;
+            
+            // Динамическое определение высоты карты в зависимости от разрешения
+            const viewportWidth = window.innerWidth;
+            let cardHeight;
+
+            if (viewportWidth >= 1921) {
+                cardHeight = 336;
+            } else if (viewportWidth >= 1440) {
+                cardHeight = 336;
+            } else if (viewportWidth >= 1200) {
+                cardHeight = 302; // 336 × 0.9
+            } else if (viewportWidth >= 1024) {
+                cardHeight = 269; // 336 × 0.8
+            } else if (viewportWidth >= 769) {
+                cardHeight = 235; // 336 × 0.7
+            } else {
+                cardHeight = 336; // fallback
+            }
+
+            const targetHeight = targetRect.height;
+            let finalTop = targetTopInDocument + (targetHeight / 2) - (cardHeight / 2);
+            
+            card.style.top = `${finalTop}px`;
+            
+            console.log(`📍 ${config.selector} позиция:`, {
+                top: `${finalTop}px`,
+                [config.horizontalProperty]: config.horizontalPosition,
+                target: config.targetSelector  // ИЗМЕНЕНО: убрали offset, добавили target
+            });
+        }
+        
+        /**
+         * Intersection Observer для активации анимации
+         */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Устанавливаем финальную позицию
+                    setCardFinalPosition();
+                    
+                    // Активируем slide анимацию через 100ms
+                    setTimeout(() => {
+                        card.classList.add('active');
+                        card.style[config.horizontalProperty] = config.horizontalPosition;
+                        
+                        console.log(`🎴 ${config.selector} активирована`);
+                        
+                        // Запуск левитации через 2s после slide
+                        setTimeout(() => {
+                            card.classList.add('levitating');
+                            console.log(`✨ ${config.selector} левитация`);
+                        }, 2000);
+                    }, 100);
+                    
+                    // Отключаем observer после первой активации
+                    observer.unobserve(targetElement);
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '0px'
+        });
+        
+        /**
+         * Пересчет позиции при ресайзе окна
+         * Только для активных карт
+         */
+        window.addEventListener('resize', () => {
+            if (card.classList.contains('active')) {
+                setCardFinalPosition();
+                card.style[config.horizontalProperty] = config.horizontalPosition;
+            }
+        });
+        
+        // Запуск наблюдения
+        observer.observe(targetElement);
+        console.log(`✅ Триггер установлен для ${config.selector}`);
+    }
+    
+    /**
+     * Поиск целевого элемента для привязки карты
+     * @param {Object} config - Конфигурация карты
+     * @returns {Element|null} Найденный элемент или null
+     */
+    function findTargetElement(config) {
+        // Для элементов с ID используем прямой селектор
+        if (config.targetSelector.startsWith('#')) {
+            const element = document.querySelector(config.targetSelector);
+            return element;
+        }
+        
+        // Fallback для других селекторов (не используется в текущей конфигурации)
+        const elements = document.querySelectorAll(config.targetSelector);
+        
+        if (config.targetText) {
+            for (const element of elements) {
+                if (element.textContent.includes(config.targetText)) {
+                    return element.closest('.process-step') || element;
+                }
+            }
+        }
+        
+        return elements[0] || elements[elements.length - 1];
+    }
+    
+    /**
+     * Инициализация всех карт Таро
+     */
+    function initTarotCanvas() {
+        console.log('🎴 Инициализация холста карт Таро (DRY архитектура)');
+        
+        // Инициализируем все четыре карты через единую функцию
+        initTarotCard(CARD_CONFIG.left);
+        initTarotCard(CARD_CONFIG.right);
+        initTarotCard(CARD_CONFIG.testimonials);
+        initTarotCard(CARD_CONFIG.lovers);
+        
+        console.log('✅ Все четыре карты инициализированы через универсальную функцию');
+    }
+    
+    // Запуск при загрузке DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTarotCanvas);
+    } else {
+        initTarotCanvas();
+    }
+})();
