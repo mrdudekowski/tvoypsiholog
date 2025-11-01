@@ -96,6 +96,7 @@
 
   /* Типографика */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-body: 'Source Sans 3', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -175,6 +176,59 @@ body {
   /* Дополнительная поддержка momentum и блокировки overscroll */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: none;
+}
+
+/* Базовый шрифт для всего текстового контента, кроме заголовков и кнопок */
+p,
+ul,
+ol,
+li,
+span,
+strong,
+em,
+small,
+blockquote,
+figcaption,
+time,
+address,
+label,
+input,
+textarea,
+select,
+option,
+table,
+td,
+th,
+.about-description,
+.service-description,
+.step-description,
+.testimonial-text,
+.contact-description,
+.modal-subtitle,
+.footer-link,
+.nav-menu a {
+  font-family: var(--font-family-body);
+}
+
+/* Сохраняем Inter для заголовков */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.service-title,
+.step-title {
+  font-family: var(--font-family-primary);
+}
+
+/* Кнопки и интерактивные элементы остаются на базовом шрифте */
+.btn,
+.question-btn,
+.contact-button,
+.faq-question {
+  font-family: var(--font-family-primary);
 }
 
 * {
@@ -316,7 +370,8 @@ img {
 
 .hero-title {
   font-size: var(--text-5xl);
-  font-weight: var(--font-weight-light);
+  font-family: 'El Messiri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
   margin-bottom: var(--spacing-lg);
   line-height: 1.2;
   letter-spacing: 0.02em;
