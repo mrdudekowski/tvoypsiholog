@@ -232,10 +232,7 @@
     width: clamp(120px, 28vw, 160px);
     height: auto;
     filter: drop-shadow(0 8px 20px rgba(184, 134, 11, 0.35));
-    transition: left 700ms cubic-bezier(0.16, 1, 0.3, 1),
-                top 700ms cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Синхронизировано с desktop */
     will-change: left, top, opacity, transform;
   }
 

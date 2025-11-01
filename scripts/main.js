@@ -99,8 +99,9 @@ function initializeScrollAnimations() {
     });
 
     // Также наблюдаем за старыми элементами (обратная совместимость)
+    // testimonial-card исключены - у них больше нет анимаций появления, только карусель
     const legacyElements = document.querySelectorAll(
-        '.service-card:not([data-scroll-reveal]), .process-step:not([data-scroll-reveal]), .testimonial-card:not([data-scroll-reveal]), .faq-item:not([data-scroll-reveal])'
+        '.service-card:not([data-scroll-reveal]), .process-step:not([data-scroll-reveal]), .faq-item:not([data-scroll-reveal])'
     );
 
     legacyElements.forEach(element => {

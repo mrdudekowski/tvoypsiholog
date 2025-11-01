@@ -32,6 +32,13 @@
   transform: translateZ(0);
 }
 
+/* Исключение для slideInRight - карточки должны быть видимы с начала */
+[data-scroll-reveal="slideInRight"] {
+  opacity: 1; /* Видимы с начала, без fade */
+  transform: translateX(100px) translateZ(0); /* Начальное состояние для slide */
+  will-change: transform; /* Только transform для плавности */
+}
+
 /* Утилиты для прокрутки (Single Source of Truth) */
 .scroll-momentum {
   -webkit-overflow-scrolling: touch;
@@ -46,6 +53,12 @@
 /* После анимации убираем will-change */
 [data-scroll-reveal].animated {
   will-change: auto;
+}
+
+/* Для slideInRight гарантируем финальное состояние после анимации */
+[data-scroll-reveal="slideInRight"].animated {
+  transform: translateX(0) translateZ(0);
+  opacity: 1; /* Гарантируем видимость после анимации */
 }
 
 /* Анимация снизу вверх с GPU ускорением */
@@ -99,9 +112,11 @@
 /* Плавное скольжение вправо для карточек отзывов */
 @keyframes slideInRight {
   from {
+    opacity: 1; /* Видимы с начала, без fade */
     transform: translateX(100px) translateZ(0);
   }
   to {
+    opacity: 1; /* Остаются видимыми */
     transform: translateX(0) translateZ(0);
   }
 }
@@ -125,6 +140,10 @@
 
 .animate-slideInRight {
   animation: slideInRight 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 1 !important; /* Гарантия видимости без fade */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Задержки для stagger эффекта */
@@ -167,10 +186,11 @@
   }
   
   .service-card,
-  .process-step,
-  .testimonial-card {
+  .process-step {
     animation: none !important;
   }
+  
+  /* testimonial-card исключены - у них нет анимаций, только карусель */
   
   .service-icon::before,
   .service-icon::after {

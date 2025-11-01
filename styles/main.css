@@ -1011,51 +1011,58 @@ section {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  justify-content: center; /* Центрируем контейнер с карточками */
+  gap: 0;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 /* Стрелки навигации */
 .carousel-arrow {
-  background: linear-gradient(135deg, 
-    var(--color-gold-medium) 0%,
-    var(--color-gold-dark) 100%
-  );
-  color: var(--color-text-primary);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: transparent;
+  color: var(--color-gold-medium);
   width: 50px;
   height: 50px;
-  border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: none;
   flex-shrink: 0;
   z-index: 10;
-  box-shadow: 
-    var(--shadow-gold-sm),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border: none;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .carousel-arrow:hover {
-  background: linear-gradient(135deg, 
-    var(--color-gold-classic) 0%,
-    var(--color-gold-medium) 100%
-  );
-  transform: translateY(-2px);
-  box-shadow: 
-    var(--shadow-gold-md),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+  outline: none;
 }
 
-.carousel-arrow:active {
-  transform: translateY(0);
+.carousel-arrow:active,
+.carousel-arrow:focus {
+  outline: none;
+  box-shadow: none;
+  transform: none;
 }
 
 .carousel-arrow i {
   font-size: 20px;
+  color: var(--color-gold-medium);
+}
+
+.carousel-arrow-left {
+  position: absolute;
+  left: calc(50% - 160px - 50px); /* 160px = половина ширины карточки (320px/2), 50px = ширина стрелки */
+}
+
+.carousel-arrow-right {
+  position: absolute;
+  right: calc(50% - 160px - 50px);
 }
 
 /* Контейнер карусели */
@@ -1086,7 +1093,9 @@ section {
   height: 240px;
   flex-shrink: 0;
   overflow: hidden;
-  /* Убираем transition для transform, чтобы не конфликтовал с анимацией */
+  /* Карточки всегда видимы - анимация только через карусель */
+  opacity: 1;
+  transform: translateZ(0);
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -1690,7 +1699,7 @@ section {
 
   /* Мобильная адаптация карусели */
   .testimonials-carousel {
-    gap: var(--spacing-sm);
+    gap: 0;
   }
   
   .testimonials-track-container {
@@ -1701,11 +1710,21 @@ section {
   .carousel-arrow {
     width: clamp(40px, 8vw, 50px);
     height: clamp(40px, 8vw, 50px);
-    border-radius: var(--radius-xl);
+    border: none;
+    border-radius: 0;
+    outline: none;
   }
   
   .carousel-arrow i {
     font-size: clamp(16px, 4vw, 20px);
+  }
+  
+  .carousel-arrow-left {
+    left: calc(50% - min(160px, 45vw) - clamp(40px, 8vw, 50px));
+  }
+
+  .carousel-arrow-right {
+    right: calc(50% - min(160px, 45vw) - clamp(40px, 8vw, 50px));
   }
   
   .testimonial-card {
@@ -1899,11 +1918,10 @@ section {
 
   /* Мобильный hover для стрелок карусели */
   .carousel-arrow:hover {
-    transform: translateY(-1px);
-    background: linear-gradient(135deg, 
-      var(--color-gold-classic) 0%,
-      var(--color-gold-medium) 100%
-    );
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+    outline: none;
   }
 
   /* Отключаем hover для карточек процесса */
