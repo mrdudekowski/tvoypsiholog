@@ -96,6 +96,16 @@
   }
 }
 
+/* Плавное скольжение вправо для карточек отзывов */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px) translateZ(0);
+  }
+  to {
+    transform: translateX(0) translateZ(0);
+  }
+}
+
 /* Классы для применения анимаций */
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out forwards;
@@ -111,6 +121,10 @@
 
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Задержки для stagger эффекта */
@@ -145,7 +159,8 @@
   .animate-fadeInUp,
   .animate-fadeInLeft,
   .animate-fadeInRight,
-  .animate-fadeIn {
+  .animate-fadeIn,
+  .animate-slideInRight {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

@@ -71,11 +71,15 @@ function initializeScrollAnimations() {
                 // Применяем соответствующую анимацию
                 target.classList.add(`animate-${animationType}`);
                 
-                // Добавляем класс animated после завершения fade-in
+                // Добавляем класс animated после завершения анимации
                 target.addEventListener('animationend', function handleAnimationEnd(e) {
-                    if (e.animationName.includes('fadeIn')) {
+                    if (e.animationName.includes('fadeIn') || e.animationName.includes('slideIn')) {
                         target.classList.add('animated');
                         target.style.willChange = 'auto';
+                        // После завершения анимации можно вернуть transition для hover
+                        if (target.classList.contains('testimonial-card')) {
+                            target.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+                        }
                         this.removeEventListener('animationend', handleAnimationEnd);
                     }
                 }, { once: true });
@@ -790,9 +794,8 @@ function initTestimonialsCarousel() {
         return;
     }
     
-    // Определяем режим отображения (десктоп или мобильный)
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const cardsPerStep = isMobile ? 1 : 3;
+    // Отображаем 1 карточку за раз на всех экранах
+    const cardsPerStep = 1;
     
     let currentIndex = 0;
     const originalCardsCount = cards.length;
@@ -844,14 +847,7 @@ function initTestimonialsCarousel() {
         }
     });
     
-    // Обработка изменения размера экрана
-    window.addEventListener('resize', () => {
-        const newIsMobile = window.matchMedia('(max-width: 768px)').matches;
-        if (newIsMobile !== isMobile) {
-            // Перезапускаем карусель при изменении режима
-            location.reload();
-        }
-    });
+    // Обработка изменения размера экрана - больше не требуется, т.к. всегда 1 карточка
     
     console.log(`✅ Карусель отзывов инициализирована (${cardsPerStep} карточек за шаг)`);
 }
