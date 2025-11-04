@@ -227,7 +227,11 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
     let rightX = Math.min(maxX, centerX + gap);
 
     // Проверка, чтобы карты не выходили за пределы viewport по вертикали
-    const topY = Math.max(edgeMargin, Math.min(centerY - cardH / 2, viewportH - cardH - edgeMargin));
+    const docH = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+    );
+    const topY = Math.max(edgeMargin, Math.min(centerY - cardH / 2, docH - cardH - edgeMargin));
     
     // Дополнительная проверка: если карта не помещается, уменьшаем gap
     if (leftX + cardW > viewportW - edgeMargin || rightX < edgeMargin) {
@@ -245,22 +249,21 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
     rightCard.style.left = `${rightX}px`;
 }
 
-        // Наблюдатели для двух промежутков
-        const aboutImage = document.querySelector('.about .about-image') || document.querySelector('#about');
-        const servicesSection = document.querySelector('#services');
-        const processSection = document.querySelector('.process') || document.querySelector('#process-title');
+        // Наблюдатели для карт - синхронизировано с desktop версией
+        // Первая пара карт: left и right привязаны к #process-title
+        const processTitle = document.querySelector('#process-title');
+        const testimonialsTitle = document.querySelector('#testimonials-title');
 
-        if (aboutImage && servicesSection) {
-            // Ранний триггер: сразу после прокрутки фото (его нижняя граница выше верхней границы viewport)
+        if (processTitle) {
+            // Триггер для первой пары карт (left и right) у process-title
             let firedGap1 = false;
             const onScrollGap1 = () => {
                 if (firedGap1) return;
-                const servicesTitle = document.querySelector('#services-title') || servicesSection;
-                const titleTop = servicesTitle.getBoundingClientRect().top;
-                // Синхронизировано с появлением секции, но раньше: когда верх заголовка поднимается до 75% высоты экрана
+                const titleTop = processTitle.getBoundingClientRect().top;
+                // Срабатывание когда заголовок достигает 75% высоты экрана
                 if (titleTop <= window.innerHeight * 0.75) {
                     firedGap1 = true;
-                    positionCardsAtTitle(servicesTitle, '.tarot-card-left', '.tarot-card-right');
+                    positionCardsAtTitle(processTitle, '.tarot-card-left', '.tarot-card-right');
                     const left = document.querySelector('.tarot-card-left');
                     const right = document.querySelector('.tarot-card-right');
                     // устранение мерцаний: сначала расставляем позиции, затем в следующем кадре добавляем класс
@@ -282,24 +285,22 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
             // Ресайз/ориентация — актуализировать позицию
             const recalc1 = () => {
                 if (!firedGap1) return;
-                const servicesTitle = document.querySelector('#services-title');
-                positionCardsAtTitle(servicesTitle || servicesSection, '.tarot-card-left', '.tarot-card-right');
+                positionCardsAtTitle(processTitle, '.tarot-card-left', '.tarot-card-right');
             };
             window.addEventListener('resize', recalc1);
             window.addEventListener('orientationchange', recalc1);
         }
 
-        if (servicesSection && processSection) {
-            // Ранний триггер: когда низ секции services поднимается выше ~20% высоты viewport
+        if (testimonialsTitle) {
+            // Триггер для второй пары карт (testimonials и lovers) у testimonials-title
             let firedGap2 = false;
             const onScrollGap2 = () => {
                 if (firedGap2) return;
-                const processTitle = document.querySelector('#process-title') || processSection;
-                const titleTop2 = processTitle.getBoundingClientRect().top;
-                // Срабатывание раньше появления секции на экране, когда заголовок достигает 75% высоты экрана
+                const titleTop2 = testimonialsTitle.getBoundingClientRect().top;
+                // Срабатывание когда заголовок достигает 75% высоты экрана
                 if (titleTop2 <= window.innerHeight * 0.75) {
                     firedGap2 = true;
-                    positionCardsAtTitle(processTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
+                    positionCardsAtTitle(testimonialsTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
                     const left2 = document.querySelector('.tarot-card-testimonials');
                     const right2 = document.querySelector('.tarot-card-lovers');
                     setTimeout(() => {
@@ -312,14 +313,13 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
                             right2.dataset.activated = 'true';
                         }
                     }, 100); // Синхронизировано с desktop
-                    window.removeEventListener('scroll', onScrollGap2); // <-- ПРАВИЛЬНЫЙ ОТСТУП (как строка 305)
-                } // <-- закрывает if (titleTop2 <= window.innerHeight * 0.75)
-            }; // <-- закрывает const onScrollGap2 = () => {
-            window.addEventListener('scroll', onScrollGap2, { passive: true }); // <-- ДОБАВИТЬ ЭТУ СТРОКУ!
+                    window.removeEventListener('scroll', onScrollGap2);
+                }
+            };
+            window.addEventListener('scroll', onScrollGap2, { passive: true });
             const recalc2 = () => {
                 if (!firedGap2) return;
-                const processTitle = document.querySelector('#process-title') || processSection;
-                positionCardsAtTitle(processTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
+                positionCardsAtTitle(testimonialsTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
             };
             window.addEventListener('resize', recalc2);
             window.addEventListener('orientationchange', recalc2);
