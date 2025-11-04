@@ -18,6 +18,9 @@
     <meta name="twitter:title" content="Таролог Елена - Путь к самопознанию">
     <meta name="twitter:description" content="Интегративный подход к духовному и личностному росту">
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://taro-elena.ru/">
+
     <title>Студия Елены Макаровой</title>
 
     <!-- Favicon -->
@@ -32,13 +35,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Предзагрузка CSS файлов шрифтов для ускорения загрузки -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" as="style" crossorigin>
     
     <!-- Загрузка шрифтов -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet" crossorigin>
     
     <!-- Скрытие контента до загрузки шрифтов для предотвращения FOUT -->
     <style>
@@ -89,7 +92,7 @@
         <nav class="site-nav" role="navigation" aria-label="Основная навигация">
             <div class="nav-brand">
                 <div class="logo">
-                    <img src="assets/images/logo.png" alt="Елена Макарова" class="logo-image">
+                    <img src="assets/images/logo.png" alt="Елена Макарова" class="logo-image" width="120" height="120">
                 </div>
             </div>
 
@@ -178,7 +181,7 @@
                     <div class="about-image">
                         <picture>
                             <source srcset="assets/images/elena.webp" type="image/webp">
-                            <img src="assets/images/elena.jpg" alt="Елена - таролог и психолог" class="profile-image">
+                            <img src="assets/images/elena.jpg" alt="Елена - таролог и психолог" class="profile-image" width="400" height="400">
                         </picture>
                     </div>
                 </div>
@@ -288,14 +291,14 @@
         <section class="testimonials" id="testimonials" aria-labelledby="testimonials-title" data-scroll-reveal="fadeInUp">
             <div class="container">
                 <h2 id="testimonials-title" class="section-title">Истории трансформации</h2>
-                <div class="testimonials-carousel">
+                <div class="testimonials-carousel" role="region" aria-label="Карусель отзывов">
                     <!-- Стрелка влево -->
                     <button class="carousel-arrow carousel-arrow-left" aria-label="Предыдущий отзыв">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     
                     <!-- Контейнер карусели -->
-                    <div class="testimonials-track-container">
+                    <div class="testimonials-track-container" aria-live="polite" aria-atomic="true">
                         <div class="testimonials-track">
                             <!-- Карточка 1 -->
                             <div class="testimonial-card">
@@ -451,31 +454,7 @@
             </div>
         </section>
 
-        <!-- FAQ -->
-        <section class="faq" aria-labelledby="faq-title" data-scroll-reveal="fadeInUp">
-            <div class="container">
-                <h2 id="faq-title" class="section-title">Частые вопросы</h2>
-                <div class="faq-accordion">
-                    <div class="faq-item" data-scroll-reveal="fadeInUp" data-delay="100">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
-                            Чем вы отличаетесь от обычных тарологов?
-                        </button>
-                        <div class="faq-answer" id="faq-answer-1" aria-hidden="true">
-                            <p>Я сочетаю таро с профессиональной психологией, поэтому результаты глубже и практичнее. Это не просто предсказание, а комплексное понимание вашей ситуации.</p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item" data-scroll-reveal="fadeInUp" data-delay="200">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
-                            Работаете ли вы онлайн?
-                        </button>
-                        <div class="faq-answer" id="faq-answer-2" aria-hidden="true">
-                            <p>Да, все консультации проводятся онлайн через видеосвязь или мессенджеры. Это позволяет сосредоточиться на сути без отвлекающих факторов.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- Контакты -->
         <section class="contact" id="contact" aria-labelledby="contact-title" data-scroll-reveal="fadeInUp">
@@ -547,10 +526,13 @@
                             name="name" 
                             class="form-input" 
                             required 
+                            aria-required="true"
+                            aria-invalid="false"
+                            aria-describedby="nameError"
                             placeholder="Как к вам обращаться?"
                             autocomplete="name"
                         >
-                        <span class="form-error" id="nameError"></span>
+                        <span class="form-error" id="nameError" role="alert" aria-live="polite"></span>
                     </div>
 
                     <!-- Телефон -->
@@ -564,10 +546,13 @@
                             name="phone" 
                             class="form-input" 
                             required 
+                            aria-required="true"
+                            aria-invalid="false"
+                            aria-describedby="phoneError"
                             placeholder="+7 (___) ___-__-__"
                             autocomplete="tel"
                         >
-                        <span class="form-error" id="phoneError"></span>
+                        <span class="form-error" id="phoneError" role="alert" aria-live="polite"></span>
                     </div>
 
                     <!-- Email -->
@@ -580,10 +565,13 @@
                             id="contactEmail" 
                             name="email" 
                             class="form-input" 
+                            aria-required="false"
+                            aria-invalid="false"
+                            aria-describedby="emailError"
                             placeholder="your@email.com"
                             autocomplete="email"
                         >
-                        <span class="form-error" id="emailError"></span>
+                        <span class="form-error" id="emailError" role="alert" aria-live="polite"></span>
                     </div>
 
                     <!-- Выбор мессенджера -->
@@ -598,6 +586,8 @@
                                     name="messenger" 
                                     value="phone" 
                                     required
+                                    aria-required="true"
+                                    aria-invalid="false"
                                     checked
                                 >
                                 <span class="messenger-btn">
@@ -611,6 +601,8 @@
                                     name="messenger" 
                                     value="whatsapp" 
                                     required
+                                    aria-required="true"
+                                    aria-invalid="false"
                                 >
                                 <span class="messenger-btn">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -620,7 +612,7 @@
                                 </span>
                             </label>
                         </div>
-                        <span class="form-error" id="messengerError"></span>
+                        <span class="form-error" id="messengerError" role="alert" aria-live="polite"></span>
                     </div>
 
                     <!-- Вопрос -->
@@ -633,10 +625,13 @@
                             name="question" 
                             class="form-textarea" 
                             required 
+                            aria-required="true"
+                            aria-invalid="false"
+                            aria-describedby="questionError"
                             rows="4"
                             placeholder="Расскажите, с чем вы хотели бы поработать..."
                         ></textarea>
-                        <span class="form-error" id="questionError"></span>
+                        <span class="form-error" id="questionError" role="alert" aria-live="polite"></span>
                     </div>
 
                     <!-- Кнопка отправки -->
@@ -681,37 +676,37 @@
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/1.webp" type="image/webp">
-                        <img src="assets/images/certification/1.jpg" alt="Сертификат 1" loading="lazy">
+                        <img src="assets/images/certification/1.jpg" alt="Сертификат 1" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/2.webp" type="image/webp">
-                        <img src="assets/images/certification/2.jpg" alt="Сертификат 2" loading="lazy">
+                        <img src="assets/images/certification/2.jpg" alt="Сертификат 2" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/3.webp" type="image/webp">
-                        <img src="assets/images/certification/3.jpg" alt="Сертификат 3" loading="lazy">
+                        <img src="assets/images/certification/3.jpg" alt="Сертификат 3" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/4.webp" type="image/webp">
-                        <img src="assets/images/certification/4.jpg" alt="Сертификат 4" loading="lazy">
+                        <img src="assets/images/certification/4.jpg" alt="Сертификат 4" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/5.webp" type="image/webp">
-                        <img src="assets/images/certification/5.jpg" alt="Сертификат 5" loading="lazy">
+                        <img src="assets/images/certification/5.jpg" alt="Сертификат 5" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
                 <div class="certificate-item">
                     <picture>
                         <source srcset="assets/images/certification/6.webp" type="image/webp">
-                        <img src="assets/images/certification/6.jpg" alt="Сертификат 6" loading="lazy">
+                        <img src="assets/images/certification/6.jpg" alt="Сертификат 6" loading="lazy" width="800" height="600">
                     </picture>
                 </div>
             </div>
@@ -719,6 +714,8 @@
     </div>
 
     <!-- Скрипты -->
+    <script src="scripts/config.js"></script>
+    <script src="scripts/modal-utils.js"></script>
     <script src="scripts/resize-manager.js" defer></script>
     <script src="scripts/main.js" defer></script>
     <script src="scripts/tarot-canvas.js" defer></script>

@@ -601,8 +601,10 @@
   color: var(--color-primary);
   font-size: 22px;
   line-height: 1;
-  width: 32px;
-  height: 32px;
+  width: 44px; /* WCAG 2.2 AA minimum touch target */
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -661,6 +663,7 @@
 .certificate-item img {
   width: 100%;
   height: auto;
+  aspect-ratio: 4 / 3; /* Сохраняем пропорции для предотвращения CLS (800/600 = 4/3) */
   display: block;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.2);

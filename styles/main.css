@@ -221,7 +221,6 @@ h6,
 .service-title,
 .step-title,
 .testimonial-name,
-.faq-question,
 .modal-title {
   font-family: 'El Messiri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -229,8 +228,7 @@ h6,
 /* Кнопки и интерактивные элементы остаются на базовом шрифте */
 .btn,
 .question-btn,
-.contact-button,
-.faq-question {
+.contact-button {
   font-family: var(--font-family-primary);
 }
 
@@ -314,6 +312,7 @@ img {
 .logo-image {
   height: clamp(60px, 8vw, 120px);
   width: auto;
+  aspect-ratio: 1 / 1; /* Сохраняем квадратную форму для предотвращения CLS */
   padding: clamp(0.125rem, 1vw, 0.5rem) clamp(0.25rem, 2vw, 1rem);
   filter: invert(1) brightness(2);
   pointer-events: none;
@@ -567,6 +566,9 @@ section {
 .profile-image {
   width: 100%;
   max-width: 400px;
+  height: auto;
+  aspect-ratio: 1 / 1; /* Сохраняем квадратную форму для предотвращения CLS */
+  object-fit: cover;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
@@ -1036,6 +1038,8 @@ section {
   color: var(--color-gold-medium);
   width: 50px;
   height: 50px;
+  min-width: 44px; /* WCAG 2.2 AA minimum touch target */
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1056,11 +1060,16 @@ section {
   outline: none;
 }
 
-.carousel-arrow:active,
-.carousel-arrow:focus {
+.carousel-arrow:active {
   outline: none;
   box-shadow: none;
   transform: none;
+}
+
+.carousel-arrow:focus-visible {
+  outline: 2px solid var(--color-gold-medium);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(218, 162, 79, 0.3);
 }
 
 .carousel-arrow i {
@@ -1175,65 +1184,7 @@ section {
   hyphens: auto;
 }
 
-/* FAQ */
-.faq {
-  /* Фон убран - используется единый градиент body */
-  color: var(--color-text-primary);
-}
-
-.faq-accordion {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.faq-question {
-  width: 100%;
-  text-align: left;
-  padding: var(--spacing-lg) 0;
-  background: none;
-  border: none;
-  font-family: var(--font-family-primary);
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  transition: color var(--transition-fast);
-}
-
-.faq-question:hover {
-  color: var(--color-primary);
-}
-
-.faq-question::after {
-  content: '+';
-  float: right;
-  font-size: var(--text-xl);
-  transition: transform var(--transition-fast);
-}
-
-.faq-question[aria-expanded="true"]::after {
-  transform: rotate(45deg);
-}
-
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-normal);
-  padding-left: var(--spacing-lg);
-}
-
-.faq-answer[aria-hidden="false"] {
-  max-height: 200px;
-}
-
-.faq-answer p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-}
+/* FAQ removed */
 
 /* Контакты */
 .contact {
@@ -1293,10 +1244,15 @@ section {
   font-size: var(--text-lg);
 }
 
-.question-btn:hover,
-.question-btn:focus {
+.question-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+}
+
+.question-btn:focus-visible {
+  outline: 2px solid var(--color-gold-medium);
+  outline-offset: 2px;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3), 0 0 0 4px rgba(218, 162, 79, 0.3);
 }
 
 /* Текст внутри question-btn */
@@ -1370,6 +1326,16 @@ section {
   border-color: var(--color-gold-classic);
   transform: translateY(-2px);
   box-shadow: 0 0 20px rgba(46, 139, 87, 0.6); /* Emerald green glow */
+}
+
+/* Focus styles для всех кнопок контактов */
+.contact-button:focus-visible,
+.phone-btn:focus-visible,
+.telegram-btn:focus-visible,
+.whatsapp-btn:focus-visible {
+  outline: 2px solid var(--color-gold-medium);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(218, 162, 79, 0.3);
 }
 
 /* Подвал */
@@ -1735,8 +1701,10 @@ section {
   }
   
   .carousel-arrow {
-    width: clamp(40px, 8vw, 50px);
-    height: clamp(40px, 8vw, 50px);
+    width: clamp(44px, 8vw, 50px); /* Минимум 44px для WCAG 2.2 AA */
+    height: clamp(44px, 8vw, 50px);
+    min-width: 44px; /* Гарантия минимума */
+    min-height: 44px;
     border: none;
     border-radius: 0;
     outline: none;
@@ -1926,6 +1894,37 @@ section {
     order: 2; /* Кнопка вопроса во втором ряду */
     flex-basis: 100%; /* Занимает всю ширину строки */
     align-self: center; /* Центрирование кнопки */
+  }
+}
+
+/* Поддержка prefers-reduced-motion (WCAG 2.2) */
+@media (prefers-reduced-motion: reduce) {
+  /* Отключаем несущественные анимации */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Сохраняем функциональные анимации (модальные окна, карусель) с уменьшенной длительностью */
+  .modal-overlay.active,
+  .modal-content {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  .testimonials-track {
+    transition-duration: 0.3s !important;
+  }
+  
+  /* Отключаем пульсацию иконок и таро-карт */
+  .service-card.animated,
+  .service-card.animated .service-icon,
+  .tarot-card,
+  .section-title::after {
+    animation: none !important;
   }
 }
 

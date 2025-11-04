@@ -217,6 +217,7 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
     const cardH = leftCard.getBoundingClientRect().height || Math.round(cardW * (336/196));
 
     const viewportW = document.documentElement.clientWidth;
+    const viewportH = document.documentElement.clientHeight;
     const edgeMargin = 4; // Отступ от края экрана
     const minX = edgeMargin;
     const maxX = viewportW - cardW - edgeMargin;
@@ -225,7 +226,15 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
     let leftX = Math.max(minX, centerX - cardW - gap);
     let rightX = Math.min(maxX, centerX + gap);
 
-    const topY = Math.max(0, centerY - cardH / 2);
+    // Проверка, чтобы карты не выходили за пределы viewport по вертикали
+    const topY = Math.max(edgeMargin, Math.min(centerY - cardH / 2, viewportH - cardH - edgeMargin));
+    
+    // Дополнительная проверка: если карта не помещается, уменьшаем gap
+    if (leftX + cardW > viewportW - edgeMargin || rightX < edgeMargin) {
+        gap = Math.max(20, Math.round(window.innerWidth * 0.1));
+        leftX = Math.max(minX, centerX - cardW - gap);
+        rightX = Math.min(maxX, centerX + gap);
+    }
 
     leftCard.style.top = `${topY}px`;
     rightCard.style.top = `${topY}px`;

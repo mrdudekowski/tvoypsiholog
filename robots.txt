@@ -1,0 +1,9 @@
+# robots.txt для taro-elena.ru
+# Указывает поисковым роботам, какие страницы индексировать
+
+User-agent: *
+Allow: /
+
+# Карта сайта
+Sitemap: https://taro-elena.ru/sitemap.xml
+

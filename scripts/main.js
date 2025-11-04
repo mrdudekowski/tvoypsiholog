@@ -16,7 +16,6 @@ function initializeSite() {
 
     // Инициализация компонентов
     initializeScrollAnimations();
-    initializeFAQ();
     initializeSmoothScroll();
     initializeContactButtons();
     initializeCertificatesModal();
@@ -101,7 +100,7 @@ function initializeScrollAnimations() {
     // Также наблюдаем за старыми элементами (обратная совместимость)
     // testimonial-card исключены - у них больше нет анимаций появления, только карусель
     const legacyElements = document.querySelectorAll(
-        '.service-card:not([data-scroll-reveal]), .process-step:not([data-scroll-reveal]), .faq-item:not([data-scroll-reveal])'
+        '.service-card:not([data-scroll-reveal]), .process-step:not([data-scroll-reveal])'
     );
 
     legacyElements.forEach(element => {
@@ -118,31 +117,7 @@ function initializeScrollAnimations() {
     console.log(`📊 Инициализировано ${scrollRevealElements.length + legacyElements.length} анимируемых элементов`);
 }
 
-/**
- * Инициализирует FAQ аккордеон
- */
-function initializeFAQ() {
-    const faqQuestions = document.querySelectorAll('.faq-question');
-
-    faqQuestions.forEach(question => {
-        question.addEventListener('click', function() {
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            const answer = this.nextElementSibling;
-
-            // Закрываем все остальные вопросы
-            faqQuestions.forEach(q => {
-                if (q !== this) {
-                    q.setAttribute('aria-expanded', 'false');
-                    q.nextElementSibling.setAttribute('aria-hidden', 'true');
-                }
-            });
-
-            // Переключаем текущий вопрос
-            this.setAttribute('aria-expanded', !isExpanded);
-            answer.setAttribute('aria-hidden', isExpanded);
-        });
-    });
-}
+// FAQ удален
 
 /**
  * Инициализирует плавный скролл для навигации
@@ -182,6 +157,9 @@ function initializeCertificatesModal() {
         return;
     }
 
+    // Переменная для хранения cleanup функции focus trap
+    let focusTrapCleanup = null;
+
     /**
      * Открывает модальное окно
      */
@@ -191,8 +169,16 @@ function initializeCertificatesModal() {
         document.body.classList.add('modal-open');
         document.body.style.overflow = 'hidden';
         
-        // Фокус на кнопку закрытия для accessibility
-        closeBtn?.focus();
+        // Инициализируем focus trap
+        if (window.ModalFocusTrap) {
+            const trapResult = window.ModalFocusTrap.initialize(modal, openBtn);
+            if (trapResult) {
+                focusTrapCleanup = trapResult.cleanup;
+            }
+        } else {
+            // Fallback: фокус на кнопку закрытия
+            closeBtn?.focus();
+        }
         
         // Трекинг события
         trackEvent('certificates', 'modal_open');
@@ -209,8 +195,11 @@ function initializeCertificatesModal() {
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
         
-        // Возвращаем фокус на кнопку открытия
-        openBtn.focus();
+        // Очищаем focus trap
+        if (focusTrapCleanup) {
+            focusTrapCleanup();
+            focusTrapCleanup = null;
+        }
         
         // Трекинг события
         trackEvent('certificates', 'modal_close');
@@ -264,7 +253,7 @@ function initializeContactButtons() {
     if (telegramBtn) {
         telegramBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            window.open('https://t.me/taro_elena', '_blank', 'noopener,noreferrer');
+            window.open(SITE_CONFIG.urls.telegram, '_blank', 'noopener,noreferrer');
             trackEvent('contact_click', 'telegram');
         });
     }
@@ -272,7 +261,7 @@ function initializeContactButtons() {
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            window.open('https://wa.me/79025553566', '_blank', 'noopener,noreferrer');
+            window.open(SITE_CONFIG.urls.whatsapp, '_blank', 'noopener,noreferrer');
             trackEvent('contact_click', 'whatsapp');
         });
     }
@@ -280,7 +269,7 @@ function initializeContactButtons() {
     if (phoneBtn) {
         phoneBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            window.location.href = 'tel:+79025553566';
+            window.location.href = SITE_CONFIG.urls.phone;
             trackEvent('contact_click', 'phone');
         });
     }
@@ -329,9 +318,9 @@ function loadLazyImages() {
  * Предзагрузка критических ресурсов
  */
 function preloadCriticalResources() {
-    // Предзагрузка шрифтов
+    // Предзагрузка шрифтов из конфигурации
     const fontPreloads = [
-        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+        SITE_CONFIG.fonts.inter
     ];
 
     fontPreloads.forEach(font => {
@@ -376,8 +365,11 @@ function initializeContactFormModal() {
         return;
     }
 
-    // URL Google Apps Script webhook (заменить на реальный после развертывания)
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwnjjIart4H57pc7O8xNQ0ry3hpP1oOT8bMxeqUn_d3fZUNwRpmfFFBtyZ2o9nxUYy_/exec';
+    // URL Google Apps Script webhook из конфигурации
+    const WEBHOOK_URL = SITE_CONFIG.urls.webhook;
+
+    // Переменная для хранения cleanup функции focus trap
+    let focusTrapCleanup = null;
 
     /**
      * Открывает модальное окно
@@ -386,7 +378,18 @@ function initializeContactFormModal() {
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        closeBtn?.focus();
+        
+        // Инициализируем focus trap
+        if (window.ModalFocusTrap) {
+            const trapResult = window.ModalFocusTrap.initialize(modal, openBtn);
+            if (trapResult) {
+                focusTrapCleanup = trapResult.cleanup;
+            }
+        } else {
+            // Fallback: фокус на кнопку закрытия
+            closeBtn?.focus();
+        }
+        
         trackEvent('contact_form', 'modal_open');
         console.log('📝 Модальное окно формы открыто');
     }
@@ -398,7 +401,13 @@ function initializeContactFormModal() {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        openBtn.focus();
+        
+        // Очищаем focus trap
+        if (focusTrapCleanup) {
+            focusTrapCleanup();
+            focusTrapCleanup = null;
+        }
+        
         trackEvent('contact_form', 'modal_close');
         console.log('📝 Модальное окно формы закрыто');
     }
@@ -467,6 +476,7 @@ function initializeContactFormModal() {
         
         if (input) {
             input.classList.add('error');
+            input.setAttribute('aria-invalid', 'true');
         }
         
         if (errorElement) {
@@ -480,6 +490,7 @@ function initializeContactFormModal() {
     function clearErrors() {
         document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
             input.classList.remove('error');
+            input.setAttribute('aria-invalid', 'false');
         });
         
         document.querySelectorAll('.form-error').forEach(error => {
@@ -523,10 +534,21 @@ function initializeContactFormModal() {
         // Проверка выбора мессенджера
         if (!formData.get('messenger')) {
             const messengerError = document.getElementById('messengerError');
+            const messengerInputs = form.querySelectorAll('input[name="messenger"]');
             if (messengerError) {
                 messengerError.textContent = 'Выберите удобный мессенджер';
             }
+            // Устанавливаем aria-invalid для radio buttons
+            messengerInputs.forEach(radio => {
+                radio.setAttribute('aria-invalid', 'true');
+            });
             isValid = false;
+        } else {
+            // Очищаем aria-invalid если мессенджер выбран
+            const messengerInputs = form.querySelectorAll('input[name="messenger"]');
+            messengerInputs.forEach(radio => {
+                radio.setAttribute('aria-invalid', 'false');
+            });
         }
 
         // Проверка honeypot (защита от ботов)
@@ -646,6 +668,7 @@ function initializeContactFormModal() {
     form.querySelectorAll('.form-input, .form-textarea').forEach(input => {
         input.addEventListener('focus', () => {
             input.classList.remove('error');
+            input.setAttribute('aria-invalid', 'false');
             const errorId = input.id.replace('contact', '').toLowerCase() + 'Error';
             const errorElement = document.getElementById(errorId);
             if (errorElement) {

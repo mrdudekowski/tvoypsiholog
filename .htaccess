@@ -1,0 +1,46 @@
+# Security Headers для Apache
+# ВАЖНО: Этот файл работает только на серверах Apache
+# Для других серверов (Nginx, IIS и т.д.) смотрите docs/deployment-security.md
+
+# HSTS (HTTP Strict Transport Security)
+# Указывает браузеру использовать только HTTPS соединение
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# Content Security Policy (CSP)
+# Ограничивает источники контента для предотвращения XSS атак
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com;"
+</IfModule>
+
+# X-Content-Type-Options
+# Предотвращает MIME-sniffing атаки
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# X-Frame-Options
+# Защита от clickjacking атак
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Referrer-Policy
+# Контролирует, какую информацию о referrer отправлять
+<IfModule mod_headers.c>
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Permissions-Policy (ранее Feature-Policy)
+# Ограничивает использование браузерных функций
+<IfModule mod_headers.c>
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Удаление информации о сервере
+<IfModule mod_headers.c>
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
