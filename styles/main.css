@@ -1785,12 +1785,12 @@ section {
   }
   
   /* Icon buttons - адаптивные размеры */
-  .phone-btn,
-  .telegram-btn,
-  .whatsapp-btn {
+  .contact-methods .phone-btn,
+  .contact-methods .telegram-btn,
+  .contact-methods .whatsapp-btn {
     width: clamp(44px, 12vw, 70px);
     height: clamp(44px, 12vw, 70px);
-    min-width: 44px;
+    min-width: 0; /* Переопределяем базовое min-width: 120px */
     font-size: clamp(1.2rem, 4vw, 1.5rem);
     margin: 0 4px;
     display: inline-flex;
@@ -1803,6 +1803,7 @@ section {
   .contact-methods .whatsapp-btn {
     display: inline-flex;
     flex-shrink: 0;
+    order: 1; /* Иконки в первом ряду */
   }
   
   /* Question button - mobile size - full width on new line */
@@ -1811,11 +1812,13 @@ section {
     min-width: 200px;
     max-width: 240px;
     font-size: 0.9rem;
-    flex-basis: auto;
+    flex-basis: 100%; /* Занимает всю ширину строки */
     flex-shrink: 0;
     flex-grow: 0;
     margin-top: var(--spacing-sm);
     box-sizing: border-box;
+    order: 2; /* Кнопка вопроса во втором ряду */
+    align-self: center; /* Центрирование кнопки */
   }
 
   .footer-content {
@@ -1905,13 +1908,24 @@ section {
   }
 
   
+  /* Icon buttons on tiny screens - ensure order and min-width */
+  .contact-methods .phone-btn,
+  .contact-methods .telegram-btn,
+  .contact-methods .whatsapp-btn {
+    order: 1; /* Иконки в первом ряду */
+    min-width: 0; /* Переопределяем базовое min-width */
+  }
+  
   /* Question button full width on tiny screens */
-  .question-btn {
+  .contact-methods .question-btn {
     width: 240px;
     min-width: 180px;
     max-width: 240px;
     font-size: 0.85rem;
     box-sizing: border-box;
+    order: 2; /* Кнопка вопроса во втором ряду */
+    flex-basis: 100%; /* Занимает всю ширину строки */
+    align-self: center; /* Центрирование кнопки */
   }
 }
 
