@@ -697,9 +697,11 @@
 
 @media (max-width: 768px) {
   .modal-glassmorphism {
-    padding: 24px 16px;
-    max-width: 95vw;
-    max-height: 90vh;
+    padding: 20px 12px;
+    max-width: 98vw;
+    width: 98vw;
+    max-height: 95vh;
+    margin: 0 auto;
   }
 
   .modal-title {
@@ -709,7 +711,21 @@
 
   .certificates-gallery {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .certificate-item {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .certificate-item img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: 4 / 3;
   }
 
   .modal-close {
@@ -720,9 +736,19 @@
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
+  .modal-glassmorphism {
+    padding: 24px 16px;
+    max-width: 96vw;
+    width: 96vw;
+  }
+
   .certificates-gallery {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 16px;
+  }
+
+  .certificate-item img {
+    object-fit: contain;
   }
 }
 
