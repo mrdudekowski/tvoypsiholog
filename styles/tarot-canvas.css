@@ -12,6 +12,7 @@
   height: 100%;
   z-index: 5;
   pointer-events: none;
+  overflow-anchor: none; /* Предотвращает scroll anchoring для предотвращения отката скролла */
 }
 
 /* Базовые стили карты */
@@ -25,7 +26,7 @@
   will-change: transform, opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
-  transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Плавный easing */
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Оптимизировано: только opacity и transform */
   z-index: 10; /* Поверх других элементов */
 }
 
@@ -37,13 +38,15 @@
   opacity: 0;
   transform: rotate(-15deg) scale(0.8);
   filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform; /* Оптимизация: не включаем filter в will-change */
 }
 
 /* Левая карта - активное состояние (видима, на финальной позиции) */
 .tarot-card-left.active {
-  /* left и top устанавливаются через JavaScript */
+  /* left и top устанавливаются через JavaScript один раз */
   opacity: 0.3;
   transform: rotate(-10deg) scale(1);
+  /* filter остается постоянным, не анимируется - предотвращает reflow */
 }
 
 /* Анимация левитации - плавное покачивание */
@@ -74,11 +77,12 @@
   opacity: 0;
   transform: rotate(15deg) scale(0.8); /* Зеркальный наклон */
   filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform;
 }
 
 /* Правая карта - активное состояние */
 .tarot-card-right.active {
-  /* right и top устанавливаются через JavaScript */
+  /* right и top устанавливаются через JavaScript один раз */
   opacity: 0.3;
   transform: rotate(10deg) scale(1); /* Зеркальный поворот */
 }
@@ -109,11 +113,12 @@
   opacity: 0;
   transform: rotate(-12deg) scale(0.8); /* Немного другой угол */
   filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform;
 }
 
 /* Третья карта - активное состояние */
 .tarot-card-testimonials.active {
-  /* left и top устанавливаются через JavaScript */
+  /* left и top устанавливаются через JavaScript один раз */
   opacity: 0.3;
   transform: rotate(-8deg) scale(1); /* Финальный поворот */
 }
@@ -145,11 +150,12 @@
   opacity: 0;
   transform: rotate(12deg) scale(0.8); /* Зеркальный угол */
   filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform;
 }
 
 /* Четвертая карта - активное состояние */
 .tarot-card-lovers.active {
-  /* right и top устанавливаются через JavaScript */
+  /* right и top устанавливаются через JavaScript один раз */
   opacity: 0.3;
   transform: rotate(8deg) scale(1); /* Финальный поворот */
 }
@@ -232,8 +238,8 @@
     width: clamp(120px, 28vw, 160px);
     height: auto;
     filter: drop-shadow(0 8px 20px rgba(184, 134, 11, 0.35));
-    transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Синхронизировано с desktop */
-    will-change: left, top, opacity, transform;
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Синхронизировано с desktop */
+    will-change: opacity, transform;
   }
 
   /* Отключаем левитацию на мобиле */

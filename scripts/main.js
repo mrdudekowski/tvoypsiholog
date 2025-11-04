@@ -53,9 +53,10 @@ function initializeScrollAnimations() {
     }
 
     // Настройки для Intersection Observer
+    // Увеличен rootMargin для более раннего старта анимаций, чтобы избежать конфликта с картами
     const observerOptions = {
         threshold: 0.2, // Триггер при 20% видимости для более раннего появления
-        rootMargin: '0px 0px -50px 0px' // Уменьшенный отступ для более плавного появления
+        rootMargin: '0px 0px -100px 0px' // Увеличенный отступ для более раннего старта анимаций
     };
 
     // Создаем Intersection Observer
@@ -67,8 +68,16 @@ function initializeScrollAnimations() {
                 // Получаем тип анимации из data-атрибута
                 const animationType = target.dataset.scrollReveal || 'fadeInUp';
                 
-                // Применяем соответствующую анимацию
-                target.classList.add(`animate-${animationType}`);
+                // Небольшая задержка для предотвращения конфликта с активацией карт
+                // Используем requestAnimationFrame для синхронизации с repaint
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            // Применяем соответствующую анимацию
+                            target.classList.add(`animate-${animationType}`);
+                        });
+                    }, 50); // Небольшая задержка для разделения с активацией карт
+                });
                 
                 // Добавляем класс animated после завершения анимации
                 target.addEventListener('animationend', function handleAnimationEnd(e) {

@@ -35,9 +35,9 @@
         },
         testimonials: {
             selector: '.tarot-card-testimonials',
-            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetSelector: '#services-title',  // ИЗМЕНЕНО: перемещено к "Путь трансформации"
             targetText: null,
-            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
+            horizontalPosition: '3vw',
             horizontalProperty: 'left',
             initialRotation: -12,
             finalRotation: -8,
@@ -46,9 +46,9 @@
         },
         lovers: {
             selector: '.tarot-card-lovers',
-            targetSelector: '#testimonials-title',  // ИЗМЕНЕНО: было '.testimonials'
+            targetSelector: '#services-title',  // ИЗМЕНЕНО: перемещено к "Путь трансформации"
             targetText: null,
-            horizontalPosition: '3vw',              // ИЗМЕНЕНО: было '2vw'
+            horizontalPosition: '3vw',
             horizontalProperty: 'right',
             initialRotation: 12,
             finalRotation: 8,
@@ -81,38 +81,68 @@
          * Вычисление и установка финальной позиции карты
          */
         function setCardFinalPosition() {
-            const targetRect = targetElement.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const targetTopInDocument = targetRect.top + scrollTop;
-            
-            // Динамическое определение высоты карты через CSS переменные
-            function getCardHeight() {
-                const cardElement = document.querySelector('.tarot-card');
-                if (cardElement) {
-                    const computedStyle = getComputedStyle(cardElement);
-                    return parseInt(computedStyle.height);
+            requestAnimationFrame(() => {
+                const targetRect = targetElement.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const targetTopInDocument = targetRect.top + scrollTop;
+                
+                // Динамическое определение высоты карты через CSS переменные
+                function getCardHeight() {
+                    const cardElement = document.querySelector('.tarot-card');
+                    if (cardElement) {
+                        const computedStyle = getComputedStyle(cardElement);
+                        return parseInt(computedStyle.height);
+                    }
+                    
+                    // Fallback через matchMedia
+                    if (window.matchMedia('(min-width: 1921px)').matches) return 336;
+                    if (window.matchMedia('(min-width: 1440px)').matches) return 336;
+                    if (window.matchMedia('(min-width: 1200px)').matches) return 302;
+                    if (window.matchMedia('(min-width: 1024px)').matches) return 269;
+                    if (window.matchMedia('(min-width: 769px)').matches) return 235;
+                    return 336;
+                }
+
+                const cardHeight = getCardHeight();
+                const targetHeight = targetRect.height;
+                const finalTop = targetTopInDocument + (targetHeight / 2) - (cardHeight / 2);
+                
+                // Устанавливаем базовую позицию top один раз, затем используем только для resize
+                // Это предотвращает постоянные reflow при скролле
+                const baseTop = card.dataset.baseTop ? parseFloat(card.dataset.baseTop) : finalTop;
+                
+                if (!card.dataset.baseTop) {
+                    card.style.top = `${finalTop}px`;
+                    card.dataset.baseTop = finalTop;
+                } else if (Math.abs(baseTop - finalTop) > 1) {
+                    // Обновляем только если позиция значительно изменилась (при resize)
+                    card.style.top = `${finalTop}px`;
+                    card.dataset.baseTop = finalTop;
                 }
                 
-                // Fallback через matchMedia
-                if (window.matchMedia('(min-width: 1921px)').matches) return 336;
-                if (window.matchMedia('(min-width: 1440px)').matches) return 336;
-                if (window.matchMedia('(min-width: 1200px)').matches) return 302;
-                if (window.matchMedia('(min-width: 1024px)').matches) return 269;
-                if (window.matchMedia('(min-width: 769px)').matches) return 235;
-                return 336;
-            }
-
-            const cardHeight = getCardHeight();
-
-            const targetHeight = targetRect.height;
-            let finalTop = targetTopInDocument + (targetHeight / 2) - (cardHeight / 2);
-            
-            card.style.top = `${finalTop}px`;
-            
-            console.log(`📍 ${config.selector} позиция:`, {
-                top: `${finalTop}px`,
-                [config.horizontalProperty]: config.horizontalPosition,
-                target: config.targetSelector  // ИЗМЕНЕНО: убрали offset, добавили target
+                // Вычисляем горизонтальное смещение для transform вместо left/right
+                // Это предотвращает layout reflow
+                const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+                const horizontalOffset = (parseFloat(config.horizontalPosition) / 100) * viewportWidth;
+                
+                if (!card.dataset.baseHorizontalOffset) {
+                    // Устанавливаем базовую позицию left/right один раз для начального позиционирования
+                    if (config.horizontalProperty === 'left') {
+                        card.style.left = config.horizontalPosition;
+                        card.style.right = 'auto';
+                    } else {
+                        card.style.right = config.horizontalPosition;
+                        card.style.left = 'auto';
+                    }
+                    card.dataset.baseHorizontalOffset = horizontalOffset;
+                }
+                
+                console.log(`📍 ${config.selector} позиция:`, {
+                    top: `${finalTop}px`,
+                    [config.horizontalProperty]: config.horizontalPosition,
+                    transformOffset: `${horizontalOffset}px`,
+                    target: config.targetSelector
+                });
             });
         }
         
@@ -122,22 +152,30 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Устанавливаем финальную позицию
+                    // Устанавливаем финальную позицию через requestAnimationFrame
                     setCardFinalPosition();
                     
-                    // Активируем slide анимацию через 100ms
-                    setTimeout(() => {
-                        card.classList.add('active');
-                        card.style[config.horizontalProperty] = config.horizontalPosition;
-                        
-                        console.log(`🎴 ${config.selector} активирована`);
-                        
-                        // Запуск левитации через 2s после slide
+                    // Активируем slide анимацию через requestAnimationFrame для синхронизации
+                    // НЕ меняем left/right - они уже установлены, используем только CSS класс для анимации
+                    requestAnimationFrame(() => {
                         setTimeout(() => {
-                            card.classList.add('levitating');
-                            console.log(`✨ ${config.selector} левитация`);
-                        }, 2000);
-                    }, 100);
+                            requestAnimationFrame(() => {
+                                // Добавляем класс active - CSS transition анимирует opacity и transform
+                                // left/right уже установлены в setCardFinalPosition, не меняем их здесь
+                                card.classList.add('active');
+                                
+                                console.log(`🎴 ${config.selector} активирована`);
+                                
+                                // Запуск левитации через 2s после slide
+                                setTimeout(() => {
+                                    requestAnimationFrame(() => {
+                                        card.classList.add('levitating');
+                                        console.log(`✨ ${config.selector} левитация`);
+                                    });
+                                }, 2000);
+                            });
+                        }, 100);
+                    });
                     
                     // Отключаем observer после первой активации
                     observer.unobserve(targetElement);
@@ -151,11 +189,24 @@
         /**
          * Пересчет позиции при ресайзе окна
          * Только для активных карт
+         * Используем requestAnimationFrame для синхронизации
          */
         resizeManager.addHandler(() => {
             if (card.classList.contains('active')) {
-                setCardFinalPosition();
-                card.style[config.horizontalProperty] = config.horizontalPosition;
+                requestAnimationFrame(() => {
+                    setCardFinalPosition();
+                    // Пересчитываем горизонтальную позицию только при resize
+                    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+                    const horizontalOffset = (parseFloat(config.horizontalPosition) / 100) * viewportWidth;
+                    card.dataset.baseHorizontalOffset = horizontalOffset;
+                    
+                    // Обновляем left/right только при resize, не при каждом скролле
+                    if (config.horizontalProperty === 'left') {
+                        card.style.left = config.horizontalPosition;
+                    } else {
+                        card.style.right = config.horizontalPosition;
+                    }
+                });
             }
         });
         
@@ -240,19 +291,31 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
         rightX = Math.min(maxX, centerX + gap);
     }
 
-    leftCard.style.top = `${topY}px`;
-    rightCard.style.top = `${topY}px`;
-    // Переопределяем позиционирование через left (для симметрии) и убираем возможные конфликты
-    leftCard.style.right = 'auto';
-    rightCard.style.right = 'auto';
-    leftCard.style.left = `${leftX}px`;
-    rightCard.style.left = `${rightX}px`;
+    // Используем requestAnimationFrame для синхронизации изменений DOM
+    requestAnimationFrame(() => {
+        // Устанавливаем базовую позицию top один раз
+        if (!leftCard.dataset.baseTop) {
+            leftCard.style.top = `${topY}px`;
+            leftCard.dataset.baseTop = topY;
+        }
+        if (!rightCard.dataset.baseTop) {
+            rightCard.style.top = `${topY}px`;
+            rightCard.dataset.baseTop = topY;
+        }
+        
+        // Переопределяем позиционирование через left (для симметрии) и убираем возможные конфликты
+        leftCard.style.right = 'auto';
+        rightCard.style.right = 'auto';
+        leftCard.style.left = `${leftX}px`;
+        rightCard.style.left = `${rightX}px`;
+    });
 }
 
         // Наблюдатели для карт - синхронизировано с desktop версией
         // Первая пара карт: left и right привязаны к #process-title
+        // Вторая пара карт: testimonials и lovers привязаны к #services-title
         const processTitle = document.querySelector('#process-title');
-        const testimonialsTitle = document.querySelector('#testimonials-title');
+        const servicesTitle = document.querySelector('#services-title');
 
         if (processTitle) {
             // Триггер для первой пары карт (left и right) у process-title
@@ -267,16 +330,20 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
                     const left = document.querySelector('.tarot-card-left');
                     const right = document.querySelector('.tarot-card-right');
                     // устранение мерцаний: сначала расставляем позиции, затем в следующем кадре добавляем класс
-                    setTimeout(() => {
-                        if (left && !left.dataset.activated) {
-                            left.classList.add('active');
-                            left.dataset.activated = 'true';
-                        }
-                        if (right && !right.dataset.activated) {
-                            right.classList.add('active');
-                            right.dataset.activated = 'true';
-                        }
-                    }, 100); // Синхронизировано с desktop
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                if (left && !left.dataset.activated) {
+                                    left.classList.add('active');
+                                    left.dataset.activated = 'true';
+                                }
+                                if (right && !right.dataset.activated) {
+                                    right.classList.add('active');
+                                    right.dataset.activated = 'true';
+                                }
+                            });
+                        }, 100); // Синхронизировано с desktop
+                    });
                     window.removeEventListener('scroll', onScrollGap1);
                 }
             };
@@ -291,35 +358,39 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
             window.addEventListener('orientationchange', recalc1);
         }
 
-        if (testimonialsTitle) {
-            // Триггер для второй пары карт (testimonials и lovers) у testimonials-title
+        if (servicesTitle) {
+            // Триггер для второй пары карт (testimonials и lovers) у services-title (Путь трансформации)
             let firedGap2 = false;
             const onScrollGap2 = () => {
                 if (firedGap2) return;
-                const titleTop2 = testimonialsTitle.getBoundingClientRect().top;
+                const titleTop2 = servicesTitle.getBoundingClientRect().top;
                 // Срабатывание когда заголовок достигает 75% высоты экрана
                 if (titleTop2 <= window.innerHeight * 0.75) {
                     firedGap2 = true;
-                    positionCardsAtTitle(testimonialsTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
+                    positionCardsAtTitle(servicesTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
                     const left2 = document.querySelector('.tarot-card-testimonials');
                     const right2 = document.querySelector('.tarot-card-lovers');
-                    setTimeout(() => {
-                        if (left2 && !left2.dataset.activated) {
-                            left2.classList.add('active');
-                            left2.dataset.activated = 'true';
-                        }
-                        if (right2 && !right2.dataset.activated) {
-                            right2.classList.add('active');
-                            right2.dataset.activated = 'true';
-                        }
-                    }, 100); // Синхронизировано с desktop
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                if (left2 && !left2.dataset.activated) {
+                                    left2.classList.add('active');
+                                    left2.dataset.activated = 'true';
+                                }
+                                if (right2 && !right2.dataset.activated) {
+                                    right2.classList.add('active');
+                                    right2.dataset.activated = 'true';
+                                }
+                            });
+                        }, 100); // Синхронизировано с desktop
+                    });
                     window.removeEventListener('scroll', onScrollGap2);
                 }
             };
             window.addEventListener('scroll', onScrollGap2, { passive: true });
             const recalc2 = () => {
                 if (!firedGap2) return;
-                positionCardsAtTitle(testimonialsTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
+                positionCardsAtTitle(servicesTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
             };
             window.addEventListener('resize', recalc2);
             window.addEventListener('orientationchange', recalc2);
