@@ -210,7 +210,7 @@ th,
   font-family: var(--font-family-body);
 }
 
-/* Сохраняем Inter для заголовков */
+/* Используем El Messiri для всех заголовков (как H1) */
 h1,
 h2,
 h3,
@@ -219,8 +219,11 @@ h5,
 h6,
 .section-title,
 .service-title,
-.step-title {
-  font-family: var(--font-family-primary);
+.step-title,
+.testimonial-name,
+.faq-question,
+.modal-title {
+  font-family: 'El Messiri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* Кнопки и интерактивные элементы остаются на базовом шрифте */
@@ -582,7 +585,8 @@ section {
   gap: var(--spacing-xl);
   position: relative;
   z-index: 2;
-  justify-items: center;
+  justify-items: stretch;
+  align-items: stretch;
 }
 
 /* Нижний ряд с 2 карточками - центрируем */
@@ -590,22 +594,23 @@ section {
 /* Центрируем нижний ряд - 2 карточки рядом в центре */
 .services-grid .service-card:nth-child(4) {
   grid-column: 1 / 2; /* Левая колонка */
-  justify-self: center; /* Центрируем в левой колонке */
+  justify-self: stretch; /* Растягиваем на всю ширину колонки */
   grid-row: 2; /* Второй ряд */
 }
 
 .services-grid .service-card:nth-child(5) {
   grid-column: 3 / 4; /* Правая колонка */
-  justify-self: center; /* Центрируем в правой колонке */
+  justify-self: stretch; /* Растягиваем на всю ширину колонки */
   grid-row: 2; /* Второй ряд */
 }
 
 /* Предотвращение наезжания - добавляем отступы */
 .services-grid .service-card:nth-child(4),
 .services-grid .service-card:nth-child(5) {
-  margin: 0 auto;
+  margin: 0;
   max-width: 100%;
   box-sizing: border-box;
+  width: 100%;
 }
 
 /* Адаптивность для мобильных устройств - перенесено в основной медиа-запрос */
@@ -622,6 +627,13 @@ section {
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-top: 3px solid var(--color-border);
+  /* Фиксированные размеры для одинаковых карточек */
+  width: 100%;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
 }
 
 /* Hover эффект для карточек - деликатный */
@@ -802,6 +814,7 @@ section {
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-lg);
   line-height: 1.6;
+  flex-grow: 1;
 }
 
 
@@ -1254,30 +1267,36 @@ section {
   padding: var(--spacing-md) var(--spacing-2xl);
   font-size: var(--text-lg);
   font-weight: 600;
-  color: #fff;
-  background: transparent;
-  border: 2px solid var(--color-gold-classic);
+  color: white;
+  background: linear-gradient(135deg, var(--color-gold-dark) 0%, var(--color-gold-medium) 50%, var(--color-gold-classic) 100%);
+  border: none;
   border-radius: var(--radius-lg);
-  box-shadow: none;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
   transition: 
     background 0.24s cubic-bezier(0.4, 0, 0.2, 1),
     color 0.2s,
-    border-color 0.24s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.22s cubic-bezier(0.4, 0.1, 0.2, 1),
     transform 0.22s cubic-bezier(0.4, 0.1, 0.2, 1);
   cursor: pointer;
   outline: none;
   width: 240px;
-  min-width: 240px;
+  min-width: 200px;
+  max-width: 240px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+}
+
+/* Увеличенная специфичность для гарантии приоритета padding и font-size */
+.contact-button.question-btn {
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: var(--text-lg);
 }
 
 .question-btn:hover,
 .question-btn:focus {
-  background: linear-gradient(90deg, #ffeac9 0%, #ffd8a7 100%);
-  color: #111;
-  border-color: var(--color-gold-classic);
-  box-shadow: 0 0 20px rgba(200, 132, 43, 0.18);
-  transform: translateY(-2px) scale(1.025);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
 }
 
 /* Текст внутри question-btn */
@@ -1286,7 +1305,7 @@ section {
   font-weight: 600;
 }
 
-.contact-button {
+.contact-button:not(.question-btn) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1677,8 +1696,10 @@ section {
 
   .services-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(6, auto);
     gap: var(--spacing-lg);
+    justify-items: stretch;
+    align-items: stretch;
   }
   
   /* Мобильные карточки - предотвращение наезжания */
@@ -1686,10 +1707,16 @@ section {
   .services-grid .service-card:nth-child(5) {
     grid-column: 1;
     grid-row: auto;
-    justify-self: center;
-    margin: 0 auto;
+    justify-self: stretch;
+    margin: 0;
     max-width: 100%;
     box-sizing: border-box;
+  }
+  
+  /* Фиксированные размеры на мобильных */
+  .service-card {
+    min-height: 240px;
+    width: 100%;
   }
 
   .process-steps {
@@ -1780,11 +1807,15 @@ section {
   
   /* Question button - mobile size - full width on new line */
   .contact-methods .question-btn {
-    width: 100%;
+    width: 240px;
     min-width: 200px;
+    max-width: 240px;
     font-size: 0.9rem;
-    flex-basis: 100%;
+    flex-basis: auto;
+    flex-shrink: 0;
+    flex-grow: 0;
     margin-top: var(--spacing-sm);
+    box-sizing: border-box;
   }
 
   .footer-content {
@@ -1798,13 +1829,29 @@ section {
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+    justify-items: stretch;
+    align-items: stretch;
   }
   
   .services-grid .service-card:nth-child(4),
   .services-grid .service-card:nth-child(5) {
     grid-column: span 1;
     grid-row: auto;
-    justify-self: center;
+    justify-self: stretch;
+  }
+  
+  /* Фиксированные размеры на средних экранах */
+  .service-card {
+    min-height: 260px;
+    width: 100%;
+  }
+  
+  /* Фиксированный размер кнопки "Задать вопрос" на средних экранах */
+  .question-btn {
+    width: 240px;
+    max-width: 240px;
+    flex-shrink: 0;
+    flex-grow: 0;
   }
 }
 
@@ -1819,7 +1866,7 @@ section {
   
   .contact .contact-methods .question-btn {
     width: 240px;
-    min-width: 240px;
+    min-width: 200px;
     max-width: 240px;
     font-size: 1rem;
     flex-shrink: 0;
@@ -1828,6 +1875,12 @@ section {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  /* Фиксированные размеры на десктопе - все карточки одинаковые */
+  .service-card {
+    min-height: 280px;
+    width: 100%;
   }
 }
 
@@ -1854,9 +1907,11 @@ section {
   
   /* Question button full width on tiny screens */
   .question-btn {
-    width: 100%;
-    min-width: unset;
+    width: 240px;
+    min-width: 180px;
+    max-width: 240px;
     font-size: 0.85rem;
+    box-sizing: border-box;
   }
 }
 

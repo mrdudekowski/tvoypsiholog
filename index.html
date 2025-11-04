@@ -27,12 +27,30 @@
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
 
-    <!-- Шрифты -->
+    <!-- Шрифты - предзагрузка критических -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Предзагрузка CSS файлов шрифтов для ускорения загрузки -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" as="style">
+    
+    <!-- Загрузка шрифтов -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    
+    <!-- Скрытие контента до загрузки шрифтов для предотвращения FOUT -->
+    <style>
+        /* Плавное скрытие контента до загрузки шрифтов */
+        body:not(.fonts-loaded) {
+            opacity: 0;
+            transition: opacity 0.2s ease-in;
+        }
+        body.fonts-loaded {
+            opacity: 1;
+        }
+    </style>
     
     <!-- Font Awesome для иконок мессенджеров -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
@@ -704,5 +722,22 @@
     <script src="scripts/resize-manager.js" defer></script>
     <script src="scripts/main.js" defer></script>
     <script src="scripts/tarot-canvas.js" defer></script>
+    
+    <!-- Показ контента после загрузки шрифтов -->
+    <script>
+        // Показываем контент после загрузки шрифтов для предотвращения FOUT
+        (function() {
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function() {
+                    document.body.classList.add('fonts-loaded');
+                });
+            } else {
+                // Fallback для старых браузеров
+                window.addEventListener('load', function() {
+                    document.body.classList.add('fonts-loaded');
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
