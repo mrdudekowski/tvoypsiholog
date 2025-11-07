@@ -707,7 +707,9 @@ section {
 }
 
 /* Предотвращаем клиппинг во время анимации появления */
+/* Применяем тот же подход, что и для process-step */
 .service-card[data-scroll-reveal]:not(.animated),
+.service-card:not(.animated):not([data-scroll-reveal]),
 .service-card.animate-fadeInUp,
 .service-card.animate-fadeInLeft,
 .service-card.animate-fadeInRight,
