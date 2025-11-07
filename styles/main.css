@@ -706,10 +706,20 @@ section {
   animation: none !important;
 }
 
+/* Предотвращаем клиппинг во время анимации появления */
+.service-card[data-scroll-reveal]:not(.animated),
+.service-card.animate-fadeInUp,
+.service-card.animate-fadeInLeft,
+.service-card.animate-fadeInRight,
+.service-card.animate-fadeIn {
+  overflow: visible !important;
+}
+
 /* Включаем пульсацию после fade-in */
 .service-card.animated {
   animation: card-breathe 6s ease-in-out infinite;
   animation-delay: 0.3s; /* Задержка 300ms после fade-in */
+  overflow: hidden; /* Возвращаем overflow: hidden после анимации */
 }
 
 .service-card.animated .service-icon {
