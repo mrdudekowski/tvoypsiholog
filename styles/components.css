@@ -625,16 +625,24 @@
   min-height: 44px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  z-index: 10001;
+  will-change: transform;
+  transform: translateY(0);
+}
+
+/* Состояние кнопки внизу (при доскролливании до конца) */
+.modal-glassmorphism .modal-close.scrolled-to-bottom {
+  /* transform будет установлен через JavaScript */
 }
 
 .modal-glassmorphism .modal-close:hover {
   background: rgba(184, 134, 11, 0.3);
-  transform: rotate(90deg);
+  transform: translateY(var(--close-btn-translate-y, 0)) rotate(90deg);
   box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
 }
 
@@ -956,6 +964,7 @@ body.modal-open {
   justify-content: center;
   border-radius: 50%;
   transition: all 0.3s ease;
+  z-index: 1000;
 }
 
 .modal-close:hover {

@@ -23,8 +23,6 @@ function initializeSite() {
     initializeBurgerMenu();
     initializePerformanceOptimizations();
 
-    // Логирование успешной инициализации
-    console.log('✅ Все компоненты инициализированы');
 }
 
 /**
@@ -123,7 +121,6 @@ function initializeScrollAnimations() {
         }, { once: true });
     });
 
-    console.log(`📊 Инициализировано ${scrollRevealElements.length + legacyElements.length} анимируемых элементов`);
 }
 
 // FAQ удален
@@ -206,6 +203,70 @@ function initializeCertificatesModal() {
     }
 
     /**
+     * Вычисляет и устанавливает позицию кнопки закрытия
+     */
+    function updateCloseButtonPosition() {
+        if (!closeBtn) return;
+        
+        const modalContent = modal.querySelector('.modal-glassmorphism');
+        if (!modalContent) return;
+        
+        const scrollTop = modalContent.scrollTop;
+        const scrollHeight = modalContent.scrollHeight;
+        const clientHeight = modalContent.clientHeight;
+        const threshold = 100; // пикселей от конца
+        
+        // Проверяем, есть ли скролл (контент больше высоты окна)
+        const hasScroll = scrollHeight > clientHeight;
+        
+        // Если скролла нет, оставляем кнопку вверху
+        if (!hasScroll) {
+            closeBtn.classList.remove('scrolled-to-bottom');
+            closeBtn.style.transform = 'translateY(0)';
+            closeBtn.style.setProperty('--close-btn-translate-y', '0');
+            return;
+        }
+        
+        // Проверяем, достиг ли пользователь низа (с threshold)
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold;
+        
+        // Проверяем, находится ли пользователь вверху (с threshold)
+        const isAtTop = scrollTop <= threshold;
+        
+        // Вычисляем расстояние для перемещения кнопки
+        // Кнопка должна фиксироваться по нижнему краю ВСЕГО контента (scrollHeight), а не видимой области
+        const computedStyle = window.getComputedStyle(closeBtn);
+        const topValue = parseInt(computedStyle.top) || 16;
+        const buttonHeight = parseInt(computedStyle.height) || 44;
+        const bottomOffset = 16; // отступ снизу от края контейнера
+        
+        // Используем scrollHeight (полная высота контента) для вычисления позиции внизу
+        // Кнопка должна быть внизу под последним сертификатом
+        // Позиция внизу от верха всего контента = scrollHeight - bottomOffset - buttonHeight
+        const targetBottomPosition = scrollHeight - bottomOffset - buttonHeight;
+        const translateY = targetBottomPosition - topValue;
+        
+        if (isAtBottom) {
+            // Пользователь внизу - кнопка съезжает вниз
+            closeBtn.classList.add('scrolled-to-bottom');
+            closeBtn.style.transform = `translateY(${translateY}px)`;
+            closeBtn.style.setProperty('--close-btn-translate-y', `${translateY}px`);
+        } else if (isAtTop) {
+            // Пользователь вверху - кнопка возвращается наверх
+            closeBtn.classList.remove('scrolled-to-bottom');
+            closeBtn.style.transform = 'translateY(0)';
+            closeBtn.style.setProperty('--close-btn-translate-y', '0');
+        }
+    }
+
+    /**
+     * Отслеживает скролл модального окна и управляет позицией кнопки закрытия
+     */
+    function handleModalScroll(e) {
+        updateCloseButtonPosition();
+    }
+
+    /**
      * Открывает модальное окно
      */
     function openModal() {
@@ -231,10 +292,21 @@ function initializeCertificatesModal() {
             closeBtn?.focus();
         }
         
+        // Проверяем начальное состояние скролла после открытия
+        // Небольшая задержка для корректного расчета размеров
+        setTimeout(() => {
+            updateCloseButtonPosition();
+        }, 100);
+        
+        // Обновляем позицию при изменении размера окна
+        window.addEventListener('resize', () => {
+            if (modal.classList.contains('active')) {
+                updateCloseButtonPosition();
+            }
+        });
+        
         // Трекинг события
         trackEvent('certificates', 'modal_open');
-        
-        console.log('📜 Модальное окно сертификатов открыто');
     }
 
     /**
@@ -246,6 +318,13 @@ function initializeCertificatesModal() {
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
         
+        // Сбрасываем состояние кнопки закрытия (возвращаем наверх)
+        if (closeBtn) {
+            closeBtn.classList.remove('scrolled-to-bottom');
+            closeBtn.style.transform = 'translateY(0)';
+            closeBtn.style.setProperty('--close-btn-translate-y', '0');
+        }
+        
         // Очищаем focus trap
         if (focusTrapCleanup) {
             focusTrapCleanup();
@@ -254,8 +333,6 @@ function initializeCertificatesModal() {
         
         // Трекинг события
         trackEvent('certificates', 'modal_close');
-        
-        console.log('📜 Модальное окно сертификатов закрыто');
     }
 
     // Открытие модального окна по клику на кнопку
@@ -285,11 +362,24 @@ function initializeCertificatesModal() {
     certificateImages.forEach((img, index) => {
         img.addEventListener('click', () => {
             trackEvent('certificates', 'certificate_view', `certificate_${index + 1}`);
-            console.log(`📜 Просмотр сертификата ${index + 1}`);
         });
     });
 
-    console.log('✅ Модальное окно сертификатов инициализировано');
+    // Добавляем обработчик скролла на модальное окно
+    // Важно: обработчик должен быть добавлен после того, как элементы доступны
+    // Скролл происходит на .modal-glassmorphism (overflow-y: auto)
+    const modalContent = modal.querySelector('.modal-glassmorphism');
+    if (modalContent && closeBtn) {
+        // Обработчик скролла на .modal-glassmorphism
+        modalContent.addEventListener('scroll', function(e) {
+            handleModalScroll(e);
+        }, { passive: true });
+        
+        // Также добавляем обработчик на modal-overlay на случай, если скролл там
+        modal.addEventListener('scroll', function(e) {
+            handleModalScroll(e);
+        }, { passive: true });
+    }
 }
 
 /**
@@ -388,7 +478,6 @@ function preloadCriticalResources() {
  */
 function trackEvent(category, action, label = null) {
     // Простая реализация трекинга (можно заменить на GA, YM, etc.)
-    console.log('📊 Event tracked:', { category, action, label });
 
     // Здесь можно добавить интеграцию с аналитикой
     if (typeof gtag !== 'undefined') {
@@ -442,7 +531,6 @@ function initializeContactFormModal() {
         }
         
         trackEvent('contact_form', 'modal_open');
-        console.log('📝 Модальное окно формы открыто');
     }
 
     /**
@@ -460,7 +548,6 @@ function initializeContactFormModal() {
         }
         
         trackEvent('contact_form', 'modal_close');
-        console.log('📝 Модальное окно формы закрыто');
     }
 
     /**
@@ -648,7 +735,6 @@ function initializeContactFormModal() {
             const result = await response.json();
             
             if (result.ok) {
-                console.log('✅ Форма успешно отправлена');
                 
                 // Трекинг успешной отправки
                 trackEvent('contact_form', 'submit_success', data.messenger);
@@ -745,7 +831,6 @@ function initializeContactFormModal() {
         await submitForm(formData);
     });
 
-    console.log('✅ Модальное окно формы обратной связи инициализировано');
 }
 
 
@@ -792,8 +877,6 @@ function initializeBurgerMenu() {
         
         // Трекинг события
         trackEvent('mobile_menu', 'open');
-        
-        console.log('📱 Мобильное меню открыто');
     }
 
     /**
@@ -812,8 +895,6 @@ function initializeBurgerMenu() {
         
         // Трекинг события
         trackEvent('mobile_menu', 'close');
-        
-        console.log('📱 Мобильное меню закрыто');
     }
 
     // Клик по кнопке гамбургера
@@ -844,7 +925,6 @@ function initializeBurgerMenu() {
         }
     });
 
-    console.log('✅ Бургер меню инициализировано');
 }
 
 
@@ -924,7 +1004,6 @@ function initTestimonialsCarousel() {
     
     // Обработка изменения размера экрана - больше не требуется, т.к. всегда 1 карточка
     
-    console.log(`✅ Карусель отзывов инициализирована (${cardsPerStep} карточек за шаг)`);
 }
 
 // Инициализация карусели при загрузке
