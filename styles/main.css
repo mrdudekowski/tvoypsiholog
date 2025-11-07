@@ -1250,9 +1250,8 @@ section {
 }
 
 .question-btn:focus-visible {
-  outline: 2px solid var(--color-gold-medium);
-  outline-offset: 2px;
-  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3), 0 0 0 4px rgba(218, 162, 79, 0.3);
+  outline: none;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
 }
 
 /* Текст внутри question-btn */
@@ -1328,14 +1327,12 @@ section {
   box-shadow: 0 0 20px rgba(46, 139, 87, 0.6); /* Emerald green glow */
 }
 
-/* Focus styles для всех кнопок контактов */
+/* Focus styles для всех кнопок контактов - outline убран */
 .contact-button:focus-visible,
 .phone-btn:focus-visible,
 .telegram-btn:focus-visible,
 .whatsapp-btn:focus-visible {
-  outline: 2px solid var(--color-gold-medium);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(218, 162, 79, 0.3);
+  outline: none;
 }
 
 /* Подвал */

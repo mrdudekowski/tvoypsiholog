@@ -468,6 +468,23 @@
   outline-offset: 2px;
 }
 
+/* Убираем outline для кнопок контактов и кнопки сертификатов */
+.contact-button:focus,
+.contact-button:active,
+.phone-btn:focus,
+.phone-btn:active,
+.telegram-btn:focus,
+.telegram-btn:active,
+.whatsapp-btn:focus,
+.whatsapp-btn:active,
+.question-btn:focus,
+.question-btn:active,
+.btn-certificates:focus,
+.btn-certificates:active,
+.btn-certificates:focus-visible {
+  outline: none !important;
+}
+
 /* ============================================
    КНОПКА СЕРТИФИКАТОВ
    ============================================ */
@@ -505,6 +522,7 @@
 .btn-certificates:hover,
 .btn-certificates:focus {
   color: var(--color-primary-hover);
+  outline: none;
 }
 
 .btn-certificates:hover .icon-graduation,
