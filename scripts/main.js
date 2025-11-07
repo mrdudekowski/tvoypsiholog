@@ -170,9 +170,51 @@ function initializeCertificatesModal() {
     let focusTrapCleanup = null;
 
     /**
+     * Предзагружает изображения сертификатов
+     */
+    function preloadCertificateImages() {
+        const certificateSources = modal.querySelectorAll('.certificate-item picture source[type="image/webp"]');
+        const certificateImages = modal.querySelectorAll('.certificate-item img');
+        
+        // Предзагрузка webp изображений из source
+        certificateSources.forEach((source) => {
+            const srcset = source.getAttribute('srcset');
+            if (srcset) {
+                // Берем URL из srcset (убираем дескрипторы размеров если есть)
+                const url = srcset.split(/\s+/)[0];
+                if (url) {
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'image';
+                    link.href = url;
+                    link.type = 'image/webp';
+                    document.head.appendChild(link);
+                }
+            }
+        });
+        
+        // Предзагрузка fallback jpg изображений (только для первых 3 для оптимизации)
+        certificateImages.forEach((img, index) => {
+            if (index < 3 && img.src && !img.complete) {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'image';
+                link.href = img.src;
+                document.head.appendChild(link);
+            }
+        });
+    }
+
+    /**
      * Открывает модальное окно
      */
     function openModal() {
+        // Предзагрузка изображений при первом открытии
+        if (!modal.dataset.imagesPreloaded) {
+            preloadCertificateImages();
+            modal.dataset.imagesPreloaded = 'true';
+        }
+        
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');

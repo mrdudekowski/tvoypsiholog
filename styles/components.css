@@ -576,9 +576,6 @@
   -ms-overflow-style: none; /* IE and Edge */
 }
 
-.modal-glassmorphism::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
 
 @keyframes slideUp {
   from {
@@ -591,8 +588,8 @@
   }
 }
 
-/* Кнопка закрытия */
-.modal-close {
+/* Кнопка закрытия для модалки сертификатов */
+.modal-glassmorphism .modal-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -614,14 +611,14 @@
   padding: 0;
 }
 
-.modal-close:hover {
+.modal-glassmorphism .modal-close:hover {
   background: rgba(184, 134, 11, 0.3);
   transform: rotate(90deg);
   box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
 }
 
-/* Заголовок модального окна */
-.modal-title {
+/* Заголовок модального окна сертификатов */
+.modal-glassmorphism .modal-title {
   color: var(--color-primary);
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-bold);
@@ -639,13 +636,18 @@
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 90vw), 1fr));
   gap: clamp(16px, 3vw, 20px);
   margin-top: var(--spacing-lg);
+  justify-items: center; /* Центрируем элементы в grid ячейках */
 }
 
 .certificate-item {
   position: relative;
   line-height: 0;
   font-size: 0;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .certificate-item:hover img {
@@ -656,23 +658,42 @@
 
 .certificate-item picture {
   display: block;
-  width: 100%;
+  max-width: 100%;
   line-height: 0;
 }
 
 .certificate-item img {
-  width: 100%;
+  max-width: 100%;
+  width: auto;
   height: auto;
-  aspect-ratio: 4 / 3; /* Сохраняем пропорции для предотвращения CLS (800/600 = 4/3) */
   display: block;
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.2);
+  background: 
+    linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%),
+    rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(184, 134, 11, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
+  /* Изображения сохраняют свои оригинальные пропорции, не растягиваются принудительно */
 }
 
-/* Скроллбар для модального окна */
+/* Placeholder для загрузки изображений */
+.certificate-item img[loading] {
+  background: 
+    linear-gradient(135deg, rgba(184, 134, 11, 0.15) 0%, rgba(0, 0, 0, 0.4) 100%),
+    rgba(0, 0, 0, 0.3);
+}
+
+/* Улучшенный fallback для не загруженных изображений */
+.certificate-item img:not([src]),
+.certificate-item img[src=""] {
+  min-height: 200px;
+  background: 
+    linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%),
+    rgba(0, 0, 0, 0.2);
+}
+
+/* Скроллбар для модального окна сертификатов */
 .modal-glassmorphism::-webkit-scrollbar {
   width: 8px;
 }
@@ -704,7 +725,7 @@
     margin: 0 auto;
   }
 
-  .modal-title {
+  .modal-glassmorphism .modal-title {
     font-size: var(--text-xl);
     margin-bottom: var(--spacing-md);
   }
@@ -721,17 +742,62 @@
   }
 
   .certificate-item img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  .modal-glassmorphism .modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* Медиа-запрос для очень маленьких экранов */
+@media (max-width: 480px) {
+  .modal-glassmorphism {
+    padding: 16px 8px;
+    max-width: 100vw;
+    width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    border-radius: 12px;
+  }
+
+  .modal-glassmorphism .modal-title {
+    font-size: clamp(1.125rem, 5vw, 1.25rem);
+    margin-bottom: var(--spacing-sm);
+    padding: 0 32px 0 0; /* Отступ справа для кнопки закрытия */
+  }
+
+  .certificates-gallery {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: var(--spacing-sm);
+  }
+
+  .certificate-item {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .certificate-item img {
     width: 100%;
     max-width: 100%;
     height: auto;
-    object-fit: contain;
-    aspect-ratio: 4 / 3;
   }
 
-  .modal-close {
-    width: 36px;
-    height: 36px;
-    font-size: 24px;
+  .modal-glassmorphism .modal-close {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    top: 8px;
+    right: 8px;
+    min-width: 32px;
+    min-height: 32px;
   }
 }
 
@@ -743,26 +809,40 @@
   }
 
   .certificates-gallery {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
 
   .certificate-item img {
-    object-fit: contain;
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .certificates-gallery {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
+  }
+  
+  .certificate-item img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 }
 
 @media (min-width: 1025px) {
   .certificates-gallery {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
+  }
+  
+  .certificate-item img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 }
 
