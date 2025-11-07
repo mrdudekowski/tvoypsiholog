@@ -468,7 +468,7 @@
   outline-offset: 2px;
 }
 
-/* Убираем outline для кнопок контактов и кнопки сертификатов */
+/* Убираем outline для кнопок контактов, кнопки сертификатов и стрелок карусели */
 .contact-button:focus,
 .contact-button:active,
 .phone-btn:focus,
@@ -481,7 +481,10 @@
 .question-btn:active,
 .btn-certificates:focus,
 .btn-certificates:active,
-.btn-certificates:focus-visible {
+.btn-certificates:focus-visible,
+.carousel-arrow:focus,
+.carousel-arrow:active,
+.carousel-arrow:focus-visible {
   outline: none !important;
 }
 
