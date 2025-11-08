@@ -1746,6 +1746,7 @@ section {
   .hero-actions {
     flex-direction: column;
     align-items: center;
+    margin-top: 15px;
   }
 
   .about-content {
