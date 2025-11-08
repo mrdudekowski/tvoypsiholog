@@ -1729,9 +1729,12 @@ section {
   }
 
   .hero {
+    min-height: 100vh; /* было: 80vh */
+    min-height: 100dvh; /* для мобильных браузеров с учетом UI */
     padding: var(--spacing-2xl) var(--container-padding);
-    min-height: 80vh;
-    background-attachment: scroll; /* Убираем fixed для мобильных */
+    padding-bottom: var(--spacing-3xl); /* добавить отступ снизу */
+    align-items: flex-start; /* было: center - контент сверху */
+    padding-top: calc(var(--header-height) + var(--spacing-xl)); /* отступ от header */
   }
 
 
