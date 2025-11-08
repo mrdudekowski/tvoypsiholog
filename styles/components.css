@@ -225,13 +225,13 @@
 /* Пульсирующая кнопка CTA */
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.6);
+    box-shadow: 0 0 0 0 rgba(13, 79, 60, 0.6);
   }
   70% {
-    box-shadow: 0 0 0 15px rgba(184, 134, 11, 0);
+    box-shadow: 0 0 0 15px rgba(13, 79, 60, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
+    box-shadow: 0 0 0 0 rgba(13, 79, 60, 0);
   }
 }
 
@@ -723,12 +723,13 @@ body.modal-open {
 .modal-content {
   background: transparent;
   backdrop-filter: blur(25px);
-  border: 2px solid var(--color-gold-classic); /* Золотая рамка */
+  border: 1px solid var(--color-gold-classic); /* Возвращаем border */
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 2.5rem 1.5rem; /* Увеличен нижний padding для границы */
   max-width: 500px;
   width: 100%;
-  max-height: calc(100vh - 2rem); /* Гарантия вмещения */
+  max-height: calc(100vh - 1rem); /* Максимальная высота для скролла */
+  min-height: fit-content; /* Минимальная высота по контенту */
   overflow-y: auto; /* Внутренний скролл если нужен */
   position: relative;
   box-shadow: 
@@ -743,11 +744,16 @@ body.modal-open {
   /* Momentum + containment */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  /* Обеспечиваем, что граница видна */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Для правильного расположения контента */
 }
 
 .modal-content::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
 
 
 .modal-overlay.active .modal-content {
@@ -783,6 +789,8 @@ body.modal-open {
 
 /* Заголовки модального окна */
 .modal-title {
+  position: relative;
+  z-index: 2; /* Поверх границы */
   font-size: 2rem;
   font-weight: 600;
   background: linear-gradient(135deg, var(--color-gold-medium) 0%, var(--color-gold-medium) 50%, var(--color-gold-classic) 100%);
@@ -794,6 +802,8 @@ body.modal-open {
 }
 
 .modal-subtitle {
+  position: relative;
+  z-index: 2; /* Поверх границы */
   color: var(--color-text-secondary);
   text-align: center;
   margin: 0 0 1.5rem 0; /* Уменьшено с 2rem */
@@ -802,16 +812,20 @@ body.modal-open {
 
 /* Форма */
 .contact-form {
+  position: relative;
+  z-index: 2; /* Поверх границы */
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.5rem; /* Уменьшено для компактности */
+  flex: 1; /* Занимает доступное пространство */
+  min-height: 0; /* Позволяет скролл работать */
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem; /* Уменьшено с 1.5rem */
+  margin-bottom: 0.5rem; /* Уменьшено для компактности */
 }
 
 .form-label {
@@ -865,6 +879,12 @@ body.modal-open {
   resize: vertical;
   min-height: clamp(80px, 15vh, 120px);
   max-height: clamp(120px, 30vh, 200px);
+  margin-top: 0; /* Убираем дополнительный отступ */
+}
+
+/* Уменьшаем отступ до группы с вопросом */
+.form-group:has(.form-textarea) {
+  margin-top: 0.25rem; /* Минимальный отступ до textarea */
 }
 
 /* Ошибки валидации */
@@ -883,12 +903,14 @@ body.modal-open {
 /* Выбор мессенджера */
 .messenger-choice {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr; /* Телефон слева, WhatsApp справа */
+  gap: 0.75rem; /* Уменьшено для компактности */
+  justify-items: start; /* Выравнивание по левому краю */
 }
 
 .messenger-option {
   cursor: pointer;
+  width: 100%; /* Занимает всю ширину ячейки */
 }
 
 .messenger-option input[type="radio"] {
@@ -898,23 +920,27 @@ body.modal-open {
 .messenger-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Выравнивание по левому краю */
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0.625rem 0.75rem; /* Уменьшено для компактности */
   background: rgba(0, 0, 0, 0.6); /* Темный черный фон */
-  border: 2px solid rgba(212, 175, 55, 0.3); /* Золотая рамка */
-  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.3); /* Золотая рамка 1px */
+  border-radius: 5px; /* Radial изгиб 5px */
   color: var(--color-text-primary);
   font-weight: 500;
+  font-size: 0.9rem; /* Уменьшен размер текста */
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  width: 100%; /* Занимает всю ширину */
+  box-sizing: border-box; /* Учитываем border в ширине */
 }
 
 .messenger-btn svg,
 .messenger-btn i {
-  width: 24px;
-  height: 24px;
-  font-size: 20px;
+  width: 18px; /* Уменьшено */
+  height: 18px; /* Уменьшено */
+  font-size: 16px; /* Уменьшено */
+  flex-shrink: 0;
 }
 
 .messenger-option input[type="radio"]:checked + .messenger-btn {
@@ -939,34 +965,37 @@ body.modal-open {
 /* Кнопка отправки */
 .btn-submit {
   width: 100%;
-  margin-top: 0.5rem;
+  max-width: 100%; /* Ограничиваем ширину */
+  margin: 0.5rem auto 0 auto; /* Центрируем и добавляем верхний отступ */
   padding: 1rem 2rem;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, 
-    var(--color-gold-dark) 0%, 
-    var(--color-gold-medium) 50%, 
-    var(--color-gold-classic) 100%
+  background: linear-gradient(315deg, 
+  var(--color-emerald-dark) 0%, 
+  var(--color-emerald-medium) 50%, 
+  var(--color-emerald-light) 100%
   ); /* Золотой градиент */
-  color: #000; /* Темный текст на золотом фоне */
-  border: 2px solid var(--color-gold-classic);
+  color: #ffffff; /* Темный текст на золотом фоне */
+  border: 2px solid var(--color-emerald-light);
   border-radius: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   box-shadow: 
-    0 4px 15px rgba(212, 175, 55, 0.3),
+    0 4px 15px rgba(13, 79, 60, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: block; /* Блочный элемент для центрирования */
+  box-sizing: border-box;
 }
 
 .btn-submit:hover {
-  background: linear-gradient(135deg, 
-    var(--color-gold-classic) 0%, 
-    var(--color-gold-medium) 50%, 
-    var(--color-gold-dark) 100%
-  ); /* Инвертированный золотой градиент при hover */
+  background: linear-gradient(315deg, 
+    var(--color-emerald-dark) 0%, 
+    var(--color-emerald-medium) 50%, 
+    var(--color-emerald-light) 100%
+  );
   transform: translateY(-2px);
   box-shadow: 
-    0 8px 25px rgba(212, 175, 55, 0.5),
-    0 0 20px rgba(212, 175, 55, 0.3),
+    0 8px 25px rgba(46, 125, 50, 0.5),
+    0 0 20px rgba(46, 125, 50, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -1089,16 +1118,17 @@ body.modal-open {
 
 @media (max-width: 768px) {
   .modal-content {
-    padding: clamp(1rem, 4vw, 1.25rem);
+    padding: clamp(1rem, 4vw, 1.25rem) clamp(1rem, 4vw, 1.25rem) clamp(2rem, 5vw, 2.5rem) clamp(1rem, 4vw, 1.25rem); /* Увеличен нижний padding */
     max-width: min(90vw, 500px);
-    max-height: calc(100vh - 2rem);
-    margin: 1rem auto;
+    max-height: calc(100vh - 1rem); /* Максимальная высота для скролла */
+    min-height: fit-content; /* Минимальная высота по контенту */
+    margin: 0 auto; /* Убираем верхний margin */
   }
   
   .modal-overlay.active {
-    padding: 1rem 0.5rem;
+    padding: 0.5rem 0.5rem 1rem 0.5rem; /* Только нижний padding */
     align-items: flex-start;
-    padding-top: 2rem;
+    padding-top: 0.5rem; /* Минимальный верхний отступ */
   }
   
   .modal-title {
@@ -1108,9 +1138,15 @@ body.modal-open {
   .modal-subtitle {
     font-size: 0.9rem;
   }
+  
+  .btn-submit {
+    margin-left: auto;
+    margin-right: auto; /* Центрируем кнопку */
+  }
 
   .messenger-choice {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr; /* Оставляем в ряд на мобильных */
+    gap: 0.5rem; /* Уменьшаем gap на мобильных */
   }
 
   .notification-popup {
@@ -1136,16 +1172,17 @@ body.modal-open {
 
 @media (max-width: 480px) {
   .modal-overlay.active {
-    padding: 0.5rem;
+    padding: 0.25rem 0.5rem 0.75rem 0.5rem; /* Только нижний padding */
     align-items: flex-start;
-    padding-top: 1rem;
+    padding-top: 0.25rem; /* Минимальный верхний отступ */
   }
 
   .modal-content {
-    padding: clamp(0.75rem, 3vw, 1rem);
+    padding: clamp(0.75rem, 3vw, 1rem) clamp(0.75rem, 3vw, 1rem) clamp(1.75rem, 4vw, 2rem) clamp(0.75rem, 3vw, 1rem); /* Увеличен нижний padding */
     max-width: min(95vw, 400px);
-    max-height: calc(100vh - 1rem);
-    margin: 0.5rem auto;
+    max-height: calc(100vh - 0.75rem); /* Максимальная высота для скролла */
+    min-height: fit-content; /* Минимальная высота по контенту */
+    margin: 0 auto; /* Убираем верхний margin */
   }
   
   .modal-title {
@@ -1155,5 +1192,10 @@ body.modal-open {
   .form-input,
   .form-textarea {
     font-size: max(16px, 4vw); /* Предотвращает zoom на iOS */
+  }
+  
+  .btn-submit {
+    margin-left: auto;
+    margin-right: auto; /* Центрируем кнопку */
   }
 }
