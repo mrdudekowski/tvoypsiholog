@@ -436,6 +436,31 @@ function trackEvent(category, action, label = null) {
     }
 }
 
+/**
+ * Утилиты валидации форм
+ * Вынесены из initializeContactFormModal() для переиспользования
+ */
+
+/**
+ * Валидирует телефонный номер
+ * @param {string} phone - Номер телефона для валидации
+ * @returns {boolean} true если номер валиден
+ */
+function validatePhone(phone) {
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+/**
+ * Валидирует email адрес
+ * @param {string} email - Email для валидации (опциональный)
+ * @returns {boolean} true если email валиден или пустой
+ */
+function validateEmail(email) {
+    if (!email) return true; // Email опциональный
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 /**
  * Инициализирует модальное окно формы обратной связи
@@ -533,23 +558,6 @@ function initializeContactFormModal() {
             if (value.length > 9) formatted += '-' + value.substring(9, 11);
             input.value = formatted;
         }
-    }
-
-    /**
-     * Валидирует телефонный номер
-     */
-    function validatePhone(phone) {
-        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-        return phoneRegex.test(phone.replace(/\s/g, ''));
-    }
-
-    /**
-     * Валидирует email
-     */
-    function validateEmail(email) {
-        if (!email) return true; // Email опциональный
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
     }
 
     /**

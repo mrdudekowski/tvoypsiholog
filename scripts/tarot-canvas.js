@@ -54,6 +54,28 @@
             finalRotation: 8,
             levitationRotationStart: 8,
             levitationRotationEnd: 10
+        },
+        contactLeft: {
+            selector: '.tarot-card-contact-left',
+            targetSelector: '#contact-title',
+            targetText: null,
+            horizontalPosition: '3vw',
+            horizontalProperty: 'left',
+            initialRotation: -15,
+            finalRotation: -10,
+            levitationRotationStart: -10,
+            levitationRotationEnd: -12
+        },
+        contactRight: {
+            selector: '.tarot-card-contact-right',
+            targetSelector: '#contact-title',
+            targetText: null,
+            horizontalPosition: '3vw',
+            horizontalProperty: 'right',
+            initialRotation: 15,
+            finalRotation: 10,
+            levitationRotationStart: 10,
+            levitationRotationEnd: 12
         }
     };
     
@@ -236,153 +258,210 @@
     function initMobileTarotCards() {
         if (window.innerWidth > 768) return;
 
-// Позиционирование пары карт по центру заголовка (горизонтально и вертикально)
-function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
-    if (!titleEl) return;
-    const titleRect = titleEl.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const docLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        /**
+         * Позиционирование пары карт по центру заголовка (горизонтально и вертикально)
+         * Рефакторинг: вычисления вынесены в отдельные функции для улучшения читаемости
+         */
+        function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
+            if (!titleEl) return;
+            
+            const leftCard = document.querySelector(leftCardSelector);
+            const rightCard = document.querySelector(rightCardSelector);
+            if (!leftCard || !rightCard) return;
 
-    const centerY = titleRect.top + scrollTop + titleRect.height / 2;
-    const centerX = titleRect.left + docLeft + titleRect.width / 2;
+            /**
+             * Вычисляет центр заголовка (X, Y) в координатах документа
+             */
+            function calculateTitleCenter(titleEl) {
+                const titleRect = titleEl.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const docLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+                
+                return {
+                    x: titleRect.left + docLeft + titleRect.width / 2,
+                    y: titleRect.top + scrollTop + titleRect.height / 2
+                };
+            }
 
-    const gap = Math.max(30, Math.min(60, Math.round(window.innerWidth * 0.15))); // Увеличен gap
+            /**
+             * Вычисляет gap между картами на основе ширины экрана
+             */
+            function calculateCardGap() {
+                return Math.max(30, Math.min(60, Math.round(window.innerWidth * 0.15)));
+            }
 
-    const leftCard = document.querySelector(leftCardSelector);
-    const rightCard = document.querySelector(rightCardSelector);
-    if (!leftCard || !rightCard) return;
+            /**
+             * Вычисляет размеры карты
+             */
+            function calculateCardDimensions(card) {
+                const rect = card.getBoundingClientRect();
+                const width = rect.width || Math.max(120, Math.min(160, window.innerWidth * 0.28));
+                const height = rect.height || Math.round(width * (336/196));
+                return { width, height };
+            }
 
-    // измерения карт
-    const cardW = leftCard.getBoundingClientRect().width || Math.max(120, Math.min(160, window.innerWidth * 0.28));
-    const cardH = leftCard.getBoundingClientRect().height || Math.round(cardW * (336/196));
+            /**
+             * Вычисляет позиции карт с учетом границ viewport
+             */
+            function calculateCardPositions(centerX, centerY, cardW, cardH, gap) {
+                const viewportW = document.documentElement.clientWidth;
+                const edgeMargin = 4;
+                const minX = edgeMargin;
+                const maxX = viewportW - cardW - edgeMargin;
 
-    const viewportW = document.documentElement.clientWidth;
-    const viewportH = document.documentElement.clientHeight;
-    const edgeMargin = 4; // Отступ от края экрана
-    const minX = edgeMargin;
-    const maxX = viewportW - cardW - edgeMargin;
+                // Позиционируем ближе к краям, сохраняя центр как ориентир
+                let leftX = Math.max(minX, centerX - cardW - gap);
+                let rightX = Math.min(maxX, centerX + gap);
 
-    // Позиционируем ближе к краям, сохраняя центр как ориентир
-    let leftX = Math.max(minX, centerX - cardW - gap);
-    let rightX = Math.min(maxX, centerX + gap);
+                // Проверка, чтобы карты не выходили за пределы viewport по вертикали
+                const docH = Math.max(
+                    document.documentElement.scrollHeight,
+                    document.body.scrollHeight
+                );
+                const topY = Math.max(edgeMargin, Math.min(centerY - cardH / 2, docH - cardH - edgeMargin));
 
-    // Проверка, чтобы карты не выходили за пределы viewport по вертикали
-    const docH = Math.max(
-        document.documentElement.scrollHeight,
-        document.body.scrollHeight
-    );
-    const topY = Math.max(edgeMargin, Math.min(centerY - cardH / 2, docH - cardH - edgeMargin));
-    
-    // Дополнительная проверка: если карта не помещается, уменьшаем gap
-    if (leftX + cardW > viewportW - edgeMargin || rightX < edgeMargin) {
-        gap = Math.max(20, Math.round(window.innerWidth * 0.1));
-        leftX = Math.max(minX, centerX - cardW - gap);
-        rightX = Math.min(maxX, centerX + gap);
-    }
+                return { leftX, rightX, topY, edgeMargin, minX, maxX, viewportW };
+            }
 
-    // Используем requestAnimationFrame для синхронизации изменений DOM
-    requestAnimationFrame(() => {
-        // Устанавливаем базовую позицию top один раз
-        if (!leftCard.dataset.baseTop) {
-            leftCard.style.top = `${topY}px`;
-            leftCard.dataset.baseTop = topY;
+            /**
+             * Проверяет и корректирует позиции карт, если они не помещаются
+             */
+            function validateCardPositions(leftX, rightX, cardW, centerX, gap, minX, maxX, edgeMargin, viewportW) {
+                let finalGap = gap;
+                let finalLeftX = leftX;
+                let finalRightX = rightX;
+
+                // Дополнительная проверка: если карта не помещается, уменьшаем gap
+                if (leftX + cardW > viewportW - edgeMargin || rightX < edgeMargin) {
+                    finalGap = Math.max(20, Math.round(window.innerWidth * 0.1));
+                    finalLeftX = Math.max(minX, centerX - cardW - finalGap);
+                    finalRightX = Math.min(maxX, centerX + finalGap);
+                }
+
+                return { leftX: finalLeftX, rightX: finalRightX };
+            }
+
+            // Выполняем вычисления
+            const center = calculateTitleCenter(titleEl);
+            let gap = calculateCardGap();
+            const cardDimensions = calculateCardDimensions(leftCard);
+            const positions = calculateCardPositions(center.x, center.y, cardDimensions.width, cardDimensions.height, gap);
+            const validatedPositions = validateCardPositions(
+                positions.leftX, 
+                positions.rightX, 
+                cardDimensions.width, 
+                center.x, 
+                gap, 
+                positions.minX, 
+                positions.maxX, 
+                positions.edgeMargin, 
+                positions.viewportW
+            );
+
+            // Используем requestAnimationFrame для синхронизации изменений DOM
+            requestAnimationFrame(() => {
+                // Устанавливаем базовую позицию top один раз
+                if (!leftCard.dataset.baseTop) {
+                    leftCard.style.top = `${positions.topY}px`;
+                    leftCard.dataset.baseTop = positions.topY;
+                }
+                if (!rightCard.dataset.baseTop) {
+                    rightCard.style.top = `${positions.topY}px`;
+                    rightCard.dataset.baseTop = positions.topY;
+                }
+                
+                // Переопределяем позиционирование через left (для симметрии) и убираем возможные конфликты
+                leftCard.style.right = 'auto';
+                rightCard.style.right = 'auto';
+                leftCard.style.left = `${validatedPositions.leftX}px`;
+                rightCard.style.left = `${validatedPositions.rightX}px`;
+            });
         }
-        if (!rightCard.dataset.baseTop) {
-            rightCard.style.top = `${topY}px`;
-            rightCard.dataset.baseTop = topY;
+
+        /**
+         * Универсальная функция для настройки триггера пары карт
+         * Устраняет дублирование кода для разных пар карт
+         * @param {HTMLElement} titleElement - Элемент заголовка для привязки
+         * @param {string} leftCardSelector - Селектор левой карты
+         * @param {string} rightCardSelector - Селектор правой карты
+         */
+        function setupCardPairTrigger(titleElement, leftCardSelector, rightCardSelector) {
+            if (!titleElement) return;
+
+            let fired = false;
+            const SCROLL_THRESHOLD = 0.75; // 75% высоты экрана
+            const ACTIVATION_DELAY = 100; // Задержка активации в мс
+
+            /**
+             * Обработчик скролла для активации карт
+             */
+            const onScroll = () => {
+                if (fired) return;
+                
+                const titleTop = titleElement.getBoundingClientRect().top;
+                // Срабатывание когда заголовок достигает 75% высоты экрана
+                if (titleTop <= window.innerHeight * SCROLL_THRESHOLD) {
+                    fired = true;
+                    
+                    // Позиционируем карты
+                    positionCardsAtTitle(titleElement, leftCardSelector, rightCardSelector);
+                    
+                    // Получаем элементы карт
+                    const leftCard = document.querySelector(leftCardSelector);
+                    const rightCard = document.querySelector(rightCardSelector);
+                    
+                    // Устранение мерцаний: сначала расставляем позиции, затем в следующем кадре добавляем класс
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            requestAnimationFrame(() => {
+                                if (leftCard && !leftCard.dataset.activated) {
+                                    leftCard.classList.add('active');
+                                    leftCard.dataset.activated = 'true';
+                                }
+                                if (rightCard && !rightCard.dataset.activated) {
+                                    rightCard.classList.add('active');
+                                    rightCard.dataset.activated = 'true';
+                                }
+                            });
+                        }, ACTIVATION_DELAY); // Синхронизировано с desktop
+                    });
+                    
+                    window.removeEventListener('scroll', onScroll);
+                }
+            };
+
+            /**
+             * Обработчик ресайза/изменения ориентации для пересчета позиций
+             */
+            const onResize = () => {
+                if (!fired) return;
+                positionCardsAtTitle(titleElement, leftCardSelector, rightCardSelector);
+            };
+
+            // Добавляем обработчики событий
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onResize);
+            window.addEventListener('orientationchange', onResize);
         }
-        
-        // Переопределяем позиционирование через left (для симметрии) и убираем возможные конфликты
-        leftCard.style.right = 'auto';
-        rightCard.style.right = 'auto';
-        leftCard.style.left = `${leftX}px`;
-        rightCard.style.left = `${rightX}px`;
-    });
-}
 
         // Наблюдатели для карт - синхронизировано с desktop версией
         // Первая пара карт: left и right привязаны к #process-title
         // Вторая пара карт: testimonials и lovers привязаны к #services-title
+        // Третья пара карт: contactLeft и contactRight привязаны к #contact-title
         const processTitle = document.querySelector('#process-title');
         const servicesTitle = document.querySelector('#services-title');
+        const contactTitle = document.querySelector('#contact-title');
 
         if (processTitle) {
-            // Триггер для первой пары карт (left и right) у process-title
-            let firedGap1 = false;
-            const onScrollGap1 = () => {
-                if (firedGap1) return;
-                const titleTop = processTitle.getBoundingClientRect().top;
-                // Срабатывание когда заголовок достигает 75% высоты экрана
-                if (titleTop <= window.innerHeight * 0.75) {
-                    firedGap1 = true;
-                    positionCardsAtTitle(processTitle, '.tarot-card-left', '.tarot-card-right');
-                    const left = document.querySelector('.tarot-card-left');
-                    const right = document.querySelector('.tarot-card-right');
-                    // устранение мерцаний: сначала расставляем позиции, затем в следующем кадре добавляем класс
-                    requestAnimationFrame(() => {
-                        setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                if (left && !left.dataset.activated) {
-                                    left.classList.add('active');
-                                    left.dataset.activated = 'true';
-                                }
-                                if (right && !right.dataset.activated) {
-                                    right.classList.add('active');
-                                    right.dataset.activated = 'true';
-                                }
-                            });
-                        }, 100); // Синхронизировано с desktop
-                    });
-                    window.removeEventListener('scroll', onScrollGap1);
-                }
-            };
-            window.addEventListener('scroll', onScrollGap1, { passive: true });
-
-            // Ресайз/ориентация — актуализировать позицию
-            const recalc1 = () => {
-                if (!firedGap1) return;
-                positionCardsAtTitle(processTitle, '.tarot-card-left', '.tarot-card-right');
-            };
-            window.addEventListener('resize', recalc1);
-            window.addEventListener('orientationchange', recalc1);
+            setupCardPairTrigger(processTitle, '.tarot-card-left', '.tarot-card-right');
         }
 
         if (servicesTitle) {
-            // Триггер для второй пары карт (testimonials и lovers) у services-title (Путь трансформации)
-            let firedGap2 = false;
-            const onScrollGap2 = () => {
-                if (firedGap2) return;
-                const titleTop2 = servicesTitle.getBoundingClientRect().top;
-                // Срабатывание когда заголовок достигает 75% высоты экрана
-                if (titleTop2 <= window.innerHeight * 0.75) {
-                    firedGap2 = true;
-                    positionCardsAtTitle(servicesTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
-                    const left2 = document.querySelector('.tarot-card-testimonials');
-                    const right2 = document.querySelector('.tarot-card-lovers');
-                    requestAnimationFrame(() => {
-                        setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                if (left2 && !left2.dataset.activated) {
-                                    left2.classList.add('active');
-                                    left2.dataset.activated = 'true';
-                                }
-                                if (right2 && !right2.dataset.activated) {
-                                    right2.classList.add('active');
-                                    right2.dataset.activated = 'true';
-                                }
-                            });
-                        }, 100); // Синхронизировано с desktop
-                    });
-                    window.removeEventListener('scroll', onScrollGap2);
-                }
-            };
-            window.addEventListener('scroll', onScrollGap2, { passive: true });
-            const recalc2 = () => {
-                if (!firedGap2) return;
-                positionCardsAtTitle(servicesTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
-            };
-            window.addEventListener('resize', recalc2);
-            window.addEventListener('orientationchange', recalc2);
+            setupCardPairTrigger(servicesTitle, '.tarot-card-testimonials', '.tarot-card-lovers');
+        }
+
+        if (contactTitle) {
+            setupCardPairTrigger(contactTitle, '.tarot-card-contact-left', '.tarot-card-contact-right');
         }
     }
 
@@ -402,6 +481,8 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
         initTarotCard(CARD_CONFIG.right);
         initTarotCard(CARD_CONFIG.testimonials);
         initTarotCard(CARD_CONFIG.lovers);
+        initTarotCard(CARD_CONFIG.contactLeft);
+        initTarotCard(CARD_CONFIG.contactRight);
         
     }
     

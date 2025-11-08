@@ -177,6 +177,81 @@
   will-change: transform;
 }
 
+/* ==================== ПЯТАЯ КАРТА (CONTACT LEFT - EMPRESS) ==================== */
+
+/* Левая карта контакта - начальное состояние */
+.tarot-card-contact-left {
+  background-image: url('../assets/images/empress.webp');
+  /* Позиция устанавливается через JavaScript относительно #contact-title */
+  left: -20vw; /* За пределами экрана слева */
+  opacity: 0;
+  transform: rotate(-15deg) scale(0.8);
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform;
+}
+
+/* Левая карта контакта - активное состояние */
+.tarot-card-contact-left.active {
+  /* left и top устанавливаются через JavaScript один раз */
+  opacity: 0.3;
+  transform: rotate(-10deg) scale(1);
+}
+
+/* Анимация левитации для левой карты контакта */
+@keyframes cardFloatContactLeft {
+  0%, 100% {
+    transform: translateY(0px) rotate(-10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-12deg) scale(1.02);
+  }
+}
+
+/* Класс для активации левитации левой карты контакта */
+.tarot-card-contact-left.levitating {
+  animation: cardFloatContactLeft 4s ease-in-out infinite;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ==================== ШЕСТАЯ КАРТА (CONTACT RIGHT - EMPEROR) ==================== */
+
+/* Правая карта контакта - начальное состояние */
+.tarot-card-contact-right {
+  background-image: url('../assets/images/Emperor.webp');
+  /* Позиция устанавливается через JavaScript относительно #contact-title */
+  right: -20vw; /* За пределами экрана справа */
+  left: auto;
+  opacity: 0;
+  transform: rotate(15deg) scale(0.8); /* Зеркальный наклон */
+  filter: drop-shadow(0 10px 30px rgba(184, 134, 11, 0.3));
+  will-change: opacity, transform;
+}
+
+/* Правая карта контакта - активное состояние */
+.tarot-card-contact-right.active {
+  /* right и top устанавливаются через JavaScript один раз */
+  opacity: 0.3;
+  transform: rotate(10deg) scale(1); /* Зеркальный поворот */
+}
+
+/* Зеркальная анимация левитации для правой карты контакта */
+@keyframes cardFloatContactRight {
+  0%, 100% {
+    transform: translateY(0px) rotate(10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) rotate(12deg) scale(1.02);
+  }
+}
+
+/* Класс для активации левитации правой карты контакта */
+.tarot-card-contact-right.levitating {
+  animation: cardFloatContactRight 4s ease-in-out infinite;
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
 /* Адаптивный скейлинг для разных разрешений */
 
 /* Очень большие экраны (>1920px) - полный размер */
@@ -249,4 +324,18 @@
 
   /* Отключаем левитацию на мобиле */
   .tarot-card.levitating { animation: none; }
+  
+  /* Новые карты контакта на мобильных */
+  .tarot-card-contact-left,
+  .tarot-card-contact-right {
+    width: clamp(120px, 28vw, 160px);
+    height: auto;
+    aspect-ratio: 196 / 336;
+    filter: drop-shadow(0 8px 20px rgba(184, 134, 11, 0.35));
+  }
+  
+  .tarot-card-contact-left.levitating,
+  .tarot-card-contact-right.levitating {
+    animation: none;
+  }
 }
