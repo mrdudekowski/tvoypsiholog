@@ -412,59 +412,13 @@ function initializeContactButtons() {
 
 /**
  * Инициализирует оптимизации производительности
+ * УДАЛЕНО: loadLazyImages() - не используется (все изображения используют нативный loading="lazy", нет data-src)
+ * УДАЛЕНО: preloadCriticalResources() - не используется (шрифты уже предзагружены в HTML)
+ * Нативный lazy loading работает автоматически, дополнительная логика не требуется
  */
 function initializePerformanceOptimizations() {
-    // Lazy loading для изображений
-    if ('loading' in HTMLImageElement.prototype) {
-        const images = document.querySelectorAll('img[loading="lazy"]');
-        images.forEach(img => {
-            img.src = img.src;
-        });
-    } else {
-        // Fallback для браузеров без поддержки lazy loading
-        loadLazyImages();
-    }
-
-    // Предзагрузка критических ресурсов
-    preloadCriticalResources();
-}
-
-/**
- * Fallback функция для lazy loading изображений
- */
-function loadLazyImages() {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
-    });
-}
-
-/**
- * Предзагрузка критических ресурсов
- */
-function preloadCriticalResources() {
-    // Предзагрузка шрифтов из конфигурации
-    const fontPreloads = [
-        SITE_CONFIG.fonts.inter
-    ];
-
-    fontPreloads.forEach(font => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'style';
-        link.href = font;
-        document.head.appendChild(link);
-    });
+    // Lazy loading и предзагрузка ресурсов обрабатываются нативно через HTML атрибуты
+    // Все современные браузеры поддерживают loading="lazy" и preload ссылки
 }
 
 /**
