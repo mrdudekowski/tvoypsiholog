@@ -715,6 +715,8 @@ section {
 .service-card.animate-fadeInRight,
 .service-card.animate-fadeIn {
   overflow: visible !important;
+  will-change: transform, opacity;
+  contain: layout style paint;
 }
 
 /* Включаем пульсацию после fade-in */
@@ -722,6 +724,8 @@ section {
   animation: card-breathe 6s ease-in-out infinite;
   animation-delay: 0.3s; /* Задержка 300ms после fade-in */
   overflow: hidden; /* Возвращаем overflow: hidden после анимации */
+  will-change: auto;
+  contain: none;
 }
 
 .service-card.animated .service-icon {
@@ -1653,8 +1657,49 @@ section {
   }
 
   html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative;
+    /* Предотвращаем горизонтальный overscroll */
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: auto;
+    /* Ограничиваем touch-action только вертикальным свайпом */
+    touch-action: pan-y;
+  }
+  
+  /* Все дочерние элементы не должны выходить за границы */
+  * {
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  
+  /* Элементы с абсолютным позиционированием не должны создавать скролл */
+  [class*="carousel-arrow"] {
+    max-width: 100vw;
+  }
+  
+  /* Контейнеры должны ограничивать содержимое */
+  .container,
+  .testimonials-carousel,
+  .testimonials-track-container {
     max-width: 100vw;
     overflow-x: hidden;
+  }
+  
+  /* Все секции не должны выходить за границы */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* Все контейнеры */
+  .container {
+    max-width: 100vw;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+    box-sizing: border-box;
   }
 
   .site-nav {
