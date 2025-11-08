@@ -97,12 +97,30 @@
             return;
         }
         
+        // Кэш для getBoundingClientRect() результатов (desktop)
+        let cachedTargetRect = null;
+        let cachedTargetRectTimestamp = 0;
+        const TARGET_RECT_CACHE_DURATION = 100; // Кэш на 100ms
+
+        /**
+         * Получает кэшированный или свежий getBoundingClientRect для targetElement
+         */
+        function getCachedTargetRect() {
+            const now = Date.now();
+            if (!cachedTargetRect || (now - cachedTargetRectTimestamp) > TARGET_RECT_CACHE_DURATION) {
+                cachedTargetRect = targetElement.getBoundingClientRect();
+                cachedTargetRectTimestamp = now;
+            }
+            return cachedTargetRect;
+        }
+
         /**
          * Вычисление и установка финальной позиции карты
+         * Оптимизировано: использует кэширование getBoundingClientRect()
          */
         function setCardFinalPosition() {
             requestAnimationFrame(() => {
-                const targetRect = targetElement.getBoundingClientRect();
+                const targetRect = getCachedTargetRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const targetTopInDocument = targetRect.top + scrollTop;
                 
@@ -199,12 +217,32 @@
         });
         
         /**
+         * Debounce для resize обработчика (desktop)
+         */
+        let resizeTimeout = null;
+        const RESIZE_DEBOUNCE_DELAY = 150; // Задержка для debounce resize
+        
+        /**
          * Пересчет позиции при ресайзе окна
          * Только для активных карт
          * Используем requestAnimationFrame для синхронизации
+         * Debounce для предотвращения частых пересчетов
+         * Инвалидирует кэш при resize
          */
         resizeManager.addHandler(() => {
-            if (card.classList.contains('active')) {
+            if (!card.classList.contains('active')) return;
+            
+            // Инвалидируем кэш при resize
+            cachedTargetRect = null;
+            cachedTargetRectTimestamp = 0;
+            
+            // Очищаем предыдущий timeout
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            
+            // Debounce resize для предотвращения частых пересчетов
+            resizeTimeout = setTimeout(() => {
                 requestAnimationFrame(() => {
                     setCardFinalPosition();
                     // Пересчитываем горизонтальную позицию только при resize
@@ -219,7 +257,7 @@
                         card.style.right = config.horizontalPosition;
                     }
                 });
-            }
+            }, RESIZE_DEBOUNCE_DELAY);
         });
         
         // Запуск наблюдения
@@ -269,11 +307,42 @@
             const rightCard = document.querySelector(rightCardSelector);
             if (!leftCard || !rightCard) return;
 
+            // Кэш для getBoundingClientRect() результатов (mobile)
+            let cachedTitleRect = null;
+            let cachedCardRect = null;
+            let cacheTimestamp = 0;
+            const CACHE_DURATION = 100; // Кэш на 100ms
+
+            /**
+             * Получает кэшированный или свежий getBoundingClientRect для заголовка
+             */
+            function getCachedTitleRect(titleEl) {
+                const now = Date.now();
+                if (!cachedTitleRect || (now - cacheTimestamp) > CACHE_DURATION) {
+                    cachedTitleRect = titleEl.getBoundingClientRect();
+                    cacheTimestamp = now;
+                }
+                return cachedTitleRect;
+            }
+
+            /**
+             * Получает кэшированный или свежий getBoundingClientRect для карты
+             */
+            function getCachedCardRect(card) {
+                const now = Date.now();
+                if (!cachedCardRect || (now - cacheTimestamp) > CACHE_DURATION) {
+                    cachedCardRect = card.getBoundingClientRect();
+                    cacheTimestamp = now;
+                }
+                return cachedCardRect;
+            }
+
             /**
              * Вычисляет центр заголовка (X, Y) в координатах документа
+             * Оптимизировано: использует кэширование getBoundingClientRect()
              */
             function calculateTitleCenter(titleEl) {
-                const titleRect = titleEl.getBoundingClientRect();
+                const titleRect = getCachedTitleRect(titleEl);
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const docLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
                 
@@ -292,9 +361,10 @@
 
             /**
              * Вычисляет размеры карты
+             * Оптимизировано: использует кэширование getBoundingClientRect()
              */
             function calculateCardDimensions(card) {
-                const rect = card.getBoundingClientRect();
+                const rect = getCachedCardRect(card);
                 const width = rect.width || Math.max(120, Math.min(160, window.innerWidth * 0.28));
                 const height = rect.height || Math.round(width * (336/196));
                 return { width, height };
@@ -391,11 +461,16 @@
             let fired = false;
             const SCROLL_THRESHOLD = 0.75; // 75% высоты экрана
             const ACTIVATION_DELAY = 100; // Задержка активации в мс
+            
+            // Throttle для scroll handler
+            let scrollThrottleTimeout = null;
+            let lastScrollTime = 0;
+            const SCROLL_THROTTLE_DELAY = 16; // ~60fps (16ms)
 
             /**
-             * Обработчик скролла для активации карт
+             * Проверка позиции скролла и активация карт
              */
-            const onScroll = () => {
+            const checkScroll = () => {
                 if (fired) return;
                 
                 const titleTop = titleElement.getBoundingClientRect().top;
@@ -427,14 +502,44 @@
                     });
                     
                     window.removeEventListener('scroll', onScroll);
+                    if (scrollThrottleTimeout) {
+                        clearTimeout(scrollThrottleTimeout);
+                    }
                 }
+            };
+            
+            /**
+             * Обработчик скролла для активации карт
+             * Оптимизировано: использует throttle для предотвращения частых вызовов
+             */
+            const onScroll = () => {
+                if (fired) return;
+                
+                const now = Date.now();
+                // Throttle: выполняем не чаще чем раз в 16ms (~60fps)
+                if (now - lastScrollTime < SCROLL_THROTTLE_DELAY) {
+                    if (scrollThrottleTimeout) {
+                        clearTimeout(scrollThrottleTimeout);
+                    }
+                    scrollThrottleTimeout = setTimeout(() => {
+                        lastScrollTime = Date.now();
+                        checkScroll();
+                    }, SCROLL_THROTTLE_DELAY - (now - lastScrollTime));
+                    return;
+                }
+                
+                lastScrollTime = now;
+                checkScroll();
             };
 
             /**
              * Обработчик ресайза/изменения ориентации для пересчета позиций
+             * Инвалидирует кэш при resize
              */
             const onResize = () => {
                 if (!fired) return;
+                // Кэш будет автоматически инвалидирован при следующем вызове positionCardsAtTitle
+                // так как прошло больше CACHE_DURATION (100ms)
                 positionCardsAtTitle(titleElement, leftCardSelector, rightCardSelector);
             };
 
@@ -487,9 +592,22 @@
     }
     
     // Запуск при загрузке DOM
+    // Используем небольшую задержку чтобы scroll animations успели инициализироваться первыми
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initTarotCanvas);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Небольшая задержка для синхронизации с scroll animations
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    initTarotCanvas();
+                }, 10);
+            });
+        });
     } else {
-        initTarotCanvas();
+        // Если DOM уже загружен, используем небольшую задержку
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                initTarotCanvas();
+            }, 10);
+        });
     }
 })();

@@ -62,7 +62,18 @@ function initializeScrollAnimations() {
                 // Получаем тип анимации из data-атрибута
                 const animationType = target.dataset.scrollReveal || 'fadeInUp';
                 
-                // Небольшая задержка для предотвращения конфликта с активацией карт
+                // Определяем задержку в зависимости от элемента
+                // Для секции contact увеличиваем задержку чтобы карты позиционировались первыми
+                const isContactSection = target.closest('.contact') !== null;
+                const isContactInfo = target.classList.contains('contact-info');
+                
+                // Для contact-info дополнительно увеличиваем задержку
+                // Карты позиционируются за ~100ms (desktop) или ~100ms (mobile)
+                // Анимация должна начаться после позиционирования карт
+                const baseDelay = isContactInfo ? 200 : (isContactSection ? 150 : 50);
+                const customDelay = target.dataset.delay ? parseInt(target.dataset.delay) : 0;
+                const totalDelay = baseDelay + customDelay;
+                
                 // Используем requestAnimationFrame для синхронизации с repaint
                 requestAnimationFrame(() => {
                     setTimeout(() => {
@@ -70,7 +81,7 @@ function initializeScrollAnimations() {
                             // Применяем соответствующую анимацию
                             target.classList.add(`animate-${animationType}`);
                         });
-                    }, 50); // Небольшая задержка для разделения с активацией карт
+                    }, totalDelay); // Задержка для синхронизации с позиционированием карт
                 });
                 
                 // Добавляем класс animated после завершения анимации

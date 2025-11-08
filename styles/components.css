@@ -30,7 +30,11 @@
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   transform: translateZ(0);
-  contain: layout style paint;
+  /* Оптимизация: используем layout style вместо paint для лучшей производительности */
+  contain: layout style;
+  /* Дополнительная стабилизация: предотвращаем layout shifts */
+  min-height: 0;
+  position: relative;
 }
 
 /* Исключение для slideInRight - карточки должны быть видимы с начала */
@@ -41,6 +45,20 @@
 }
 
 /* Утилиты для прокрутки - УДАЛЕНЫ неиспользуемые классы .scroll-momentum и .scroll-contain */
+
+/* Оптимизация для contact-info: contain для предотвращения layout thrashing */
+.contact-info {
+  contain: layout style;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Оптимизация для contact-title: contain для предотвращения layout thrashing */
+#contact-title {
+  contain: layout style;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
 
 /* После анимации убираем will-change и contain */
 [data-scroll-reveal].animated {
