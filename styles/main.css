@@ -639,8 +639,10 @@ section {
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   text-align: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Убран backdrop-filter - очень тяжело для производительности при скролле */
+  /* backdrop-filter: blur(10px); */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-top: 3px solid var(--color-border);
   /* Фиксированные размеры для одинаковых карточек */
@@ -650,6 +652,9 @@ section {
   flex-direction: column;
   justify-content: flex-start;
   box-sizing: border-box;
+  /* Оптимизация для производительности */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Hover эффект для карточек - деликатный */
@@ -730,7 +735,7 @@ section {
 .service-card.animate-fadeIn {
   overflow: visible !important;
   will-change: transform, opacity;
-  contain: layout style paint;
+  /* Убран contain: layout style paint - может вызывать рефлоу при скролле */
 }
 
 /* Включаем пульсацию после fade-in */
@@ -738,8 +743,8 @@ section {
   animation: card-breathe 6s ease-in-out infinite;
   animation-delay: 0.3s; /* Задержка 300ms после fade-in */
   overflow: hidden; /* Возвращаем overflow: hidden после анимации */
-  will-change: auto;
-  contain: none;
+  will-change: transform; /* Только transform для оптимизации */
+  /* Убран contain: none - не нужен */
 }
 
 .service-card.animated .service-icon {
@@ -749,28 +754,28 @@ section {
 
 @keyframes particleOrbit1 {
   0% {
-    transform: scale(1) rotate(0deg);
+    transform: rotate(0deg) translateZ(0);
     opacity: 0;
   }
   25% {
     opacity: 0.8;
   }
   100% {
-    transform: scale(1.8) rotate(360deg);
+    transform: rotate(360deg) translateZ(0);
     opacity: 0;
   }
 }
 
 @keyframes particleOrbit2 {
   0% {
-    transform: scale(1) rotate(180deg);
+    transform: rotate(180deg) translateZ(0);
     opacity: 0;
   }
   25% {
     opacity: 0.6;
   }
   100% {
-    transform: scale(1.8) rotate(540deg);
+    transform: rotate(540deg) translateZ(0);
     opacity: 0;
   }
 }
@@ -996,11 +1001,11 @@ section {
 @keyframes card-breathe {
   0%, 100% {
     transform: translateY(0) translateZ(0);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    /* Убрана анимация box-shadow - очень тяжело для производительности при скролле */
   }
   50% {
     transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    /* Убрана анимация box-shadow - очень тяжело для производительности при скролле */
   }
 }
 
