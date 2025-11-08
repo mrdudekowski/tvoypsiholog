@@ -951,8 +951,9 @@ function initTestimonialsCarousel() {
     const cards = Array.from(track.children);
     const prevButton = document.querySelector('.carousel-arrow-left');
     const nextButton = document.querySelector('.carousel-arrow-right');
+    const trackContainer = document.querySelector('.testimonials-track-container');
     
-    if (!track || !cards.length || !prevButton || !nextButton) {
+    if (!track || !cards.length) {
         return;
     }
     
@@ -968,14 +969,28 @@ function initTestimonialsCarousel() {
         track.appendChild(clone);
     });
     
-    // Функция перемещения
-    function moveToCard(index) {
-        const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
-        track.style.transform = `translateX(-${cardWidth * index}px)`;
+    // Получаем ширину карточки с учетом gap
+    function getCardWidth() {
+        return cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
     }
     
-    // Следующая группа карточек
-    nextButton.addEventListener('click', () => {
+    // Функция перемещения с поддержкой плавной анимации
+    function moveToCard(index, useTransition = true, customDuration = null) {
+        const cardWidth = getCardWidth();
+        const targetPosition = -cardWidth * index;
+        
+        if (!useTransition) {
+            track.style.transition = 'none';
+        } else {
+            const duration = customDuration !== null ? customDuration : 0.4;
+            track.style.transition = `transform ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        }
+        
+        track.style.transform = `translateX(${targetPosition}px)`;
+    }
+    
+    // Функция для перехода к следующей карточке
+    function goToNext() {
         currentIndex += cardsPerStep;
         moveToCard(currentIndex);
         
@@ -984,22 +999,22 @@ function initTestimonialsCarousel() {
             setTimeout(() => {
                 track.style.transition = 'none';
                 currentIndex = 0;
-                moveToCard(currentIndex);
+                moveToCard(currentIndex, false);
                 setTimeout(() => {
-                    track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 }, 50);
-            }, 500);
+            }, 400);
         }
-    });
+    }
     
-    // Предыдущая группа карточек
-    prevButton.addEventListener('click', () => {
+    // Функция для перехода к предыдущей карточке
+    function goToPrev() {
         if (currentIndex === 0) {
             track.style.transition = 'none';
             currentIndex = originalCardsCount;
-            moveToCard(currentIndex);
+            moveToCard(currentIndex, false);
             setTimeout(() => {
-                track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 currentIndex -= cardsPerStep;
                 moveToCard(currentIndex);
             }, 50);
@@ -1007,10 +1022,154 @@ function initTestimonialsCarousel() {
             currentIndex -= cardsPerStep;
             moveToCard(currentIndex);
         }
-    });
+    }
     
-    // Обработка изменения размера экрана - больше не требуется, т.к. всегда 1 карточка
+    // Обработчики для кнопок навигации (только если они существуют)
+    if (nextButton) {
+        nextButton.addEventListener('click', goToNext);
+    }
     
+    if (prevButton) {
+        prevButton.addEventListener('click', goToPrev);
+    }
+    
+    // ===== ПОДДЕРЖКА СВАЙПА ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ =====
+    if (trackContainer) {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchCurrentX = 0;
+        let touchCurrentY = 0;
+        let isDragging = false;
+        let startTime = 0;
+        let currentPosition = 0;
+        let basePosition = 0;
+        
+        // Вычисляем базовую позицию из текущего индекса
+        function updateBasePosition() {
+            basePosition = -getCardWidth() * currentIndex;
+        }
+        
+        updateBasePosition();
+        
+        trackContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length !== 1) return;
+            
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchCurrentX = touchStartX;
+            touchCurrentY = touchStartY;
+            startTime = Date.now();
+            isDragging = true;
+            
+            // Отключаем переход во время драга
+            track.style.transition = 'none';
+            updateBasePosition();
+            currentPosition = basePosition;
+        }, { passive: true });
+        
+        trackContainer.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            
+            const touch = e.touches[0];
+            touchCurrentX = touch.clientX;
+            touchCurrentY = touch.clientY;
+            
+            // Определяем, горизонтальный или вертикальный свайп
+            const deltaX = touchCurrentX - touchStartX;
+            const deltaY = touchCurrentY - touchStartY;
+            
+            // Если вертикальный свайп больше горизонтального, не обрабатываем
+            if (Math.abs(deltaY) > Math.abs(deltaX)) {
+                return;
+            }
+            
+            // Предотвращаем скролл страницы при горизонтальном свайпе
+            e.preventDefault();
+            
+            // Вычисляем новую позицию с учетом базовой
+            const newPosition = basePosition + deltaX;
+            currentPosition = newPosition;
+            track.style.transform = `translateX(${newPosition}px)`;
+        }, { passive: false });
+        
+        trackContainer.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            
+            const deltaX = touchCurrentX - touchStartX;
+            const deltaY = touchCurrentY - touchStartY;
+            const deltaTime = Date.now() - startTime;
+            const velocity = Math.abs(deltaX) / deltaTime; // пикселей в миллисекунду
+            
+            // Если вертикальный свайп больше горизонтального, не обрабатываем
+            if (Math.abs(deltaY) > Math.abs(deltaX)) {
+                // Возвращаемся к базовой позиции
+                track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                moveToCard(currentIndex);
+                return;
+            }
+            
+            const cardWidth = getCardWidth();
+            const threshold = cardWidth * 0.3; // 30% ширины карточки для переключения
+            const velocityThreshold = 0.3; // Минимальная скорость для переключения (px/ms)
+            
+            // Определяем, нужно ли переключить карточку
+            let shouldSwitch = false;
+            let direction = 0;
+            
+            if (Math.abs(deltaX) > threshold || velocity > velocityThreshold) {
+                shouldSwitch = true;
+                direction = deltaX > 0 ? -1 : 1; // -1 для влево (prev), 1 для вправо (next)
+            }
+            
+            if (shouldSwitch) {
+                // Вычисляем длительность анимации на основе скорости (momentum scrolling)
+                // Быстрый свайп = более короткая анимация, медленный = более длинная
+                const baseDuration = 0.4;
+                const maxDuration = 0.6;
+                const minDuration = 0.25;
+                let animationDuration = baseDuration;
+                
+                if (velocity > 0.5) {
+                    // Очень быстрый свайп
+                    animationDuration = minDuration;
+                } else if (velocity > 0.2) {
+                    // Средний свайп
+                    animationDuration = baseDuration - (velocity - 0.2) * 0.5;
+                } else {
+                    // Медленный свайп
+                    animationDuration = baseDuration + (0.2 - velocity) * 1.0;
+                }
+                
+                animationDuration = Math.max(minDuration, Math.min(maxDuration, animationDuration));
+                
+                if (direction === 1) {
+                    goToNext();
+                } else {
+                    goToPrev();
+                }
+                
+                // Обновляем базовую позицию после переключения
+                setTimeout(() => {
+                    updateBasePosition();
+                }, animationDuration * 1000);
+            } else {
+                // Возвращаемся к текущей карточке с плавной анимацией
+                track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                moveToCard(currentIndex);
+            }
+        }, { passive: true });
+        
+        trackContainer.addEventListener('touchcancel', () => {
+            if (isDragging) {
+                isDragging = false;
+                track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                moveToCard(currentIndex);
+            }
+        }, { passive: true });
+    }
 }
 
 // Инициализация карусели при загрузке

@@ -1117,7 +1117,9 @@ section {
 .testimonials-track {
   display: flex;
   gap: var(--spacing-lg);
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform; /* Оптимизация для плавной анимации */
+  touch-action: pan-y pinch-zoom;
 }
 
 /* Карточка отзыва в стиле JS комментариев */
@@ -1806,28 +1808,12 @@ section {
   .testimonials-track-container {
     width: min(320px, 90vw); /* Точная ширина карточки, адаптивная на мобильных */
     max-width: min(320px, 90vw);
+    touch-action: pan-y pinch-zoom; /* Разрешаем вертикальный скролл, но контролируем горизонтальный */
   }
   
+  /* Скрываем стрелки на мобильных устройствах */
   .carousel-arrow {
-    width: clamp(44px, 8vw, 50px); /* Минимум 44px для WCAG 2.2 AA */
-    height: clamp(44px, 8vw, 50px);
-    min-width: 44px; /* Гарантия минимума */
-    min-height: 44px;
-    border: none;
-    border-radius: 0;
-    outline: none;
-  }
-  
-  .carousel-arrow i {
-    font-size: clamp(16px, 4vw, 20px);
-  }
-  
-  .carousel-arrow-left {
-    left: calc(50% - min(160px, 45vw) - clamp(40px, 8vw, 50px));
-  }
-
-  .carousel-arrow-right {
-    right: calc(50% - min(160px, 45vw) - clamp(40px, 8vw, 50px));
+    display: none;
   }
   
   .testimonial-card {
