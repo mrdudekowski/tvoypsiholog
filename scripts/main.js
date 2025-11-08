@@ -998,31 +998,8 @@ if (document.querySelector('.testimonials-carousel')) {
 }
 
 // Предотвращение горизонтального скролла на мобильных
-function preventHorizontalScroll() {
-    if (window.innerWidth <= 768) {
-        // Принудительно устанавливаем overflow-x: hidden
-        document.documentElement.style.overflowX = 'hidden';
-        document.body.style.overflowX = 'hidden';
-        
-        // Проверяем элементы, которые могут выходить за границы
-        const allElements = document.querySelectorAll('*');
-        allElements.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            // Исключаем карты Таро - они могут выходить за границы
-            if (!el.classList.contains('tarot-card') && !el.classList.contains('tarot-canvas')) {
-                if (rect.left < 0 || rect.right > window.innerWidth) {
-                    // Элемент выходит за границы - исправляем
-                    el.style.maxWidth = '100vw';
-                    el.style.overflowX = 'hidden';
-                }
-            }
-        });
-    }
-}
-
-// Вызываем при загрузке и изменении размера
-window.addEventListener('load', preventHorizontalScroll);
-window.addEventListener('resize', preventHorizontalScroll);
+// УДАЛЕНО: Функция была избыточной - CSS уже полностью покрывает эту функциональность
+// через @media (max-width: 768px) с правилами overflow-x: hidden и max-width: 100vw
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
