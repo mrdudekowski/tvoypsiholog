@@ -66,13 +66,11 @@ function initializeScrollAnimations() {
                 // Для секции contact увеличиваем задержку чтобы карты позиционировались первыми
                 const isContactSection = target.closest('.contact') !== null;
                 const isContactInfo = target.classList.contains('contact-info');
-                const isServiceCard = target.classList.contains('service-card');
                 
-                // Для service-card используем только customDelay из data-delay (без baseDelay)
                 // Для contact-info дополнительно увеличиваем задержку
                 // Карты позиционируются за ~100ms (desktop) или ~100ms (mobile)
                 // Анимация должна начаться после позиционирования карт
-                const baseDelay = isServiceCard ? 0 : (isContactInfo ? 200 : (isContactSection ? 150 : 50));
+                const baseDelay = isContactInfo ? 200 : (isContactSection ? 150 : 50);
                 const customDelay = target.dataset.delay ? parseInt(target.dataset.delay) : 0;
                 const totalDelay = baseDelay + customDelay;
                 
