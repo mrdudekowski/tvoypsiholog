@@ -392,6 +392,7 @@ img {
 }
 
 .hero-actions {
+  margin-top: 2rem;
   display: flex;
   gap: var(--spacing-lg);
   justify-content: center;
