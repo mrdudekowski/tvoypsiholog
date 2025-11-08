@@ -715,6 +715,8 @@ section {
 .service-card.animate-fadeInRight,
 .service-card.animate-fadeIn {
   overflow: visible !important;
+  will-change: transform, opacity;
+  contain: layout style paint;
 }
 
 /* Включаем пульсацию после fade-in */
@@ -722,6 +724,8 @@ section {
   animation: card-breathe 6s ease-in-out infinite;
   animation-delay: 0.3s; /* Задержка 300ms после fade-in */
   overflow: hidden; /* Возвращаем overflow: hidden после анимации */
+  will-change: auto;
+  contain: none;
 }
 
 .service-card.animated .service-icon {

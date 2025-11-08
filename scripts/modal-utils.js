@@ -47,7 +47,6 @@ function initializeModalFocusTrap(modal, openButton) {
         });
 
     if (focusableElements.length === 0) {
-        console.warn('⚠️ В модальном окне не найдены фокусируемые элементы');
         return null;
     }
 

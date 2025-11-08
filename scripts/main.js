@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Инициализирует сайт и все интерактивные элементы
  */
 function initializeSite() {
-    console.log('🃏 Таролог Елена - сайт инициализирован');
-
     // Инициализация компонентов
     initializeScrollAnimations();
     initializeSmoothScroll();
@@ -32,7 +30,6 @@ function initializeSite() {
 function initializeScrollAnimations() {
     // Проверка поддержки Intersection Observer
     if (!('IntersectionObserver' in window)) {
-        console.warn('⚠️ Intersection Observer не поддерживается, анимации отключены');
         // Показываем все элементы без анимаций
         document.querySelectorAll('[data-scroll-reveal]').forEach(el => {
             el.style.opacity = '1';
@@ -43,7 +40,6 @@ function initializeScrollAnimations() {
     // Проверка prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-        console.log('ℹ️ Пользователь предпочитает меньше анимаций');
         document.querySelectorAll('[data-scroll-reveal]').forEach(el => {
             el.style.opacity = '1';
         });
@@ -93,7 +89,6 @@ function initializeScrollAnimations() {
                 // Прекращаем наблюдение после анимации
                 observer.unobserve(target);
                 
-                console.log(`✨ Анимация ${animationType} применена к элементу`);
             }
         });
     }, observerOptions);
@@ -159,7 +154,6 @@ function initializeCertificatesModal() {
     const closeBtn = modal?.querySelector('.modal-close');
     
     if (!modal || !openBtn) {
-        console.warn('⚠️ Элементы модального окна не найдены');
         return;
     }
 
@@ -501,7 +495,6 @@ function initializeContactFormModal() {
     const notification = document.getElementById('successNotification');
     
     if (!modal || !openBtn || !form) {
-        console.warn('⚠️ Элементы формы обратной связи не найдены');
         return;
     }
 
@@ -691,7 +684,6 @@ function initializeContactFormModal() {
 
         // Проверка honeypot (защита от ботов)
         if (formData.get('website')) {
-            console.warn('🤖 Обнаружена попытка спама (honeypot filled)');
             return false;
         }
 
@@ -721,7 +713,6 @@ function initializeContactFormModal() {
                 timestamp: new Date().toISOString()
             };
             
-            console.log('📤 Отправка данных:', data);
             
             // Отправка на Google Apps Script
             const response = await fetch(WEBHOOK_URL, {
@@ -754,7 +745,6 @@ function initializeContactFormModal() {
             }
             
         } catch (error) {
-            console.error('❌ Ошибка отправки формы:', error);
             
             // Трекинг ошибки
             trackEvent('contact_form', 'submit_error', error.message);
@@ -822,7 +812,6 @@ function initializeContactFormModal() {
         
         // Валидация
         if (!validateForm(formData)) {
-            console.warn('⚠️ Форма не прошла валидацию');
             trackEvent('contact_form', 'validation_error');
             return;
         }
@@ -844,7 +833,6 @@ function initializeBurgerMenu() {
     const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
     
     if (!hamburger || !mobileMenu) {
-        console.warn('⚠️ Элементы бургер меню не найдены');
         return;
     }
 
@@ -932,7 +920,6 @@ function initializeBurgerMenu() {
  * Обработка ошибок
  */
 window.addEventListener('error', function(e) {
-    console.error('🚨 JavaScript Error:', e.error);
     // Здесь можно отправить ошибку в сервис мониторинга
 });
 
@@ -945,7 +932,6 @@ function initTestimonialsCarousel() {
     const nextButton = document.querySelector('.carousel-arrow-right');
     
     if (!track || !cards.length || !prevButton || !nextButton) {
-        console.warn('⚠️ Элементы карусели не найдены');
         return;
     }
     

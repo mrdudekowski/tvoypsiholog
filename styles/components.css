@@ -30,6 +30,7 @@
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   transform: translateZ(0);
+  contain: layout style paint;
 }
 
 /* Исключение для slideInRight - карточки должны быть видимы с начала */
@@ -50,9 +51,10 @@
   overscroll-behavior: contain;
 }
 
-/* После анимации убираем will-change */
+/* После анимации убираем will-change и contain */
 [data-scroll-reveal].animated {
   will-change: auto;
+  contain: none;
 }
 
 /* Для slideInRight гарантируем финальное состояние после анимации */

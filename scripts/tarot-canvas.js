@@ -65,7 +65,6 @@
         const card = document.querySelector(config.selector);
         
         if (!card) {
-            console.warn(`⚠️ Не найдена карта: ${config.selector}`);
             return;
         }
         
@@ -73,7 +72,6 @@
         const targetElement = findTargetElement(config);
         
         if (!targetElement) {
-            console.warn(`⚠️ Не найден целевой элемент для ${config.selector}`);
             return;
         }
         
@@ -137,12 +135,6 @@
                     card.dataset.baseHorizontalOffset = horizontalOffset;
                 }
                 
-                console.log(`📍 ${config.selector} позиция:`, {
-                    top: `${finalTop}px`,
-                    [config.horizontalProperty]: config.horizontalPosition,
-                    transformOffset: `${horizontalOffset}px`,
-                    target: config.targetSelector
-                });
             });
         }
         
@@ -164,13 +156,11 @@
                                 // left/right уже установлены в setCardFinalPosition, не меняем их здесь
                                 card.classList.add('active');
                                 
-                                console.log(`🎴 ${config.selector} активирована`);
                                 
                                 // Запуск левитации через 2s после slide
                                 setTimeout(() => {
                                     requestAnimationFrame(() => {
                                         card.classList.add('levitating');
-                                        console.log(`✨ ${config.selector} левитация`);
                                     });
                                 }, 2000);
                             });
@@ -212,7 +202,6 @@
         
         // Запуск наблюдения
         observer.observe(targetElement);
-        console.log(`✅ Триггер установлен для ${config.selector}`);
     }
     
     /**
@@ -401,7 +390,6 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
      * Инициализация всех карт Таро
      */
     function initTarotCanvas() {
-        console.log('🎴 Инициализация холста карт Таро (DRY архитектура)');
 
         // На мобильных используем оверлей-логику
         if (window.innerWidth <= 768) {
@@ -415,7 +403,6 @@ function positionCardsAtTitle(titleEl, leftCardSelector, rightCardSelector) {
         initTarotCard(CARD_CONFIG.testimonials);
         initTarotCard(CARD_CONFIG.lovers);
         
-        console.log('✅ Все четыре карты инициализированы через универсальную функцию');
     }
     
     // Запуск при загрузке DOM
