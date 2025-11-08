@@ -716,11 +716,15 @@ section {
   animation-delay: 1.5s;
 }
 
-/* Отключаем пульсацию пока элемент анимируется */
-.service-card[data-scroll-reveal]:not(.animated) {
+/* Начальное состояние для элементов с data-scroll-reveal - скрыты до анимации */
+.service-card[data-scroll-reveal]:not(.animated):not(.animate-fadeInUp):not(.animate-fadeInLeft):not(.animate-fadeInRight):not(.animate-fadeIn) {
+  opacity: 0;
+  transform: translateY(30px) translateZ(0);
+  /* Отключаем только пульсацию (card-breathe), но не блокируем fadeInUp */
   animation: none !important;
 }
 
+/* Отключаем анимации иконок во время появления карточки */
 .service-card[data-scroll-reveal]:not(.animated) .service-icon {
   animation: none !important;
 }
