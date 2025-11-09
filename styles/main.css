@@ -240,6 +240,11 @@ h6,
   transform: translateZ(0);
 }
 
+/* Исключение для #contact-title - убираем contain для корректного позиционирования карточек таро */
+#contact-title {
+  contain: none; /* Убираем contain, чтобы заголовок не обрезался и карточки таро позиционировались корректно */
+}
+
 /* Кнопки и интерактивные элементы остаются на базовом шрифте */
 .btn,
 .question-btn,
@@ -1264,11 +1269,14 @@ section {
 .contact {
   /* Фон убран - используется единый градиент body */
   text-align: center;
-  /* Оптимизация: contain для предотвращения layout thrashing */
-  contain: layout style;
+  /* contain: layout style убран - вызывал клиппинг анимаций и карточек таро */
+  /* position: relative убран - не нужен, как в других секциях */
+  /* overflow: visible убран - используем стандартный overflow из section, как Process и Services */
+  /* padding-top для компенсации translateY(30px) в анимации fadeInUp */
+  padding-top: 30px;
+  margin-top: -30px; /* Компенсируем padding, чтобы не сдвигать секцию */
   /* Стабилизация: предотвращаем layout shifts */
   min-height: 0;
-  position: relative;
 }
 
 .contact-description {
@@ -1288,8 +1296,7 @@ section {
   align-items: center;
   margin-top: var(--spacing-xl);
   width: 100%;
-  /* Оптимизация: contain для предотвращения layout thrashing */
-  contain: layout style;
+  /* contain: layout style убран - вызывал клиппинг */
   /* Стабилизация: предотвращаем layout shifts */
   backface-visibility: hidden;
   transform: translateZ(0);

@@ -46,16 +46,16 @@
 
 /* Утилиты для прокрутки - УДАЛЕНЫ неиспользуемые классы .scroll-momentum и .scroll-contain */
 
-/* Оптимизация для contact-info: contain для предотвращения layout thrashing */
+/* Оптимизация для contact-info: contain убран - вызывал клиппинг, уже изолирован через [data-scroll-reveal] */
 .contact-info {
-  contain: layout style;
+  /* contain: layout style убран - двойная изоляция вызывала клиппинг */
   backface-visibility: hidden;
   transform: translateZ(0);
 }
 
-/* Оптимизация для contact-title: contain для предотвращения layout thrashing */
+/* Оптимизация для contact-title: contain убран - вызывал клиппинг, уже изолирован через [data-scroll-reveal] */
 #contact-title {
-  contain: layout style;
+  /* contain: layout style убран - двойная изоляция вызывала клиппинг */
   backface-visibility: hidden;
   transform: translateZ(0);
 }
