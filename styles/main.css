@@ -599,10 +599,13 @@ section {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto auto;
   gap: var(--spacing-xl);
-  position: relative;
-  z-index: 2;
+  /* position: relative убран - создавал stacking context и вызывал клиппинг */
+  /* z-index: 2 убран - не нужен без position */
   justify-items: stretch;
   align-items: stretch;
+  /* padding-top для компенсации translateY(30px) в анимации fadeInUp */
+  padding-top: 30px;
+  margin-top: -30px; /* Компенсируем padding, чтобы не сдвигать секцию */
 }
 
 /* Нижний ряд с 2 карточками - центрируем */
@@ -633,7 +636,7 @@ section {
 
 .service-card {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden убран - вызывает клиппинг при анимации, как у process-step */
   background: transparent;
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
@@ -652,8 +655,7 @@ section {
   flex-direction: column;
   justify-content: flex-start;
   box-sizing: border-box;
-  /* Оптимизация для производительности */
-  transform: translateZ(0);
+  /* transform: translateZ(0) убран - конфликтует с анимацией fadeInUp, как у process-step */
   will-change: transform;
 }
 
@@ -663,9 +665,9 @@ section {
   box-shadow: 
     0 20px 40px var(--hover-emerald-shadow-dark),       /* Изумрудное свечение */
     0 30px 60px var(--hover-emerald-shadow-medium),     /* Светло-изумрудное свечение */
-    0 0 80px var(--hover-emerald-shadow-soft);          /* Дополнительное мягкое свечение */
+    0 0 40px var(--hover-emerald-shadow-soft);          /* Уменьшено с 80px для предотвращения клиппинга */
   background: transparent;
-  transform: translateY(-5px);
+  transform: translateY(-5px) translateZ(0); /* Добавлен translateZ(0) для GPU ускорения */
 }
 
 .service-icon {
@@ -726,14 +728,13 @@ section {
 }
 
 /* Предотвращаем клиппинг во время анимации появления */
-/* Применяем тот же подход, что и для process-step */
+/* Теперь overflow не переключается, так как базовое правило убрано */
 .service-card[data-scroll-reveal]:not(.animated),
 .service-card:not(.animated):not([data-scroll-reveal]),
 .service-card.animate-fadeInUp,
 .service-card.animate-fadeInLeft,
 .service-card.animate-fadeInRight,
 .service-card.animate-fadeIn {
-  overflow: visible !important;
   will-change: transform, opacity;
   /* Убран contain: layout style paint - может вызывать рефлоу при скролле */
 }
@@ -742,7 +743,7 @@ section {
 .service-card.animated {
   animation: card-breathe 6s ease-in-out infinite;
   animation-delay: 0.3s; /* Задержка 300ms после fade-in */
-  overflow: hidden; /* Возвращаем overflow: hidden после анимации */
+  /* overflow: hidden убран - не нужен, как у process-step */
   will-change: transform; /* Только transform для оптимизации */
   /* Убран contain: none - не нужен */
 }
@@ -986,7 +987,7 @@ section {
 }
 
 /* GPU ускорение для всех анимируемых элементов */
-.service-card,
+/* service-card убран из базового правила - transform применяется только при необходимости */
 .service-icon,
 .process-step,
 .testimonial-card,
@@ -995,6 +996,16 @@ section {
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* GPU ускорение для service-card только во время анимации */
+.service-card[data-scroll-reveal]:not(.animated),
+.service-card.animate-fadeInUp,
+.service-card.animate-fadeInLeft,
+.service-card.animate-fadeInRight,
+.service-card.animate-fadeIn {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Оптимизация для пульсации */
@@ -1781,6 +1792,9 @@ section {
     gap: var(--spacing-lg);
     justify-items: stretch;
     align-items: stretch;
+    /* padding-top для компенсации translateY(30px) в анимации fadeInUp на мобильных */
+    padding-top: 30px;
+    margin-top: -30px;
   }
   
   /* Мобильные карточки - предотвращение наезжания */
