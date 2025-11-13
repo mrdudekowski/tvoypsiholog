@@ -456,6 +456,63 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Заголовок модального окна с кнопкой скачивания */
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  align-items: center;
+}
+
+.modal-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: rgba(184, 134, 11, 0.2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: var(--text-sm);
+}
+
+.modal-download-btn:hover {
+  background: rgba(184, 134, 11, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+}
+
+/* Стили для текстового контента */
+.modal-text-content {
+  color: var(--color-text-primary);
+  line-height: 1.8;
+  font-size: var(--text-base);
+}
+
+.modal-text-content h4 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.modal-text-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+.modal-text-content ul {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.modal-text-content li {
+  margin-bottom: var(--spacing-sm);
+}
+
 /* ============================================
    ГАЛЕРЕЯ СЕРТИФИКАТОВ
    ============================================ */
@@ -557,6 +614,28 @@
   .modal-glassmorphism .modal-title {
     font-size: var(--text-xl);
     margin-bottom: var(--spacing-md);
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .modal-download-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+
+  .modal-text-content {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .modal-text-content h4 {
+    font-size: var(--text-base);
   }
 
   .certificates-gallery {
@@ -891,6 +970,50 @@ body.modal-open {
 .form-input.error,
 .form-textarea.error {
   border-color: var(--color-gold-medium);
+}
+
+/* Чекбокс согласия с условиями */
+.form-agreement {
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.form-checkbox-label input[type="checkbox"] {
+  margin-top: 0.2em;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.checkbox-text {
+  flex: 1;
+  color: var(--color-text-secondary);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.link-button:hover {
+  color: var(--color-gold-medium);
 }
 
 /* Выбор мессенджера */

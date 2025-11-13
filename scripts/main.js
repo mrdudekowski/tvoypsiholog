@@ -17,6 +17,8 @@ function initializeSite() {
     initializeSmoothScroll();
     initializeContactButtons();
     initializeCertificatesModal();
+    initializePrivacyModal();
+    initializeTermsModal();
     initializeContactFormModal();
     initializeBurgerMenu();
     initializePerformanceOptimizations();
@@ -396,6 +398,186 @@ function initializeCertificatesModal() {
 }
 
 /**
+ * Инициализирует модальное окно Политики конфиденциальности
+ */
+function initializePrivacyModal() {
+    const modal = document.getElementById('privacyModal');
+    const openBtn = document.getElementById('openPrivacyModal');
+    const closeBtn = document.getElementById('closePrivacyModal');
+    
+    if (!modal || !openBtn) {
+        return;
+    }
+
+    // Переменная для хранения cleanup функции focus trap
+    let focusTrapCleanup = null;
+
+    /**
+     * Открывает модальное окно
+     */
+    function openModal() {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        
+        // Инициализируем focus trap
+        if (window.ModalFocusTrap) {
+            const trapResult = window.ModalFocusTrap.initialize(modal, openBtn);
+            if (trapResult) {
+                focusTrapCleanup = trapResult.cleanup;
+            }
+        } else {
+            // Fallback: фокус на кнопку закрытия
+            closeBtn?.focus();
+        }
+        
+        // Трекинг события
+        trackEvent('privacy_policy', 'modal_open');
+    }
+
+    /**
+     * Закрывает модальное окно
+     */
+    function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        
+        // Очищаем focus trap
+        if (focusTrapCleanup) {
+            focusTrapCleanup();
+            focusTrapCleanup = null;
+        }
+        
+        // Трекинг события
+        trackEvent('privacy_policy', 'modal_close');
+    }
+
+    // Открытие модального окна по клику на кнопку
+    openBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+    });
+
+    // Закрытие по клику на кнопку закрытия
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Закрытие по клику вне модального окна (на overlay)
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Закрытие по клавише ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
+/**
+ * Инициализирует модальное окно Пользовательского соглашения
+ */
+function initializeTermsModal() {
+    const modal = document.getElementById('termsModal');
+    const openBtn = document.getElementById('openTermsModal');
+    const openBtnFromForm = document.getElementById('openTermsModalFromForm');
+    const closeBtn = document.getElementById('closeTermsModal');
+    
+    if (!modal || (!openBtn && !openBtnFromForm)) {
+        return;
+    }
+
+    // Переменная для хранения cleanup функции focus trap
+    let focusTrapCleanup = null;
+
+    /**
+     * Открывает модальное окно
+     */
+    function openModal() {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        
+        // Инициализируем focus trap
+        const triggerBtn = openBtn || openBtnFromForm;
+        if (window.ModalFocusTrap) {
+            const trapResult = window.ModalFocusTrap.initialize(modal, triggerBtn);
+            if (trapResult) {
+                focusTrapCleanup = trapResult.cleanup;
+            }
+        } else {
+            // Fallback: фокус на кнопку закрытия
+            closeBtn?.focus();
+        }
+        
+        // Трекинг события
+        trackEvent('terms_of_service', 'modal_open');
+    }
+
+    /**
+     * Закрывает модальное окно
+     */
+    function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        
+        // Очищаем focus trap
+        if (focusTrapCleanup) {
+            focusTrapCleanup();
+            focusTrapCleanup = null;
+        }
+        
+        // Трекинг события
+        trackEvent('terms_of_service', 'modal_close');
+    }
+
+    // Открытие модального окна по клику на кнопку в футере
+    if (openBtn) {
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+    }
+
+    // Открытие модального окна по клику на кнопку в форме
+    if (openBtnFromForm) {
+        openBtnFromForm.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+    }
+
+    // Закрытие по клику на кнопку закрытия
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    // Закрытие по клику вне модального окна (на overlay)
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Закрытие по клавише ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
+/**
  * Инициализирует кнопки связи с мессенджерами
  */
 function initializeContactButtons() {
@@ -653,6 +835,12 @@ function initializeContactFormModal() {
             input.setAttribute('aria-invalid', 'false');
         });
         
+        // Очищаем ошибки чекбокса
+        const agreementCheckbox = document.getElementById('agreementCheckbox');
+        if (agreementCheckbox) {
+            agreementCheckbox.setAttribute('aria-invalid', 'false');
+        }
+        
         document.querySelectorAll('.form-error').forEach(error => {
             error.textContent = '';
         });
@@ -709,6 +897,26 @@ function initializeContactFormModal() {
             messengerInputs.forEach(radio => {
                 radio.setAttribute('aria-invalid', 'false');
             });
+        }
+
+        // Проверка согласия с условиями
+        const agreement = formData.get('agreement');
+        if (!agreement) {
+            const agreementError = document.getElementById('agreementError');
+            const checkbox = document.getElementById('agreementCheckbox');
+            if (agreementError) {
+                agreementError.textContent = 'Необходимо согласиться с условиями использования';
+            }
+            if (checkbox) {
+                checkbox.setAttribute('aria-invalid', 'true');
+            }
+            isValid = false;
+        } else {
+            // Очищаем aria-invalid если чекбокс отмечен
+            const checkbox = document.getElementById('agreementCheckbox');
+            if (checkbox) {
+                checkbox.setAttribute('aria-invalid', 'false');
+            }
         }
 
         // Проверка honeypot (защита от ботов)
