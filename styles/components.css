@@ -51,6 +51,7 @@
   /* contain: layout style убран - двойная изоляция вызывала клиппинг */
   backface-visibility: hidden;
   transform: translateZ(0);
+  contain: none;
 }
 
 /* Оптимизация для contact-title: contain убран - вызывал клиппинг, уже изолирован через [data-scroll-reveal] */

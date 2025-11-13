@@ -70,7 +70,7 @@ function initializeScrollAnimations() {
                 // Для contact-info дополнительно увеличиваем задержку
                 // Карты позиционируются за ~100ms (desktop) или ~100ms (mobile)
                 // Анимация должна начаться после позиционирования карт
-                const baseDelay = isContactInfo ? 200 : (isContactSection ? 150 : 50);
+                const baseDelay = isContactInfo ? 250 : (isContactSection ? 150 : 50);
                 const customDelay = target.dataset.delay ? parseInt(target.dataset.delay) : 0;
                 const totalDelay = baseDelay + customDelay;
                 

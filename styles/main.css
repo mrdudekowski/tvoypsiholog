@@ -1694,6 +1694,11 @@ section {
     --container-padding: var(--spacing-md);
   }
 
+  .contact {
+    padding-top: 20px;
+    margin-top: -20px;
+  }
+
   html, body {
     overflow-x: hidden !important;
     max-width: 100vw !important;
