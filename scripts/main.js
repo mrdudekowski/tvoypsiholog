@@ -117,6 +117,14 @@ function initializeScrollAnimations() {
     );
 
     legacyElements.forEach(element => {
+        const isServicesCardWithParentAnimation =
+            element.classList.contains('service-card') &&
+            element.closest('.services[data-scroll-reveal]');
+
+        if (isServicesCardWithParentAnimation) {
+            return;
+        }
+
         observer.observe(element);
         // Для старых элементов используем дефолтную анимацию
         // Единый класс анимации в CamelCase для консистентности

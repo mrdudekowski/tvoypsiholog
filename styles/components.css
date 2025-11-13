@@ -214,14 +214,6 @@
   }
 }
 
-/* Hover эффекты для карточек */
-.service-card {
-  position: relative;
-  overflow: hidden;
-}
-
-/* УДАЛЕНЫ неиспользуемые классы: .gradient-text, .glass-card */
-
 /* Пульсирующая кнопка CTA */
 @keyframes pulse {
   0% {
