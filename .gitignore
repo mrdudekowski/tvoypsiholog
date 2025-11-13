@@ -10,5 +10,4 @@ docs/
 Thumbs.db
 *.log
 
-policy/конфедициальность_твоего_психолога.txt
-policy/пользовательское_твоего_психолога.txt
+site-package.zip
