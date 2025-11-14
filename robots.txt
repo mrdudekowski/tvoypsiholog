@@ -1,9 +1,9 @@
-# robots.txt для taro-elena.ru
+# robots.txt для tvoy-psiholog.com
 # Указывает поисковым роботам, какие страницы индексировать
 
 User-agent: *
 Allow: /
 
 # Карта сайта
-Sitemap: https://taro-elena.ru/sitemap.xml
+Sitemap: https://tvoy-psiholog.com/sitemap.xml
 
