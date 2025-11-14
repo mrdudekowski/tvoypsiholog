@@ -7,7 +7,7 @@ const SITE_CONFIG = {
     // URL для контактов и внешних сервисов
     urls: {
         webhook: 'https://script.google.com/macros/s/AKfycbwnjjIart4H57pc7O8xNQ0ry3hpP1oOT8bMxeqUn_d3fZUNwRpmfFFBtyZ2o9nxUYy_/exec',
-        telegram: 'https://t.me/taro_elena',
+        telegram: 'https://t.me/Lenamakarova0311',
         whatsapp: 'https://wa.me/79025553566',
         phone: 'tel:+79025553566',
         canonical: 'https://taro-elena.ru/',
