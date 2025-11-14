@@ -1453,10 +1453,18 @@ section {
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: color var(--transition-fast);
+  outline: none;
 }
 
 .footer-link:hover {
   color: var(--color-primary);
+}
+
+.footer-link:focus,
+.footer-link:focus-visible,
+.footer-link:active {
+  outline: none;
+  box-shadow: none;
 }
 
 /* ===== БУРГЕР МЕНЮ ===== */
