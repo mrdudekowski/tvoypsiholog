@@ -324,7 +324,7 @@
   }
 
   /* Отключаем левитацию на мобиле */
-  .tarot-card.levitating { animation: none; }
+
   
   /* Новые карты контакта на мобильных */
   .tarot-card-contact-left,
@@ -333,10 +333,5 @@
     height: auto;
     aspect-ratio: 196 / 336;
     filter: drop-shadow(0 8px 20px rgba(184, 134, 11, 0.35));
-  }
-  
-  .tarot-card-contact-left.levitating,
-  .tarot-card-contact-right.levitating {
-    animation: none;
   }
 }
