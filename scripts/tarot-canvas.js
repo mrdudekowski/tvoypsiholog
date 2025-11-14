@@ -492,10 +492,24 @@
                                 if (leftCard && !leftCard.dataset.activated) {
                                     leftCard.classList.add('active');
                                     leftCard.dataset.activated = 'true';
+                                    
+                                    // Запуск левитации через 2s после slide (синхронизировано с desktop)
+                                    setTimeout(() => {
+                                        requestAnimationFrame(() => {
+                                            leftCard.classList.add('levitating');
+                                        });
+                                    }, 2000);
                                 }
                                 if (rightCard && !rightCard.dataset.activated) {
                                     rightCard.classList.add('active');
                                     rightCard.dataset.activated = 'true';
+                                    
+                                    // Запуск левитации через 2s после slide (синхронизировано с desktop)
+                                    setTimeout(() => {
+                                        requestAnimationFrame(() => {
+                                            rightCard.classList.add('levitating');
+                                        });
+                                    }, 2000);
                                 }
                             });
                         }, ACTIVATION_DELAY); // Синхронизировано с desktop

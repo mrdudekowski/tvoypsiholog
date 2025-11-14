@@ -323,9 +323,6 @@
     will-change: opacity, transform;
   }
 
-  /* Отключаем левитацию на мобиле */
-
-  
   /* Новые карты контакта на мобильных */
   .tarot-card-contact-left,
   .tarot-card-contact-right {
